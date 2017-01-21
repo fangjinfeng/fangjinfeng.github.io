@@ -153,164 +153,36 @@
     <article id="post-UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/16/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</a>
-    </h1>
-  
-
-        
-        <a href="/2017/01/16/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" class="archive-article-date">
-  	<time datetime="2017-01-16T06:00:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-16</time>
-</a>
-        
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
         <p>由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。</p>
-<h1 id="1-效果图"><a href="#1-效果图" class="headerlink" title="1.效果图"></a>1.效果图</h1><p><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></p>
-<h1 id="2-思路"><a href="#2-思路" class="headerlink" title="2.思路"></a>2.思路</h1><h2 id="A-设置tableView"><a href="#A-设置tableView" class="headerlink" title="A. 设置tableView"></a>A. 设置tableView</h2><p>a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又要显示在UINavigationBar下方，所以需要设置tablewView的frame和contentInset：</p>
-<pre><code>self.tableView.frame = CGRectMake(0, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);
+<h1 id="1-效果图"><a href="#1-效果图" class="headerlink" title="1.效果图"></a>1.效果图</h1><p><br></p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></center><br><br><br><center> UINavigationBar和UITabbar渐变.gif</center>
 
-self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,0,0,0);
-</code></pre><p>B.当tableView向上移动一个属性,UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在- (void)scrollViewDidScroll:(UIScrollView*)scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离：CGFloat_originalOffsetY;//上一次偏移量</p>
-<pre><code>CGFloat offsetY = scrollView.contentOffset.y-_originalOffsetY;//获取每次滚动偏移的距离
-
-_originalOffsetY = scrollView.contentOffset.y;//将这次tableView偏移量重新赋值给_originalOffsetY
-</code></pre><p>又因为当UINavigationBar和UITabBar已经隐藏，继续向上滚动，已经不需要隐藏，同样的当tableView滚动到最后滚不动的时候UINavigationBar和UITabBar也不需要移动，所以添加判断条件</p>
-<pre><code>//判断是否滚动到底部
-CGFloat bottomOffset = scrollView.contentSize.height- scrollView.contentOffset.y- scrollView.frame.size.height; 
-
-//判断UINavigationBar是否已经隐藏
-scrollView.contentOffset.y &gt; - (2*kNavigationBarHeight)
-
-//UIScrollView 函数
-- (void)scrollViewDidScroll:(UIScrollView*)scrollView {
-
-    CGFloat bottomOffset = scrollView.contentSize.height- scrollView.contentOffset.y- scrollView.frame.size.height;
-
-    if(scrollView.contentOffset.y&gt; - kNavigationBarHeight &amp;&amp; bottomOffset &gt;0) {
-
-    CGFloat offsetY = scrollView.contentOffset.y-_originalOffsetY;
-
-    [self moveNavigationBarAndStatusBarByOffsetY:offsetY];
-    }
-    _originalOffsetY= scrollView.contentOffset.y;
-}
-</code></pre><p>C.moveNavigationBarAndStatusBarByOffsetY函数设置UINavigationBar和UITabBar相关transform.ty位置的值，同时设置相关背景图片的透明度</p>
-<p>// 通过偏移量移动NavigationBar和StatusBar</p>
-<ul>
-<li><p>(void)moveNavigationBarAndStatusBarByOffsetY:(CGFloat)offsetY {</p>
-<pre><code>CGFloat transformTy = self.navigationController.navigationBar.transform.ty;
-CGFloat tabbarTransformTy = self.tabBarController.tabBar.transform.ty;
-</code></pre><p>  // 向上滚动</p>
-<pre><code>if (offsetY &gt; 0) {
-    if (fabs(transformTy) &gt;= kNavigationBarHeight) {
-    //当NavigationBar的transfrom.ty大于NavigationBar高度，导航栏离开可视范围，设置NavigationBar隐藏
-        [self setNavigationBarTransformProgress:1 navigationBarStatusType:NavigationBarStatusOfTypeHidden];
-} else {
-    //当NavigationBar的transfrom.ty小于NavigationBar高度，导航栏在可视范围内，设置NavigationBar偏移位置和背景透明度
-            [self setNavigationBarTransformProgress:offsetY navigationBarStatusType:NavigationBarStatusOfTypeNormal];
-    }
-
-    if (fabs(tabbarTransformTy) &gt;= kStatusBarHeight) {
-        //当StatusTabBar的transfrom.ty大于StatusTabBar高度，导航栏离开可视范围，设置StatusTabBar隐藏
-       [self setStatusBarTransformProgress:1 statusBarStatusType:StatusBarStatusTypeOfHidden];
-    } else {
-        //当当StatusTabBar的transfrom.ty小于StatusTabBar高度，导航栏在可视范围内，设置StatusTabBar偏移位置和背景透明度
-        [self setStatusBarTransformProgress:offsetY statusBarStatusType:StatusBarStatusTypeOfNormal];
-    }
-</code></pre><p>// 向下滚动</p>
-<pre><code>    } else if(offsetY &lt; 0){
-    if (transformTy &lt; 0 &amp;&amp; fabs(transformTy) &lt;= kNavigationBarHeight) {
-        //当NavigationBar的transfrom.ty小于NavigationBar高度，导航栏进入可视范围内，设置NavigationBar偏移位置和背景透明度
-        [self setNavigationBarTransformProgress:offsetY navigationBarStatusType:NavigationBarStatusOfTypeNormal];
-} else {
-    //当NavigationBar的transfrom.ty超过NavigationBar原来位置，设置NavigationBar显示
-    [self setNavigationBarTransformProgress:0 navigationBarStatusType:NavigationBarStatusOfTypeShow];
-    }
-
-    if (tabbarTransformTy &lt;= kStatusBarHeight &amp;&amp; tabbarTransformTy &gt; 0) {
-        //当StatusTabBar的transfrom.ty小于StatusTabBar高度，导航栏进入可视范围内，设置StatusTabBar偏移位置和背景透明度
-        [self setStatusBarTransformProgress:offsetY statusBarStatusType:StatusBarStatusTypeOfNormal];
-    } else {
-        //当StatusTabBar的transfrom.ty超过StatusTabBar原来位置，设置StatusTabBar显示
-        [self setStatusBarTransformProgress:0 statusBarStatusType:StatusBarStatusTypeOfShow];
-    }
-}
-</code></pre><p>}</p>
-</li>
-</ul>
-<p>D.通过这两个函数</p>
-<ul>
-<li>(void)setStatusBarTransformProgress:(CGFloat)progress statusBarStatusType:(StatusBarStatusType)statusBarStatusType<br>和 </li>
-<li>(void)setNavigationBarTransformProgress:(CGFloat)progress navigationBarStatusType:(NavigationBarStatusType)navigationBarStatusType<br>改变NavigationBarStatusTabBar背景图透明图和颜色</li>
-</ul>
-<p>// 根据传入的类型和渐变程度,改变StatusBar的颜色和位置</p>
-<ul>
-<li>(void)setStatusBarTransformProgress:(CGFloat)progress statusBarStatusType:    (StatusBarStatusType)statusBarStatusType{<pre><code>CGFloat transfromTy = self.tabBarController.tabBar.transform.ty;
-  if (statusBarStatusType == StatusBarStatusTypeOfHidden) {
-      if (transfromTy != kStatusBarHeight) {
-          [self.tabBarController.tabBar fj_moveByTranslationY:kStatusBarHeight * progress];
-          [self.tabBarController.tabBar fj_setImageViewAlpha:progress];
-      }
-   }else if(statusBarStatusType == StatusBarStatusTypeOfNormal) {
-      [self.tabBarController.tabBar fj_setTranslationY:-progress];
-       CGFloat alpha = 1 - fabs(self.tabBarController.tabBar.transform.ty)/kStatusBarHeight;
-      [self.tabBarController.tabBar fj_setImageViewAlpha:alpha];
-  }else if(statusBarStatusType == StatusBarStatusTypeOfShow) {
-      if (transfromTy != 0) {
-         [self.tabBarController.tabBar fj_moveByTranslationY: -kStatusBarHeight * progress];
-          [self.tabBarController.tabBar fj_setImageViewAlpha:(1-progress)];
-      }
-  }
-</code></pre>}</li>
-</ul>
-<p>// 根据传入的类型和渐变程度,改变NavigationBar的颜色和位置</p>
-<ul>
-<li>(void)setNavigationBarTransformProgress:(CGFloat)progress navigationBarStatusType:(NavigationBarStatusType)navigationBarStatusType{<br>  CGFloat transfromTy = self.navigationController.navigationBar.transform.ty;<br>  if (navigationBarStatusType == NavigationBarStatusOfTypeHidden) {<pre><code>if(transfromTy != -kNavigationBarHeight){
-    [self.navigationController.navigationBar fj_moveByTranslationY:-kNavigationBarHeight * progress];
-    [self.navigationController.navigationBar fj_setImageViewAlpha:progress];
-}
-</code></pre>  }else if(navigationBarStatusType == NavigationBarStatusOfTypeNormal) {<pre><code>[self.navigationController.navigationBar fj_setTranslationY: - progress];
-CGFloat alpha = 1 - fabs(self.navigationController.navigationBar.transform.ty)/kNavigationBarHeight;
-[self.navigationController.navigationBar fj_setImageViewAlpha:alpha];
-</code></pre>  }else if(navigationBarStatusType == NavigationBarStatusOfTypeShow) {<pre><code>if(transfromTy != 0){
-    [self.navigationController.navigationBar fj_moveByTranslationY:-kNavigationBarHeight * progress];
-    [self.navigationController.navigationBar fj_setImageViewAlpha:(1-progress)];
-}
-</code></pre>  }<br>}<br>E.设置UITabBar和UINavigationBar类方法<br>// 设置背景图透明度</li>
-<li>(void)fj_setImageViewAlpha:(CGFloat)alpha;<br>// 根据translationY在原来位置上偏移</li>
-<li>(void)fj_setTranslationY:(CGFloat)translationY;<br>// 设置偏移translationY</li>
-<li>(void)fj_moveByTranslationY:(CGFloat)translationY;</li>
-</ul>
-<p>F.在- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate函数里面判断当前NavigationBar偏移是否超过一半，如果一半则动画隐藏，如果没有则动画显示:</p>
-<p>//恢复或隐藏navigationBar和statusBar</p>
-<ul>
-<li><p>(void)restoreNavigationBarAndStatusBarWithContentOffset:(CGPoint)contentOffset {</p>
-<pre><code>CGFloat navigationBarCenterHeight  = kNavigationBarHeight/2.0;
-CGFloat transformTy = self.navigationController.navigationBar.transform.ty;
-if (transformTy &lt; 0 &amp;&amp; transformTy &gt; -kNavigationBarHeight) {
-    if (transformTy &lt; -navigationBarCenterHeight &amp;&amp; contentOffset.y &gt; -navigationBarCenterHeight) {
-        [UIView animateWithDuration:kDefaultAnimationTime animations:^{
-            [self hideNavigationBarAndStatusBar];
-        }];
-
-    }else {
-        [UIView animateWithDuration:kDefaultAnimationTime animations:^{
-            [self showNavigationBarAndStatusBar];
-        }];
-    }
-}
-</code></pre><p>}</p>
-</li>
-</ul>
-<h2 id="G-最后"><a href="#G-最后" class="headerlink" title="G.最后:"></a>G.最后:</h2><p>送上我最喜欢之一的动漫图:</p>
+<h1 id="2-思路"><a href="#2-思路" class="headerlink" title="2.思路"></a>2.思路</h1><p><br></p>
+<h3 id="A-设置tableView"><a href="#A-设置tableView" class="headerlink" title="A. 设置tableView"></a>A. 设置tableView</h3><p><br><br> a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又要显示在UINavigationBar下方，所以需要设置tablewView的frame和contentInset：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">self.tableView.frame = CGRectMake(<span class="number">0</span>, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);</div><div class="line"></div><div class="line">self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div></pre></td></tr></table></figure>
+<h3 id="B-当tableView向上移动一个属性-UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在-void-scrollViewDidScroll-UIScrollView-scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离："><a href="#B-当tableView向上移动一个属性-UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在-void-scrollViewDidScroll-UIScrollView-scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离：" class="headerlink" title="B.当tableView向上移动一个属性,UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在- (void)scrollViewDidScroll:(UIScrollView*)scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离："></a>B.当tableView向上移动一个属性,UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在- (void)scrollViewDidScroll:(UIScrollView*)scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离：</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">CGFloat_originalOffsetY</span>;<span class="comment">//上一次偏移量</span></div><div class="line"></div><div class="line"><span class="built_in">CGFloat</span> offsetY = scrollView.contentOffset.y-_originalOffsetY;<span class="comment">//获取每次滚动偏移的距离</span></div><div class="line"></div><div class="line"> _originalOffsetY = scrollView.contentOffset.y;<span class="comment">//将这次tableView偏移量重新赋值给_originalOffsetY</span></div></pre></td></tr></table></figure>
+<p><br><br>又因为当UINavigationBar和UITabBar已经隐藏，继续向上滚动，已经不需要隐藏，同样的当tableView滚动到最后滚不动的时候UINavigationBar和UITabBar也不需要移动，所以添加判断条件</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//判断是否滚动到底部</span></div><div class="line">CGFloat bottomOffset = scrollView.contentSize.<span class="built_in">height</span> - scrollView.contentOffset.y - scrollView.frame.<span class="built_in">size</span>.<span class="built_in">height</span>; </div><div class="line"></div><div class="line"><span class="comment">//判断UINavigationBar是否已经隐藏</span></div><div class="line">scrollView.contentOffset.y &gt; - (<span class="number">2</span>*kNavigationBarHeight)</div></pre></td></tr></table></figure>
+<p><br></p>
+<p>// UIScrollView 代理</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">- (void)<span class="keyword">scrollViewDidScroll:(UIScrollView*)scrollView </span>&#123;</div><div class="line"></div><div class="line">     CGFloat <span class="keyword">bottomOffset </span>= <span class="keyword">scrollView.contentSize.height- </span><span class="keyword">scrollView.contentOffset.y- </span><span class="keyword">scrollView.frame.size.height;</span></div><div class="line"></div><div class="line">     if(<span class="keyword">scrollView.contentOffset.y&gt; </span>- kNavigationBarHeight &amp;&amp; <span class="keyword">bottomOffset </span>&gt;<span class="number">0</span>) &#123;</div><div class="line"></div><div class="line">        CGFloat offsetY = <span class="keyword">scrollView.contentOffset.y-_originalOffsetY;</span></div><div class="line"></div><div class="line">        [self <span class="keyword">moveNavigationBarAndStatusBarByOffsetY:offsetY];</span></div><div class="line">     &#125;</div><div class="line">     _originalOffsetY= <span class="keyword">scrollView.contentOffset.y;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><br></p>
+<p>###C.moveNavigationBarAndStatusBarByOffsetY函数设置UINavigationBar和UITabBar相关transform.ty位置的值，同时设置相关背景图片的透明度</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 通过偏移量移动NavigationBar和StatusBar</span></div><div class="line">- (<span class="keyword">void</span>)<span class="string">moveNavigationBarAndStatusBarByOffsetY:</span>(CGFloat)offsetY &#123;</div><div class="line">    CGFloat transformTy = self.navigationController.navigationBar.transform.ty;</div><div class="line">    CGFloat tabbarTransformTy = self.tabBarController.tabBar.transform.ty;</div><div class="line">	 <span class="comment">// 向上滚动</span></div><div class="line">    <span class="keyword">if</span> (offsetY &gt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (fabs(transformTy) &gt;= kNavigationBarHeight) &#123;</div><div class="line">        <span class="comment">//当NavigationBar的transfrom.ty大于NavigationBar高度，导航栏离开可视范围，设置NavigationBar隐藏</span></div><div class="line">            [self <span class="string">setNavigationBarTransformProgress:</span><span class="number">1</span> <span class="string">navigationBarStatusType:</span>NavigationBarStatusOfTypeHidden];</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//当NavigationBar的transfrom.ty小于NavigationBar高度，导航栏在可视范围内，设置NavigationBar偏移位置和背景透明度</span></div><div class="line">              [self <span class="string">setNavigationBarTransformProgress:</span>offsetY <span class="string">navigationBarStatusType:</span>NavigationBarStatusOfTypeNormal];</div><div class="line">         &#125;</div><div class="line">        </div><div class="line">         <span class="keyword">if</span> (fabs(tabbarTransformTy) &gt;= kStatusBarHeight) &#123;</div><div class="line">                <span class="comment">//当StatusTabBar的transfrom.ty大于StatusTabBar高度，导航栏离开可视范围，设置StatusTabBar隐藏</span></div><div class="line">            [self <span class="string">setStatusBarTransformProgress:</span><span class="number">1</span> <span class="string">statusBarStatusType:</span>StatusBarStatusTypeOfHidden];</div><div class="line">            &#125; </div><div class="line">         <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">//当当StatusTabBar的transfrom.ty小于StatusTabBar高度，导航栏在可视范围内，设置StatusTabBar偏移位置和背景透明度</span></div><div class="line">                [self <span class="string">setStatusBarTransformProgress:</span>offsetY <span class="string">statusBarStatusType:</span>StatusBarStatusTypeOfNormal];</div><div class="line">          &#125;</div><div class="line">            </div><div class="line">       <span class="comment">// 向下滚动</span></div><div class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span>(offsetY &lt; <span class="number">0</span>)&#123;</div><div class="line">          <span class="keyword">if</span> (transformTy &lt; <span class="number">0</span> &amp;&amp; fabs(transformTy) &lt;= kNavigationBarHeight) &#123;</div><div class="line">                <span class="comment">//当NavigationBar的transfrom.ty小于NavigationBar高度，导航栏进入可视范围内，设置NavigationBar偏移位置和背景透明度</span></div><div class="line">                [self <span class="string">setNavigationBarTransformProgress:</span>offsetY <span class="string">navigationBarStatusType:</span>NavigationBarStatusOfTypeNormal];</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//当NavigationBar的transfrom.ty超过NavigationBar原来位置，设置NavigationBar显示</span></div><div class="line">            [self <span class="string">setNavigationBarTransformProgress:</span><span class="number">0</span> <span class="string">navigationBarStatusType:</span>NavigationBarStatusOfTypeShow];</div><div class="line">           	&#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (tabbarTransformTy &lt;= kStatusBarHeight &amp;&amp; tabbarTransformTy &gt; <span class="number">0</span>) &#123;</div><div class="line">                <span class="comment">//当StatusTabBar的transfrom.ty小于StatusTabBar高度，导航栏进入可视范围内，设置StatusTabBar偏移位置和背景透明度</span></div><div class="line">                [self <span class="string">setStatusBarTransformProgress:</span>offsetY <span class="string">statusBarStatusType:</span>StatusBarStatusTypeOfNormal];</div><div class="line">            &#125; </div><div class="line">         <span class="keyword">else</span> &#123;</div><div class="line">             <span class="comment">//当StatusTabBar的transfrom.ty超过StatusTabBar原来位置，设置StatusTabBar显示</span></div><div class="line">            [self <span class="string">setStatusBarTransformProgress:</span><span class="number">0</span> <span class="string">statusBarStatusType:</span>StatusBarStatusTypeOfShow];</div><div class="line">        &#125;</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="D-通过这以下两个函数来改变NavigationBarStatusTabBar背景图透明图和颜色"><a href="#D-通过这以下两个函数来改变NavigationBarStatusTabBar背景图透明图和颜色" class="headerlink" title="D.通过这以下两个函数来改变NavigationBarStatusTabBar背景图透明图和颜色:"></a>D.通过这以下两个函数来改变NavigationBarStatusTabBar背景图透明图和颜色:</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 根据传入的类型和渐变程度,改变StatusBar的颜色和位置</span></div><div class="line">- (<span class="keyword">void</span>)setStatusBarTransformProgress:(<span class="built_in">CGFloat</span>)progress statusBarStatusType:    (StatusBarStatusType)statusBarStatusType&#123;</div><div class="line">      <span class="built_in">CGFloat</span> transfromTy = <span class="keyword">self</span>.tabBarController.tabBar.transform.ty;</div><div class="line">        <span class="keyword">if</span> (statusBarStatusType == StatusBarStatusTypeOfHidden) &#123;</div><div class="line">            <span class="keyword">if</span> (transfromTy != kStatusBarHeight) &#123;</div><div class="line">                [<span class="keyword">self</span>.tabBarController.tabBar fj_moveByTranslationY:kStatusBarHeight * progress];</div><div class="line">                [<span class="keyword">self</span>.tabBarController.tabBar fj_setImageViewAlpha:progress];</div><div class="line">            &#125;</div><div class="line">         &#125;<span class="keyword">else</span> <span class="keyword">if</span>(statusBarStatusType == StatusBarStatusTypeOfNormal) &#123;</div><div class="line">            [<span class="keyword">self</span>.tabBarController.tabBar fj_setTranslationY:-progress];</div><div class="line">             <span class="built_in">CGFloat</span> alpha = <span class="number">1</span> - fabs(<span class="keyword">self</span>.tabBarController.tabBar.transform.ty)/kStatusBarHeight;</div><div class="line">            [<span class="keyword">self</span>.tabBarController.tabBar fj_setImageViewAlpha:alpha];</div><div class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(statusBarStatusType == StatusBarStatusTypeOfShow) &#123;</div><div class="line">            <span class="keyword">if</span> (transfromTy != <span class="number">0</span>) &#123;</div><div class="line">               [<span class="keyword">self</span>.tabBarController.tabBar fj_moveByTranslationY: -kStatusBarHeight * progress];</div><div class="line">                [<span class="keyword">self</span>.tabBarController.tabBar fj_setImageViewAlpha:(<span class="number">1</span>-progress)];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 根据传入的类型和渐变程度,改变NavigationBar的颜色和位置</span></div><div class="line">- (<span class="keyword">void</span>)setNavigationBarTransformProgress:(<span class="built_in">CGFloat</span>)progress navigationBarStatusType:(NavigationBarStatusType)navigationBarStatusType&#123;</div><div class="line">    <span class="built_in">CGFloat</span> transfromTy = <span class="keyword">self</span>.navigationController.navigationBar.transform.ty;</div><div class="line">    <span class="keyword">if</span> (navigationBarStatusType == NavigationBarStatusOfTypeHidden) &#123;</div><div class="line">        <span class="keyword">if</span>(transfromTy != -kNavigationBarHeight)&#123;</div><div class="line">            [<span class="keyword">self</span>.navigationController.navigationBar fj_moveByTranslationY:-kNavigationBarHeight * progress];</div><div class="line">            [<span class="keyword">self</span>.navigationController.navigationBar fj_setImageViewAlpha:progress];</div><div class="line">        &#125;</div><div class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(navigationBarStatusType == NavigationBarStatusOfTypeNormal) &#123;</div><div class="line">        [<span class="keyword">self</span>.navigationController.navigationBar fj_setTranslationY: - progress];</div><div class="line">        <span class="built_in">CGFloat</span> alpha = <span class="number">1</span> - fabs(<span class="keyword">self</span>.navigationController.navigationBar.transform.ty)/kNavigationBarHeight;</div><div class="line">        [<span class="keyword">self</span>.navigationController.navigationBar fj_setImageViewAlpha:alpha];</div><div class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(navigationBarStatusType == NavigationBarStatusOfTypeShow) &#123;</div><div class="line">        <span class="keyword">if</span>(transfromTy != <span class="number">0</span>)&#123;</div><div class="line">            [<span class="keyword">self</span>.navigationController.navigationBar fj_moveByTranslationY:-kNavigationBarHeight * progress];</div><div class="line">            [<span class="keyword">self</span>.navigationController.navigationBar fj_setImageViewAlpha:(<span class="number">1</span>-progress)];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>###E.设置UITabBar和UINavigationBar类方法<br>    // 设置背景图透明度</p>
+<pre><code>- (void)fj_setImageViewAlpha:(CGFloat)alpha;
+// 根据translationY在原来位置上偏移
+- (void)fj_setTranslationY:(CGFloat)translationY;
+// 设置偏移translationY
+- (void)fj_moveByTranslationY:(CGFloat)translationY;
+</code></pre><p>###F.在- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate函数里面判断当前NavigationBar偏移是否超过一半，如果一半则动画隐藏，如果没有则动画显示:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//恢复或隐藏navigationBar和statusBar</span></div><div class="line">- (<span class="keyword">void</span>)restoreNavigationBarAndStatusBarWithContentOffset:(<span class="built_in">CGPoint</span>)contentOffset &#123;</div><div class="line">     <span class="built_in">CGFloat</span> navigationBarCenterHeight  = kNavigationBarHeight/<span class="number">2.0</span>;</div><div class="line">     <span class="built_in">CGFloat</span> transformTy = <span class="keyword">self</span>.navigationController.navigationBar.transform.ty;</div><div class="line">     <span class="keyword">if</span> (transformTy &lt; <span class="number">0</span> &amp;&amp; transformTy &gt; -kNavigationBarHeight) &#123;</div><div class="line">         <span class="keyword">if</span> (transformTy &lt; -navigationBarCenterHeight &amp;&amp; contentOffset.y &gt; -navigationBarCenterHeight) &#123;</div><div class="line">             [<span class="built_in">UIView</span> animateWithDuration:kDefaultAnimationTime animations:^&#123;</div><div class="line">                 [<span class="keyword">self</span> hideNavigationBarAndStatusBar];</div><div class="line">            	 &#125;];</div><div class="line">          &#125;</div><div class="line">         <span class="keyword">else</span> &#123;</div><div class="line">            [<span class="built_in">UIView</span> animateWithDuration:kDefaultAnimationTime animations:^&#123;</div><div class="line">               [<span class="keyword">self</span> showNavigationBarAndStatusBar];</div><div class="line">            &#125;];</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="3-最后"><a href="#3-最后" class="headerlink" title="3.最后:"></a>3.最后:</h2><p>送上我最喜欢之一的动漫图:</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/2252551-8b5cbe64237c424d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="金木研.jpg"></p>
-<p>这是<a href="https://github.com/fangjinfeng/FJGradientNavigationAndStatusBar" target="_blank" rel="external">gitHub链接</a>和<a href="http://www.jianshu.com/p/435b49da4c95" target="_blank" rel="external">简书链接</a>，大家有兴趣可以看一下，如果觉得不错，麻烦给个喜欢或星，谢谢！</p>
+<p>这是<a href="https://github.com/fangjinfeng/FJGradientNavigationAndStatusBar" target="_blank" rel="external">gitHub链接</a>，大家有兴趣可以看一下，如果觉得不错，麻烦给个喜欢或星，谢谢！</p>
 
       
 
