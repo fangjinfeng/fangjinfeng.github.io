@@ -25,8 +25,8 @@ A. 设置tableView a.因为当UINavigationBar和UITabBar隐藏的时候，tableV
 2.思路
 A. 设置tableView a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-8b5cbe64237c424d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-21T09:54:39.000Z">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b51f6f96b81f8ffa.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-01-21T09:59:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FJF's Tech Blog的">
 <meta name="twitter:description" content="由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。
@@ -198,7 +198,10 @@ A. 设置tableView a.因为当UINavigationBar和UITabBar隐藏的时候，tableV
 - (void)fj_moveByTranslationY:(CGFloat)translationY;
 </code></pre><p>###F.在- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate函数里面判断当前NavigationBar偏移是否超过一半，如果一半则动画隐藏，如果没有则动画显示:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//恢复或隐藏navigationBar和statusBar</span></div><div class="line">- (<span class="keyword">void</span>)restoreNavigationBarAndStatusBarWithContentOffset:(<span class="built_in">CGPoint</span>)contentOffset &#123;</div><div class="line">     <span class="built_in">CGFloat</span> navigationBarCenterHeight  = kNavigationBarHeight/<span class="number">2.0</span>;</div><div class="line">     <span class="built_in">CGFloat</span> transformTy = <span class="keyword">self</span>.navigationController.navigationBar.transform.ty;</div><div class="line">     <span class="keyword">if</span> (transformTy &lt; <span class="number">0</span> &amp;&amp; transformTy &gt; -kNavigationBarHeight) &#123;</div><div class="line">         <span class="keyword">if</span> (transformTy &lt; -navigationBarCenterHeight &amp;&amp; contentOffset.y &gt; -navigationBarCenterHeight) &#123;</div><div class="line">             [<span class="built_in">UIView</span> animateWithDuration:kDefaultAnimationTime animations:^&#123;</div><div class="line">                 [<span class="keyword">self</span> hideNavigationBarAndStatusBar];</div><div class="line">            	 &#125;];</div><div class="line">          &#125;</div><div class="line">         <span class="keyword">else</span> &#123;</div><div class="line">            [<span class="built_in">UIView</span> animateWithDuration:kDefaultAnimationTime animations:^&#123;</div><div class="line">               [<span class="keyword">self</span> showNavigationBarAndStatusBar];</div><div class="line">            &#125;];</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h2 id="3-最后"><a href="#3-最后" class="headerlink" title="3.最后:"></a>3.最后:</h2><p>送上我最喜欢之一的动漫图:</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/2252551-8b5cbe64237c424d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="金木研.jpg"></p>
+<p><br></p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-b51f6f96b81f8ffa.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="光.jpeg"></center>
+
+<p><br></p>
 <p>这是<a href="https://github.com/fangjinfeng/FJGradientNavigationAndStatusBar" target="_blank" rel="external">gitHub链接</a>，大家有兴趣可以看一下，如果觉得不错，麻烦给个喜欢或星，谢谢！</p>
 
       
