@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://fjf.com"></form>
@@ -94,17 +94,26 @@ self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,0,0,0);
 
 _originalOffsetY = scrollView.contentOffset.y;//将这次tableView偏移量重新赋值给_originalOffsetY
 </code></pre><p>又因为当UINavigationBar和UITabBar已经隐藏，继续向上滚动，已经不需要隐藏，同样的当tableView滚动到最后滚不动的时候UINavigationBar和UITabBar也不需要移动，所以添加判断条件</p>
-<p>//判断是否滚动到底部<br>CGFloat bottomOffset = scrollView.contentSize.height- scrollView.contentOffset.y- scrollView.frame.size.height; </p>
-<p>//判断UINavigationBar是否已经隐藏<br>scrollView.contentOffset.y &gt; - (2*kNavigationBarHeight)</p>
-<p>//UIScrollView 函数</p>
-<ul>
-<li>(void)scrollViewDidScroll:(UIScrollView*)scrollView {</li>
-</ul>
-<p>CGFloat bottomOffset = scrollView.contentSize.height- scrollView.contentOffset.y- scrollView.frame.size.height;</p>
-<p>if(scrollView.contentOffset.y&gt; - kNavigationBarHeight &amp;&amp; bottomOffset &gt;0) {</p>
-<p>CGFloat offsetY = scrollView.contentOffset.y-_originalOffsetY;</p>
-<p>[self moveNavigationBarAndStatusBarByOffsetY:offsetY];<br>}<br>_originalOffsetY= scrollView.contentOffset.y;<br>}</p>
-<p>C.moveNavigationBarAndStatusBarByOffsetY函数设置UINavigationBar和UITabBar相关transform.ty位置的值，同时设置相关背景图片的透明度</p>
+<pre><code>//判断是否滚动到底部
+CGFloat bottomOffset = scrollView.contentSize.height- scrollView.contentOffset.y- scrollView.frame.size.height; 
+
+//判断UINavigationBar是否已经隐藏
+scrollView.contentOffset.y &gt; - (2*kNavigationBarHeight)
+
+//UIScrollView 函数
+- (void)scrollViewDidScroll:(UIScrollView*)scrollView {
+
+    CGFloat bottomOffset = scrollView.contentSize.height- scrollView.contentOffset.y- scrollView.frame.size.height;
+
+    if(scrollView.contentOffset.y&gt; - kNavigationBarHeight &amp;&amp; bottomOffset &gt;0) {
+
+    CGFloat offsetY = scrollView.contentOffset.y-_originalOffsetY;
+
+    [self moveNavigationBarAndStatusBarByOffsetY:offsetY];
+    }
+    _originalOffsetY= scrollView.contentOffset.y;
+}
+</code></pre><p>C.moveNavigationBarAndStatusBarByOffsetY函数设置UINavigationBar和UITabBar相关transform.ty位置的值，同时设置相关背景图片的透明度</p>
 <p>// 通过偏移量移动NavigationBar和StatusBar</p>
 <ul>
 <li><p>(void)moveNavigationBarAndStatusBarByOffsetY:(CGFloat)offsetY {</p>
@@ -219,7 +228,7 @@ if (transformTy &lt; 0 &amp;&amp; transformTy &gt; -kNavigationBarHeight) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://fjf.com/2017/01/16/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" data-id="ciy6o9jnz0000k35xuav7f5ur" class="article-share-link">Partager</a>
+      <a data-url="http://fjf.com/2017/01/16/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" data-id="ciy6oc6ie0000kt5xw5nyfuq0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -265,7 +274,7 @@ if (transformTy &lt; 0 &amp;&amp; transformTy &gt; -kNavigationBarHeight) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://fjf.com/2017/01/16/hello-world/" data-id="ciy6o9jo30001k35xxvnvz8jp" class="article-share-link">Partager</a>
+      <a data-url="http://fjf.com/2017/01/16/hello-world/" data-id="ciy6oc6ii0001kt5xvdw7bbuu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -300,7 +309,7 @@ if (transformTy &lt; 0 &amp;&amp; transformTy &gt; -kNavigationBarHeight) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -325,7 +334,7 @@ if (transformTy &lt; 0 &amp;&amp; transformTy &gt; -kNavigationBarHeight) {
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 fjf<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
