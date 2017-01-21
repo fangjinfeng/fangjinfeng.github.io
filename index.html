@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://fjf.com"></form>
@@ -86,12 +86,14 @@
         <p>由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。</p>
 <h1 id="1-效果图"><a href="#1-效果图" class="headerlink" title="1.效果图"></a>1.效果图</h1><p><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></p>
 <h1 id="2-思路"><a href="#2-思路" class="headerlink" title="2.思路"></a>2.思路</h1><h2 id="A-设置tableView"><a href="#A-设置tableView" class="headerlink" title="A. 设置tableView"></a>A. 设置tableView</h2><p>a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又要显示在UINavigationBar下方，所以需要设置tablewView的frame和contentInset：</p>
-<p>self.tableView.frame = CGRectMake(0, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);</p>
-<p>self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,0,0,0);</p>
-<p>B.当tableView向上移动一个属性,UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在- (void)scrollViewDidScroll:(UIScrollView*)scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离：CGFloat_originalOffsetY;//上一次偏移量</p>
-<p>CGFloat offsetY = scrollView.contentOffset.y-_originalOffsetY;//获取每次滚动偏移的距离</p>
-<p>_originalOffsetY = scrollView.contentOffset.y;//将这次tableView偏移量重新赋值给_originalOffsetY</p>
-<p>又因为当UINavigationBar和UITabBar已经隐藏，继续向上滚动，已经不需要隐藏，同样的当tableView滚动到最后滚不动的时候UINavigationBar和UITabBar也不需要移动，所以添加判断条件</p>
+<pre><code>self.tableView.frame = CGRectMake(0, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);
+
+self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,0,0,0);
+</code></pre><p>B.当tableView向上移动一个属性,UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在- (void)scrollViewDidScroll:(UIScrollView*)scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离：CGFloat_originalOffsetY;//上一次偏移量</p>
+<pre><code>CGFloat offsetY = scrollView.contentOffset.y-_originalOffsetY;//获取每次滚动偏移的距离
+
+_originalOffsetY = scrollView.contentOffset.y;//将这次tableView偏移量重新赋值给_originalOffsetY
+</code></pre><p>又因为当UINavigationBar和UITabBar已经隐藏，继续向上滚动，已经不需要隐藏，同样的当tableView滚动到最后滚不动的时候UINavigationBar和UITabBar也不需要移动，所以添加判断条件</p>
 <p>//判断是否滚动到底部<br>CGFloat bottomOffset = scrollView.contentSize.height- scrollView.contentOffset.y- scrollView.frame.size.height; </p>
 <p>//判断UINavigationBar是否已经隐藏<br>scrollView.contentOffset.y &gt; - (2*kNavigationBarHeight)</p>
 <p>//UIScrollView 函数</p>
@@ -217,7 +219,7 @@ if (transformTy &lt; 0 &amp;&amp; transformTy &gt; -kNavigationBarHeight) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://fjf.com/2017/01/16/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" data-id="ciy6o8j2q0000jm5x1qcw6c2g" class="article-share-link">Share</a>
+      <a data-url="http://fjf.com/2017/01/16/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" data-id="ciy6o9jnz0000k35xuav7f5ur" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -263,7 +265,7 @@ if (transformTy &lt; 0 &amp;&amp; transformTy &gt; -kNavigationBarHeight) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://fjf.com/2017/01/16/hello-world/" data-id="ciy6o8j2u0001jm5xqxnhzqp4" class="article-share-link">Share</a>
+      <a data-url="http://fjf.com/2017/01/16/hello-world/" data-id="ciy6o9jo30001k35xxvnvz8jp" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -298,7 +300,7 @@ if (transformTy &lt; 0 &amp;&amp; transformTy &gt; -kNavigationBarHeight) {
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -323,7 +325,7 @@ if (transformTy &lt; 0 &amp;&amp; transformTy &gt; -kNavigationBarHeight) {
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 fjf<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
