@@ -3,14 +3,41 @@
 <head>
   <meta charset="utf-8">
   
-  <title>成长笔记</title>
+  <title>UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏 | 成长笔记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="成长笔记">
-<meta property="og:url" content="http://fjf.com/index.html">
+  <meta name="description" content="由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。
+1.效果图
+Create a new post1$ hexo new &quot;My New Post&quot;
+More info: Writing
+Run server1$ hexo server
+More info: Server
+Generate static files1$ hexo generate
+More">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏">
+<meta property="og:url" content="http://fjf.com/2017/01/16/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/index.html">
 <meta property="og:site_name" content="成长笔记">
+<meta property="og:description" content="由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。
+1.效果图
+Create a new post1$ hexo new &quot;My New Post&quot;
+More info: Writing
+Run server1$ hexo server
+More info: Server
+Generate static files1$ hexo generate
+More">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2017-01-21T03:22:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="成长笔记">
+<meta name="twitter:title" content="UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏">
+<meta name="twitter:description" content="由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。
+1.效果图
+Create a new post1$ hexo new &quot;My New Post&quot;
+More info: Writing
+Run server1$ hexo server
+More info: Server
+Generate static files1$ hexo generate
+More">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip">
   
     <link rel="alternate" href="/atom.xml" title="成长笔记" type="application/atom+xml">
   
@@ -59,55 +86,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/16/hello-world/" class="article-date">
-  <time datetime="2017-01-16T06:00:37.000Z" itemprop="datePublished">2017-01-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/16/hello-world/">2016 总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>不知不觉间，2016已经走到年尾了。过几天就是农历的除夕了，粗略回想一下，真的觉得2016过得贼快，仿佛什么都没做，它就溜走了；但细细一想，其实这一年里也发生了很多事情。而且，对于我来说很多都是大事。</p>
-<h2 id="工作"><a href="#工作" class="headerlink" title="工作"></a>工作</h2><p>工作是这一整年的重心，来青柠互动也一年多了，作为初创公司的元老之一，这一年基本一直走在项目的最前端，说实话，挺喜欢IT这个行业的，主要是因为IT人员：基本闷骚但大多善良；也挺喜欢青柠的，因为这里有熟悉的朋友：姜总、廖总、余红、鹏程、强哥、傲座……</p>
-<h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://fjf.com/2017/01/16/hello-world/" data-id="ciy6o5vfz0000iv5xbp31xfdf" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/01/16/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" class="article-date">
   <time datetime="2017-01-16T06:00:37.000Z" itemprop="datePublished">2017-01-16</time>
@@ -120,8 +99,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/16/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</a>
+    <h1 class="article-title" itemprop="name">
+      UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏
     </h1>
   
 
@@ -149,10 +128,23 @@
     </footer>
   </div>
   
-</article>
-
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/16/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          2016 总结
+        
+      </div>
+    </a>
+  
+  
+</nav>
 
   
+</article>
 
 </section>
         
