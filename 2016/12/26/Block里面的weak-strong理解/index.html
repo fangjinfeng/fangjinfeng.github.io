@@ -6,17 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>Tag: 超时 回调 | Fjf&#39;s Tech Blog</title>
+  <title>Block里面的weak-strong理解 | Fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="IOS开发工程师一枚。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Fjf's Tech Blog">
-<meta property="og:url" content="//fjf.com/tags/超时-回调/index.html">
+  <meta name="description" content="快年底了，想对一些之前有点模糊的概念进行总结，所以写了总结笔记。主要参考了这几篇文章:Block技术中的weak-strong什么时候在 block 中不需要使用 weakSelf为什么 weakSelf 需要配合 strong self 使用block 什么时候需要构造循环引用
+一.循环引用例子12345678910111213141516171819202122232425#import &quot;V">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Block里面的weak-strong理解">
+<meta property="og:url" content="//fjf.com/2016/12/26/Block里面的weak-strong理解/index.html">
 <meta property="og:site_name" content="Fjf's Tech Blog">
-<meta property="og:description" content="IOS开发工程师一枚。">
+<meta property="og:description" content="快年底了，想对一些之前有点模糊的概念进行总结，所以写了总结笔记。主要参考了这几篇文章:Block技术中的weak-strong什么时候在 block 中不需要使用 weakSelf为什么 weakSelf 需要配合 strong self 使用block 什么时候需要构造循环引用
+一.循环引用例子12345678910111213141516171819202122232425#import &quot;V">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-927de9548b90da60.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-01-22T13:09:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Fjf's Tech Blog">
-<meta name="twitter:description" content="IOS开发工程师一枚。">
+<meta name="twitter:title" content="Block里面的weak-strong理解">
+<meta name="twitter:description" content="快年底了，想对一些之前有点模糊的概念进行总结，所以写了总结笔记。主要参考了这几篇文章:Block技术中的weak-strong什么时候在 block 中不需要使用 weakSelf为什么 weakSelf 需要配合 strong self 使用block 什么时候需要构造循环引用
+一.循环引用例子12345678910111213141516171819202122232425#import &quot;V">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-927de9548b90da60.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="Fjf&#39;s Tech Blog" type="application/atom+xml">
   
@@ -142,36 +148,83 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Block里面的weak-strong理解" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/12/06/NSTimer 超时 block回调/" class="archive-article-date">
-  	<time datetime="2016-12-06T12:17:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-06</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/06/NSTimer 超时 block回调/">NSTimer 超时 block回调</a>
+    <h1 class="article-title" itemprop="name">
+      Block里面的weak-strong理解
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2016/12/26/Block里面的weak-strong理解/" class="archive-article-date">
+  	<time datetime="2016-12-26T13:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>快年底了，想对一些之前有点模糊的概念进行总结，所以写了总结笔记。主要参考了这几篇文章:<br><a href="http://www.jianshu.com/p/1515fb0c3568" target="_blank" rel="external">Block技术中的weak-strong</a><br><a href="http://url.cn/42G82a0" target="_blank" rel="external">什么时候在 block 中不需要使用 weakSelf</a><br><a href="http://url.cn/42G83jN" target="_blank" rel="external">为什么 weakSelf 需要配合 strong self 使用</a><br><a href="http://url.cn/42G845O" target="_blank" rel="external">block 什么时候需要构造循环引用</a></p>
+<h1 id="一-循环引用例子"><a href="#一-循环引用例子" class="headerlink" title="一.循环引用例子"></a>一.循环引用例子</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">"ViewController.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ViewController</span>()</span>&#123;</div><div class="line">       <span class="keyword">id</span> _observer;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">ViewController</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">        [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    </div><div class="line">        _observer = [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserverForName:<span class="string">@"kThemeChangeNotification"</span> object:<span class="literal">nil</span> queue:[<span class="built_in">NSOperationQueue</span> mainQueue] usingBlock:^(<span class="built_in">NSNotification</span> * _Nonnull note) &#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, <span class="keyword">self</span>);</div><div class="line">        &#125;];</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)dealloc &#123;</div><div class="line">    <span class="keyword">if</span> (_observer) &#123;</div><div class="line">      [[<span class="built_in">NSNotificationCenter</span> defaultCenter] removeObserver:_observer];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>在这段代码中，我们向通知中心注册了一个观察者，然后在dealloc时，解除该注册，看起来很正常，但这里存在循环引用。</p>
+<p>a.消息通知block引用了self,这里self对象被block保留一次<br>b._observer又retain该block的一份拷贝，通知中心又持有_observer.<br>c.只要_observer对象还没有被解除注册，block就会被通知中心一直持有，从而self就不会被释放，dealloc也不会被调用<br>d.但我们有希望在dealloc中通过removeObserver来解除注册以消除通知中心对_observer/block的保留次数。<br>e.同时_observer是self所在类中定义赋值，被self retain<br>f.总结:因为self要想调用dealloc就必须等通知中心移除注册，释放掉_observer,但是要想通知中心移除注册、释放掉_observer就必须调用dealloc.这样相互等待就变成了死循环。这里即便self不持有_observer也会产生循环引用问题,_observer只是为了告诉通知中心移除哪个注册。</p>
+<h1 id="二、解决方法"><a href="#二、解决方法" class="headerlink" title="二、解决方法:"></a>二、解决方法:</h1><p><strong>1.通过weakSelf和strongSelf</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ViewController</span>()</span>&#123;</div><div class="line">        <span class="keyword">id</span> _observer;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">ViewController</span></span></div><div class="line"></div><div class="line"><span class="meta">#pragma mark --- life circle</span></div><div class="line"></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">   [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    </div><div class="line">   __<span class="keyword">weak</span> __<span class="keyword">typeof</span> (<span class="keyword">self</span>)weakSelf = <span class="keyword">self</span>;</div><div class="line">   </div><div class="line">   _observer = [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserverForName:<span class="string">@"kThemeChangeNotification"</span> object:<span class="literal">nil</span> queue:[<span class="built_in">NSOperationQueue</span> mainQueue] usingBlock:^(<span class="built_in">NSNotification</span> * _Nonnull note) &#123;</div><div class="line">       __<span class="keyword">strong</span> __<span class="keyword">typeof</span>(weakSelf)strongSelf = weakSelf;</div><div class="line">       <span class="keyword">if</span> (strongSelf) &#123;</div><div class="line">           <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, strongSelf);</div><div class="line">       &#125;</div><div class="line">   &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="selector-tag">-</span> (void)<span class="selector-tag">dealloc</span> &#123;</div><div class="line">   <span class="selector-tag">if</span> (_observer) &#123;</div><div class="line">      <span class="selector-attr">[[NSNotificationCenter defaultCenter]</span> <span class="selector-tag">removeObserver</span><span class="selector-pseudo">:_observer</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这段代码中，通过在block之前定义对self的弱引用，来解决了循环引用问题。</p>
+<p>a.在block之前定义对self的一个弱引用weakSelf,因为是弱引用，所以self被释放时weakSelf会变为nil;<br>b.在block中引用该弱引用，考虑到多线程情况，通过强引用strongSelf来引用该弱引用，这时如果self不为nil就会retain self,以防止在block内部使用过程中self被释放。<br>c.在block块中使用该强引用strongSelf，注意对strongSelf进行nil检测，因为多线程在弱引用weakSelf对强引用strongSelf赋值时，弱引用weakSelf可能已经为nil了<br>d.强引用strongSelf在block作用域结束之后，自动释放。</p>
+<h1 id="三、block不需要使用weakSelf情况"><a href="#三、block不需要使用weakSelf情况" class="headerlink" title="三、block不需要使用weakSelf情况"></a>三、block不需要使用weakSelf情况</h1><p>当block本身不被self持有，而被别的对象持有，同时不产生循环引用的时候，就不需要weakSelf.最常见的代码就是UIView的动画代码。我们在使用UIView的animateWithDuration:animations方法做动画的时候，并不需要使用weakSelf,因为引用的持有关系是:</p>
+<p>a.UIView的某个负责动画的对象持有了block<br>b.block持有了self</p>
+<p>因为self并没有持有block,所以就不存储循环引用，因此就不需要使用weakSelf;</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[UIView animateWithDuration:0.2 animations:<span class="comment">^&#123;</span></div><div class="line">        self.alpha = 1;</div><div class="line">&#125;]<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>当动画结束时，UIView会结束持有这个block，如果没有别的对象持有block的话，block就会释放掉，从而block就会释放对于self的持有，整个内存引用关系被解除。</p>
+<h1 id="四-weakSelf-为什么需要strongSelf配合使用"><a href="#四-weakSelf-为什么需要strongSelf配合使用" class="headerlink" title="四.weakSelf 为什么需要strongSelf配合使用"></a>四.weakSelf 为什么需要strongSelf配合使用</h1><p>在 block 中先写一个 strong self，其实是为了避免在 block 的执行过程中，突然出现 self 被释放的尴尬情况。通常情况下，如果不这么做的话，还是很容易出现一些奇怪的逻辑，甚至闪退。</p>
+<p>我们以 AFNetworking 中 AFNetworkReachabilityManager.m 的一段代码举例：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">__weak</span> __typeof(<span class="keyword">self)weakSelf </span>= <span class="keyword">self;</span></div><div class="line">     AFNetworkReachabilityStatusBlock callback = ^(AFNetworkReachabilityStatus status) &#123;</div><div class="line">    __strong __typeof(weakSelf)<span class="keyword">strongSelf </span>= weakSelf<span class="comment">;</span></div><div class="line">        </div><div class="line">    <span class="meta">if</span> (<span class="keyword">strongSelf) </span>&#123;</div><div class="line">        <span class="keyword">strongSelf.networkReachabilityStatus </span>= status<span class="comment">;</span></div><div class="line">        <span class="meta">if</span> (<span class="keyword">strongSelf.networkReachabilityStatusBlock) </span>&#123;</div><div class="line">           <span class="keyword">strongSelf.networkReachabilityStatusBlock(status);</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>如果没有 strongSelf 的那行代码，那么后面的每一行代码执行时，self 都可能被释放掉了，这样很可能造成逻辑异常。<br>特别是当我们正在执行 strongSelf.networkReachabilityStatusBlock(status); 这个 block 闭包时，如果这个 block 执行到一半时 self 释放，那么多半情况下会 Crash。</p>
+<h1 id="五-block需要构造循环引用"><a href="#五-block需要构造循环引用" class="headerlink" title="五.block需要构造循环引用"></a>五.block需要构造循环引用</h1><p>需要不使用 weak self 的场景是：你需要构造一个循环引用，以便保证引用双方都存在。比如你有一个后台的任务，希望任务执行完后，通知另外一个实例。在我们开源的 YTKNetwork 网络库的源码中，就有这样的场景。</p>
+<p>在 YTKNetwork 库中，我们的每一个网络请求 API 会持有回调的 block，回调的 block 会持有 self，而如果 self 也持有网络请求 API 的话，我们就构造了一个循环引用。虽然我们构造出了循环引用，但是因为在网络请求结束时，网络请求 API 会主动释放对 block 的持有，因此，整个循环链条被解开，循环引用就被打破了，所以不会有内存泄漏问题。代码其实很简单，如下所示：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//  YTKBaseRequest.m</span></div><div class="line">- (<span class="keyword">void</span>)clearCompletionBlock &#123;</div><div class="line">        <span class="comment">// nil out to break the retain cycle.</span></div><div class="line">        <span class="keyword">self</span>.successCompletionBlock = <span class="literal">nil</span>;</div><div class="line">        <span class="keyword">self</span>.failureCompletionBlock = <span class="literal">nil</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>总结来说，解决循环引用问题主要有两个办法：</p>
+<p>第一个办法是「事前避免」，我们在会产生循环引用的地方使用 weak 弱引用，以避免产生循环引用。<br>第二个办法是「事后补救」，我们明确知道会存在循环引用，但是我们在合理的位置主动断开环中的一个引用，使得对象得以回收。</p>
+<h1 id="五-最后"><a href="#五-最后" class="headerlink" title="五.最后:"></a>五.最后:</h1><p>送上一张喜欢的图片:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-927de9548b90da60.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风.jpg"></center>
+
+<p><strong>这是<a href="http://www.jianshu.com/p/5db1579c5454" target="_blank" rel="external">简书链接</a>如果觉得不错，麻烦给个喜欢或star,如果有问题请及时反馈，谢谢！</strong></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -181,29 +234,107 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSTimer</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">weakSelf</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">超时 回调</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">strongSelf</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://fjf.com/2016/12/26/Block里面的weak-strong理解/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2017/01/16/我的2016-年终总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          2016 总结
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2016/12/06/NSTimer 超时 block回调/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">NSTimer 超时 block回调</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -226,9 +357,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",

@@ -395,6 +395,79 @@
 
 
   
+    <article id="post-Block里面的weak-strong理解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/26/Block里面的weak-strong理解/">Block里面的weak-strong理解</a>
+    </h1>
+  
+
+        
+        <a href="/2016/12/26/Block里面的weak-strong理解/" class="archive-article-date">
+  	<time datetime="2016-12-26T13:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>快年底了，想对一些之前有点模糊的概念进行总结，所以写了总结笔记。主要参考了这几篇文章:<br><a href="http://www.jianshu.com/p/1515fb0c3568">Block技术中的weak-strong</a><br><a href="http://url.cn/42G82a0">什么时候在 block 中不需要使用 weakSelf</a><br><a href="http://url.cn/42G83jN">为什么 weakSelf 需要配合 strong self 使用</a><br><a href="http://url.cn/42G845O">block 什么时候需要构造循环引用</a></p>
+<h1 id="一-循环引用例子"><a href="#一-循环引用例子" class="headerlink" title="一.循环引用例子"></a>一.循环引用例子</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">"ViewController.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ViewController</span>()</span>&#123;</div><div class="line">       <span class="keyword">id</span> _observer;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">ViewController</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">        [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    </div><div class="line">        _observer = [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserverForName:<span class="string">@"kThemeChangeNotification"</span> object:<span class="literal">nil</span> queue:[<span class="built_in">NSOperationQueue</span> mainQueue] usingBlock:^(<span class="built_in">NSNotification</span> * _Nonnull note) &#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, <span class="keyword">self</span>);</div><div class="line">        &#125;];</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)dealloc &#123;</div><div class="line">    <span class="keyword">if</span> (_observer) &#123;</div><div class="line">      [[<span class="built_in">NSNotificationCenter</span> defaultCenter] removeObserver:_observer];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2016/12/26/Block里面的weak-strong理解/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Block</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">weakSelf</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">strongSelf</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/26/Block里面的weak-strong理解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-NSTimer 超时 block回调" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -433,11 +506,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSTimer</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Block</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Block</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSTimer</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -452,95 +525,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2016/12/06/NSTimer 超时 block回调/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-OC工具类防崩溃策略(runtime机制)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/28/OC工具类防崩溃策略(runtime机制)/">OC工具类:防崩溃策略(runtime机制)</a>
-    </h1>
-  
-
-        
-        <a href="/2016/11/28/OC工具类防崩溃策略(runtime机制)/" class="archive-article-date">
-  	<time datetime="2016-11-28T09:48:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于上一篇文章中，很多人都说通过类别拓展，添加新方法，然后对新方法进行判断，来达到防止崩溃的目的，这样做法不利于项目的维护和后期的扩展，毕竟长期以来大家习惯了用系统自带的方法。所以最好的方法就是在系统方法里面判断，因此研究了下,通过runtime机制替换了系统的方法，来对参数添加判断，以此来防止崩溃现象。主要启发自这篇文章:</p>
-<p><a href="http://www.cocoachina.com/ios/20141219/10696.html">从NSArray看类簇</a>，这篇文章比较详细介绍了类簇的设计模式。</p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-ad197a76346a5242.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风景.jpeg"></center>
-
-
-
-<h1 id="一-原理"><a href="#一-原理" class="headerlink" title="一.原理"></a>一.原理</h1><p>1.由于NSString、NSArray、NSMutableString、NSMutableArray、NSMutableDictionary这几个类型都是Class Clusters（类簇）设计模式设计出来的，它们偷偷隐藏了很多具体的实现类， 只暴露出简单的接口来供外层调用，实现了很好的封装。</p>
-<p>首先我们利用 NSArray 的几个方法来创建实例对象:</p>
-<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">(lldb) po [NSArray array]</div><div class="line"><span class="variable">&lt;__NSArray0 0x600000017670&gt;</span>(</div><div class="line">)</div><div class="line">(lldb) po [NSArray arrayWithObject:<span class="meta">@"Hello,Zie"];</span></div><div class="line"><span class="variable">&lt;__NSSingleObjectArrayI 0x600000017680&gt;</span>(</div><div class="line">Hello,Zie</div><div class="line">)</div><div class="line">po [NSArray arrayWithObjects:<span class="meta">@1,</span><span class="meta">@2,</span> nil];</div><div class="line"><span class="variable">&lt;__NSArrayI 0x100500050&gt;</span>(</div><div class="line">1,</div><div class="line">2</div><div class="line">)</div></pre></td></tr></table></figure>
-<p>通过打印可以看到由 NSArray ，创建的对象并不是 NSArray 本身，有可能是<strong>NSArray0 ,</strong>NSSingleObjectArrayI 、<strong>NSArrayI ， 这里 NSArray 就是那个抽象类，而被创建出来那些奇奇怪的类就是作为具体的实现类，同时是内部私有的。 所以通过运行时的class_addMethod和class_replaceMethod来添加方法或是通过method_exchangeImplementations来替换系统中对应的原生方法必须依据它具体的实现类，也就是说必须依据</strong>NSArray0 、<strong>NSSingleObjectArrayI 、</strong>NSArrayI这三者，而不能依据NSArray。 </p>
-        
-          <a class="article-more-a" href="/2016/11/28/OC工具类防崩溃策略(runtime机制)/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Runtime</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Method Swizzling</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSAaray,NSMutableArray 数组越界</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NSString, NSMutableString 崩溃</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/11/28/OC工具类防崩溃策略(runtime机制)/">展开全文 >></a>
         </p>
       
 
@@ -651,6 +635,18 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Block</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">weakSelf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">strongSelf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">IOS</a>
               </li>
              
@@ -667,18 +663,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Block</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ImageBrowser</a>
               </li>
              
@@ -688,6 +672,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">仿微博图片浏览</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -704,14 +696,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -732,6 +716,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">情感</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
             
             <div class="clearfix"></div>
