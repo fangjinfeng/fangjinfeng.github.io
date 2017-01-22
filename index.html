@@ -173,7 +173,7 @@
 <h1 id="一-原理"><a href="#一-原理" class="headerlink" title="一.原理"></a>一.原理</h1><p>1.由于NSString、NSArray、NSMutableString、NSMutableArray、NSMutableDictionary这几个类型都是Class Clusters（类簇）设计模式设计出来的，它们偷偷隐藏了很多具体的实现类， 只暴露出简单的接口来供外层调用，实现了很好的封装。</p>
 <p>首先我们利用 NSArray 的几个方法来创建实例对象:</p>
 <figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">(lldb) po [NSArray array]</div><div class="line"><span class="variable">&lt;__NSArray0 0x600000017670&gt;</span>(</div><div class="line">)</div><div class="line">(lldb) po [NSArray arrayWithObject:<span class="meta">@"Hello,Zie"];</span></div><div class="line"><span class="variable">&lt;__NSSingleObjectArrayI 0x600000017680&gt;</span>(</div><div class="line">Hello,Zie</div><div class="line">)</div><div class="line">po [NSArray arrayWithObjects:<span class="meta">@1,</span><span class="meta">@2,</span> nil];</div><div class="line"><span class="variable">&lt;__NSArrayI 0x100500050&gt;</span>(</div><div class="line">1,</div><div class="line">2</div><div class="line">)</div></pre></td></tr></table></figure>
-<p>通过打印可以看到由 NSArray ，创建的对象并不是 NSArray 本身，有可能是/<strong>NSArray0 ,/</strong>NSSingleObjectArrayI 、/<strong>NSArrayI ， 这里 NSArray 就是那个抽象类，而被创建出来那些奇奇怪的类就是作为具体的实现类，同时是内部私有的。 所以通过运行时的class_addMethod和class_replaceMethod来添加方法或是通过method_exchangeImplementations来替换系统中对应的原生方法必须依据它具体的实现类，也就是说必须依据/</strong>NSArray0 、/<strong>NSSingleObjectArrayI 、 /</strong>NSArrayI这三者，而不能依据NSArray。<br><br><br>
+<p>通过打印可以看到由 NSArray ，创建的对象并不是 NSArray 本身，有可能是<strong>NSArray0 ,</strong>NSSingleObjectArrayI 、<strong>NSArrayI ， 这里 NSArray 就是那个抽象类，而被创建出来那些奇奇怪的类就是作为具体的实现类，同时是内部私有的。 所以通过运行时的class_addMethod和class_replaceMethod来添加方法或是通过method_exchangeImplementations来替换系统中对应的原生方法必须依据它具体的实现类，也就是说必须依据</strong>NSArray0 、<strong>NSSingleObjectArrayI 、</strong>NSArrayI这三者，而不能依据NSArray。<br><br><br>
         
           <a class="article-more-a" href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/#more">more >></a>
         
@@ -572,18 +572,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">动画</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">UINavigationBar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
               </li>
              
@@ -597,6 +585,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">动画</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">UINavigationBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
               </li>
              
               <li class="article-tag-list-item">
