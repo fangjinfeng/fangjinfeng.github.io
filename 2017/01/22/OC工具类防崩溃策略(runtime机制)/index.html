@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-660810b4b19c20c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-50fb9b2b29b4bbd9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f16b189494df783f.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T09:27:45.000Z">
+<meta property="og:updated_time" content="2017-01-22T09:31:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OC工具类:防崩溃策略(runtime机制)">
 <meta name="twitter:description" content="由于上一篇文章中，很多人都说通过类别拓展，添加新方法，然后对新方法进行判断，来达到防止崩溃的目的，这样做法不利于项目的维护和后期的扩展，毕竟长期以来大家习惯了用系统自带的方法。所以最好的方法就是在系统方法里面判断，因此研究了下,通过runtime机制替换了系统的方法，来对参数添加判断，以此来防止崩溃现象。主要启发自这篇文章:
@@ -183,7 +183,7 @@
 <p>首先我们利用 NSArray 的几个方法来创建实例对象:</p>
 <figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">(lldb) po [NSArray array]</div><div class="line"><span class="variable">&lt;__NSArray0 0x600000017670&gt;</span>(</div><div class="line">)</div><div class="line">(lldb) po [NSArray arrayWithObject:<span class="meta">@"Hello,Zie"];</span></div><div class="line"><span class="variable">&lt;__NSSingleObjectArrayI 0x600000017680&gt;</span>(</div><div class="line">Hello,Zie</div><div class="line">)</div><div class="line">po [NSArray arrayWithObjects:<span class="meta">@1,</span><span class="meta">@2,</span> nil];</div><div class="line"><span class="variable">&lt;__NSArrayI 0x100500050&gt;</span>(</div><div class="line">1,</div><div class="line">2</div><div class="line">)</div></pre></td></tr></table></figure>
 <p>通过打印可以看到由 NSArray ，创建的对象并不是 NSArray 本身，有可能是/<strong>NSArray0 ,/</strong>NSSingleObjectArrayI 、/<strong>NSArrayI ， 这里 NSArray 就是那个抽象类，而被创建出来那些奇奇怪的类就是作为具体的实现类，同时是内部私有的。 所以通过运行时的class_addMethod和class_replaceMethod来添加方法或是通过method_exchangeImplementations来替换系统中对应的原生方法必须依据它具体的实现类，也就是说必须依据/</strong>NSArray0 、/<strong>NSSingleObjectArrayI 、 /</strong>NSArrayI这三者，而不能依据NSArray。 </p>
-<h1 id="二-具体实现-以NSString和NSMutableArray为例"><a href="#二-具体实现-以NSString和NSMutableArray为例" class="headerlink" title="二.具体实现:以NSString和NSMutableArray为例"></a>二.具体实现:以NSString和NSMutableArray为例</h1><p>##1.NSString</p>
+<h1 id="二-具体实现-以NSString和NSMutableArray为例"><a href="#二-具体实现-以NSString和NSMutableArray为例" class="headerlink" title="二.具体实现:以NSString和NSMutableArray为例"></a>二.具体实现:以NSString和NSMutableArray为例</h1><p><strong>1.NSString</strong></p>
 <center><img src="http://upload-images.jianshu.io/upload_images/2252551-53135b8f6384d005.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="NSString实例类型.png"></center>
 
 <center>NSString实例类型.png</center>
@@ -413,13 +413,14 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
 </code></pre><p>NSMutableArray的<strong>removeObjectAtIndex</strong>函数传入一个超过数组本身长度的索引，就会导致崩溃，所以你去替换系统的<strong>removeObjectAtIndex</strong>方法这样也是没有效果的</p>
 <center><img src="http://upload-images.jianshu.io/upload_images/2252551-660810b4b19c20c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="NSMutableArray的removeObjectAtIndex.png"></center><br><br><br><center> NSMutableArray的removeObjectAtIndex.png </center>
 
-<p>因为真正导致该崩溃的因为是因为系统执行了<strong>removeObjectsInRange:</strong>函数，函数里面的参数range超出了数组的范围，需要对该参数进行判断，才能有效的防止崩溃，所以替换系统的方法，必须先清楚引起系统崩溃的具体原因，才能对症下药。</p>
-<h2 id="2-NSMutableArray"><a href="#2-NSMutableArray" class="headerlink" title="2.NSMutableArray"></a>2.NSMutableArray</h2><p>NSMutableArray主要原理跟NSString是一样的，但这里有一点需要注意的:</p>
-<p>由于NSArray和NSMutableArray里面都有objectAtIndex这个原生函数，但是NSArray和NSMutableArray的实际类不一样，所以NSArray和NSMutableArray里面的替换方法必须不一样，否则因为替换 <strong>method_exchangeImplementations(originalMethod, swizzledMethod)</strong>;只是简单的进行将新方法替换掉原有的方法，但是它并没有类别的区分，所以如果NSArray和NSMutableArray里面的替换方法一样，那就只会执行NSMutableArray里面的替换方法，NSArray里面的不起作用(NSArray里面的load方法先执行)。</p>
+<p>因为真正导致该崩溃的因为是因为系统执行了removeObjectsInRange:函数，函数里面的参数range超出了数组的范围，需要对该参数进行判断，才能有效的防止崩溃，所以替换系统的方法，必须先清楚引起系统崩溃的具体原因，才能对症下药。</p>
+<p><strong>2.NSMutableArray</strong></p>
+<p>NSMutableArray主要原理跟NSString是一样的，但这里有一点需要注意的:</p>
+<p>由于NSArray和NSMutableArray里面都有objectAtIndex这个原生函数，但是NSArray和NSMutableArray的实际类不一样，所以NSArray和NSMutableArray里面的替换方法必须不一样，否则因为替换 method_exchangeImplementations(originalMethod, swizzledMethod);只是简单的进行将新方法替换掉原有的方法，但是它并没有类别的区分，所以如果NSArray和NSMutableArray里面的替换方法一样，那就只会执行NSMutableArray里面的替换方法，NSArray里面的不起作用(NSArray里面的load方法先执行)。</p>
 <center><img src="http://upload-images.jianshu.io/upload_images/2252551-50fb9b2b29b4bbd9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风景2.jpg"></center>
 
 
-<h1 id="三-总结"><a href="#三-总结" class="headerlink" title="三.总结"></a>三.总结</h1><h2 id="1-NSArray"><a href="#1-NSArray" class="headerlink" title="1.NSArray"></a>1.NSArray</h2><p>主要替换<strong>objectAtIndex:</strong>方法</p>
+<h1 id="三-总结"><a href="#三-总结" class="headerlink" title="三.总结"></a>三.总结</h1><h2 id="1-NSArray"><a href="#1-NSArray" class="headerlink" title="1.NSArray"></a>1.NSArray</h2><p>主要替换objectAtIndex:方法</p>
 <pre><code>+ (void)load {
     //只执行一次这个方法
     static dispatch_once_t onceToken;
@@ -480,7 +481,7 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
     }
     return [self safe_ZeroObjectAtIndex:index];
 }
-</code></pre><h2 id="2-NSMutableArray-1"><a href="#2-NSMutableArray-1" class="headerlink" title="2.NSMutableArray"></a>2.NSMutableArray</h2><p>主要替换方法:objectAtIndex:、removeObjectsInRange:、insertObject:atIndex:、removeObject:inRange:这几个方法</p>
+</code></pre><h2 id="2-NSMutableArray"><a href="#2-NSMutableArray" class="headerlink" title="2.NSMutableArray"></a>2.NSMutableArray</h2><p>主要替换方法:objectAtIndex:、removeObjectsInRange:、insertObject:atIndex:、removeObject:inRange:这几个方法</p>
 <pre><code>+ (void)load {
     //只执行一次这个方法
     static dispatch_once_t onceToken;
@@ -1100,8 +1101,8 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
 <nav id="article-nav">
   
   
-    <a href="/2017/01/22/Runtime(整理笔记)/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Runtime (整理笔记)</div>
+    <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -1225,14 +1226,6 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">动画</a>
               </li>
              
@@ -1242,6 +1235,14 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
              
               <li class="article-tag-list-item">
