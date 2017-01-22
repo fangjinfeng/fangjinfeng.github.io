@@ -38,7 +38,7 @@ SDWebImage源码剖析（二）
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f9a6e2182226391c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f53ce164dc39f86c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f9e75aade7c43568.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T13:58:18.000Z">
+<meta property="og:updated_time" content="2017-01-22T14:00:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SDWebImage 剖析笔记">
 <meta name="twitter:description" content="项目中一直都有使用SDWebImage，对这个框架有一定的了解，但是体系却未能贯通，因此特地整理下,主要参考:
@@ -210,10 +210,7 @@ SDWebImage源码剖析（二）
 <li>缓存中不存在图片就异步下载图片，加入缓存，更新UIImageView.</li>
 </ul>
 <p>具体流程图:</p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-67de99c91d2725e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDWebImage实现流程图.png"></center><br><br><br><center>SDWebImage实现流程图</center>
-
-<h1 id="二-架构简介"><a href="#二-架构简介" class="headerlink" title="二.架构简介:"></a>二.架构简介:</h1><p>A.架构图:</p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-b5f53e4e8f08dabf.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDWebImageView_relationship.jpeg"></center><br><br><br><center>SDWebImageView_relationship</center>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-67de99c91d2725e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDWebImage实现流程图.png"></center><br><br><br><center>SDWebImage实现流程图</center><br><a id="more"></a><br>#    二.架构简介:<br>A.架构图:<br><br><center><img src="http://upload-images.jianshu.io/upload_images/2252551-b5f53e4e8f08dabf.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDWebImageView_relationship.jpeg"></center><br><br><br><center>SDWebImageView_relationship</center>
 
 <p>UIImageView+WebCaceh和UIButton+WebCache直接为UIkit框架提供接口，而SDWebImageManger负责处理和协调SDWebImageDownloader和SDWebImageCache.并与UIkit层进行交互。</p>
 <h1 id="三、具体分析"><a href="#三、具体分析" class="headerlink" title="三、具体分析:"></a>三、具体分析:</h1><h2 id="1-UIImageView-WebCache"><a href="#1-UIImageView-WebCache" class="headerlink" title="1.UIImageView+WebCache"></a>1.UIImageView+WebCache</h2><h3 id="A-框架常用入口"><a href="#A-框架常用入口" class="headerlink" title="A.框架常用入口"></a>A.框架常用入口</h3><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 所有设置图片最终都会调用这个方法</span></div><div class="line">- (void)sd_setImageWithURL:(NSURL *)url </div><div class="line"><span class="symbol">          placeholderImage:</span>(UIImage *)<span class="class">placeholder </span>&#123;</div><div class="line">      [self sd_setImageWithURL:url </div><div class="line"><span class="symbol">            placeholderImage:</span>placeholder </div><div class="line"><span class="symbol">                     options:</span><span class="number">0</span> </div><div class="line"><span class="symbol">                    progress:</span>nil </div><div class="line"><span class="symbol">                   completed:</span>nil];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -622,6 +619,14 @@ SDWebImage源码剖析（二）
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">UIAlertView</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">标题</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">动画</a>
               </li>
              
@@ -631,14 +636,6 @@ SDWebImage源码剖析（二）
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">UIAlertView</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">标题</a>
               </li>
              
               <li class="article-tag-list-item">
