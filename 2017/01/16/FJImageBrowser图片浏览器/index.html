@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-78c4d24ec8eb86cf.gif?imageMogr2/auto-orient/strip">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-c98462a5f03d0fdb.gif?imageMogr2/auto-orient/strip">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-1beef4cb36f087d8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T12:54:53.000Z">
+<meta property="og:updated_time" content="2017-01-22T12:57:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FJImageBrowser图片浏览器">
 <meta name="twitter:description" content="一.框架介绍由于项目需求，然后也没有找到完全合适的第三方，所以自己写了一个图片浏览器，后来公司几个项目都用到了这个图片浏览器，为了适应各种产品需求，较之前添加了些功能,主要支持:
@@ -191,8 +191,7 @@
 <figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// 显示 模式</div><div class="line">typedef <span class="type">NS_ENUM</span>(<span class="type">NSInteger</span>, <span class="type">PhotoViewShowType</span>)&#123;</div><div class="line">        // 模仿微博显示</div><div class="line">        <span class="type">PhotoViewShowTypeOfWeiBo</span> = 0,</div><div class="line">        // 模仿微信显示</div><div class="line">        <span class="type">PhotoViewShowTypeOfWeiXin</span> = 1,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p><strong>2.实现代理方法 – FJPhotosViewDelegate</strong></p>
 <figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 返回临时占位图片（即原来的小图）</span></div><div class="line"></div><div class="line"><span class="selector-tag">-</span> (UIImageView *)<span class="selector-tag">photoBrowser</span><span class="selector-pseudo">:(FJPhotosView</span> *)<span class="selector-tag">browser</span> <span class="selector-tag">placeholderImageForIndex</span><span class="selector-pseudo">:(NSInteger)index</span> &#123; </div><div class="line"><span class="comment">//获取占位小图代码；</span></div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">// 返回临时占位图片位置</span></div><div class="line"></div><div class="line"><span class="selector-tag">-</span>(CGRect)<span class="selector-tag">photoBrowser</span><span class="selector-pseudo">:(FJPhotosView</span> *)<span class="selector-tag">browser</span> <span class="selector-tag">targetRectForIndex</span><span class="selector-pseudo">:(NSInteger)index</span> &#123;</div><div class="line"><span class="comment">//获取占位图片位置代码；</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="三-代码解析"><a href="#三-代码解析" class="headerlink" title="三.代码解析"></a>三.代码解析</h1><p>###1.架构解析</p>
-<p><strong>A.FJPhotosView:</strong></p>
+<h1 id="三-代码解析"><a href="#三-代码解析" class="headerlink" title="三.代码解析"></a>三.代码解析</h1><h3 id="1-架构解析"><a href="#1-架构解析" class="headerlink" title="1.架构解析"></a>1.架构解析</h3><p><strong>A.FJPhotosView:</strong></p>
 <p>a.FJPhotosView图片浏览器入口，加载在[UIApplication sharedApplication].keyWindow上，这样可以有效的避免消失时的抖动情况。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">instancetype</span>)initWithFrame:(<span class="built_in">CGRect</span>)frame &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> initWithFrame:frame]) &#123;</div><div class="line">        </div><div class="line">            <span class="keyword">self</span>.backgroundColor = [<span class="built_in">UIColor</span> blackColor];</div><div class="line">        </div><div class="line">            <span class="keyword">self</span>.frame = [<span class="built_in">UIApplication</span> sharedApplication].keyWindow.bounds;</div><div class="line">        </div><div class="line">            [[<span class="built_in">UIApplication</span> sharedApplication].keyWindow addSubview:<span class="keyword">self</span>];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>b.FJPhotosView拥有一个最外围UIScrollView负责容纳显示视图和一个UILabel负责显示当前序号,然后根据传入的参数进行初始化</p>
@@ -357,11 +356,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/01/22/Runtime(整理笔记)/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏
+          Runtime (整理笔记)
         
       </div>
     </a>
@@ -528,14 +527,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">动画</a>
               </li>
              
@@ -545,6 +536,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
              
               <li class="article-tag-list-item">
