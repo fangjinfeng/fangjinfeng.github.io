@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>Fjf&#39;s Tech Blog</title>
+  <title>Tag: UI | Fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="IOS开发工程师一枚。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Fjf's Tech Blog">
-<meta property="og:url" content="//fjf.com/index.html">
+<meta property="og:url" content="//fjf.com/tags/UI/index.html">
 <meta property="og:site_name" content="Fjf's Tech Blog">
 <meta property="og:description" content="IOS开发工程师一枚。">
 <meta name="twitter:card" content="summary">
@@ -144,80 +144,34 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-FJFloatingView 可停靠任意位置悬浮窗" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
     
-      <header class="article-header">
-        
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2017/01/22/FJFloatingView 可停靠任意位置悬浮窗/" class="archive-article-date">
+  	<time datetime="2017-01-22T12:17:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
+</a>
+        </div>
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/22/FJFloatingView 可停靠任意位置悬浮窗/">FJFloatingView 可停靠任意位置悬浮窗</a>
+      <a class="archive-article-title" href="/2017/01/22/FJFloatingView 可停靠任意位置悬浮窗/">FJFloatingView 可停靠任意位置悬浮窗</a>
     </h1>
   
 
-        
-        <a href="/2017/01/22/FJFloatingView 可停靠任意位置悬浮窗/" class="archive-article-date">
-  	<time datetime="2017-01-22T12:17:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于项目需求，需要一个悬浮窗口，随手势移动，可以停靠在任意位置，所以自己整了一个，简单封装一下，希望能帮到有需要的朋友。</p>
-<h1 id="一-效果图"><a href="#一-效果图" class="headerlink" title="一.效果图"></a>一.效果图</h1><center><img src="http://upload-images.jianshu.io/upload_images/2252551-5230518adea5dd97.gif?imageMogr2/auto-orient/strip" alt="FJFloatingView效果图.gif"></center><br><br><br><center>FJFloatingView效果图</center>
-
-<h1 id="二-使用方法"><a href="#二-使用方法" class="headerlink" title="二.使用方法"></a>二.使用方法</h1><pre><code>FJFloatingView *floatingView = [[FJFloatingView alloc] initWithFrame:CGRectMake(100, 100, FJ_FLOATING_VOICE_VIEW_SIZE, FJ_FLOATING_VOICE_VIEW_SIZE)];
-[self.view addSubview:floatingView];
-</code></pre><h1 id="三-主要代码分析"><a href="#三-主要代码分析" class="headerlink" title="三.主要代码分析:"></a>三.主要代码分析:</h1><p>滑动范围四个值:</p>
-<p>// 上边距(默认值:0)<br>@property (nonatomic, assign) CGFloat upEdgeDistance;<br>// 右边距(右边距:SCREEN_WIDTH)<br>@property (nonatomic, assign) CGFloat downEdgeDistance;<br>// 左边距(默认值:0)<br>@property (nonatomic, assign) CGFloat leftEdgeDistance;<br>// 下边距(默认值:SCREEN_HEIGHT)<br>@property (nonatomic, assign) CGFloat rightEdgeDistance;</p>
-<p>这四个值主要是有利于需求的扩展，比如需求规定不能超过状态栏，只需将上边距设为20即可。</p>
-<p>手势滑动处理函数，限定floatingView在规定的范围滑动:</p>
-<p>#pragma mark — response event</p>
-<p>-(void)pan:(UIPanGestureRecognizer *)sender {<br>        switch (sender.state) {<br>            case UIGestureRecognizerStateBegan:<br>            {<br>                _beganPoint = [sender locationInView:self.superview];<br>                _curPoint = self.center;<br>            }<br>                break;<br>            case UIGestureRecognizerStateChanged:<br>            {<br>                CGPoint point = [sender locationInView:self.superview];</p>
-<pre><code>        NSInteger x_offset = point.x - _beganPoint.x;
-        NSInteger y_offset = point.y - _beganPoint.y;
-        self.tmpView.center = self.center;
-        self.tmpView.center = CGPointMake(_curPoint.x + x_offset, _curPoint.y + y_offset);
-        // 设置 左边距
-        if (CGRectGetMinX(self.tmpView.frame) &lt; self.leftEdgeDistance){
-            x_offset -= CGRectGetMinX(self.tmpView.frame);
-        }
-        // 设置 右边距
-        if (CGRectGetMaxX(self.tmpView.frame) &gt; self.rightEdgeDistance) {
-            x_offset += SCREEN_WIDTH - CGRectGetMaxX(self.tmpView.frame);
-        }
-        // 设置 上边距
-        if (CGRectGetMinY(self.tmpView.frame) &lt; self.upEdgeDistance) {
-            y_offset -= CGRectGetMinY(self.tmpView.frame);
-        }
-        // 设置 下边距
-        if (CGRectGetMaxY(self.tmpView.frame) &gt; self.downEdgeDistance) {
-            y_offset += self.downEdgeDistance - CGRectGetMaxY(self.tmpView.frame);
-        }
-        self.center = CGPointMake(_curPoint.x + x_offset, _curPoint.y + y_offset);
-    }
-        break;
-
-    case UIGestureRecognizerStateEnded:
-        break;
-    default:
-        break;
-}
-</code></pre><p>}</p>
-<h1 id="四-最后"><a href="#四-最后" class="headerlink" title="四.最后:"></a>四.最后:</h1><p>送上一张喜欢的图片:</p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-a7c591e150e8ec18.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="青春.jpg"></center>
-
-
-<p><strong>这是<a href="https://github.com/fangjinfeng/FJFloatingView" target="_blank" rel="external">gitHub链接地址</a>，大家有兴趣可以看一下，如果觉得不错，麻烦给个喜欢或star,如果有问题请及时反馈，谢谢！</strong></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -241,364 +195,19 @@
 		</ul>
 	</div>
 
-      
+          
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/22/FJFloatingView 可停靠任意位置悬浮窗/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-
-
-
-
-
-
-
   
-    <article id="post-OC工具类防崩溃策略(runtime机制)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
+    </div></section>
+  
+
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/">OC工具类:防崩溃策略(runtime机制)</a>
-    </h1>
-  
-
-        
-        <a href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/" class="archive-article-date">
-  	<time datetime="2017-01-22T09:07:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于上一篇文章中，很多人都说通过类别拓展，添加新方法，然后对新方法进行判断，来达到防止崩溃的目的，这样做法不利于项目的维护和后期的扩展，毕竟长期以来大家习惯了用系统自带的方法。所以最好的方法就是在系统方法里面判断，因此研究了下,通过runtime机制替换了系统的方法，来对参数添加判断，以此来防止崩溃现象。主要启发自这篇文章:</p>
-<p><a href="http://www.cocoachina.com/ios/20141219/10696.html">从NSArray看类簇</a>，这篇文章比较详细介绍了类簇的设计模式。</p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-ad197a76346a5242.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风景.jpeg"></center>
-
-
-
-<h1 id="一-原理"><a href="#一-原理" class="headerlink" title="一.原理"></a>一.原理</h1><p>1.由于NSString、NSArray、NSMutableString、NSMutableArray、NSMutableDictionary这几个类型都是Class Clusters（类簇）设计模式设计出来的，它们偷偷隐藏了很多具体的实现类， 只暴露出简单的接口来供外层调用，实现了很好的封装。</p>
-<p>首先我们利用 NSArray 的几个方法来创建实例对象:</p>
-<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">(lldb) po [NSArray array]</div><div class="line"><span class="variable">&lt;__NSArray0 0x600000017670&gt;</span>(</div><div class="line">)</div><div class="line">(lldb) po [NSArray arrayWithObject:<span class="meta">@"Hello,Zie"];</span></div><div class="line"><span class="variable">&lt;__NSSingleObjectArrayI 0x600000017680&gt;</span>(</div><div class="line">Hello,Zie</div><div class="line">)</div><div class="line">po [NSArray arrayWithObjects:<span class="meta">@1,</span><span class="meta">@2,</span> nil];</div><div class="line"><span class="variable">&lt;__NSArrayI 0x100500050&gt;</span>(</div><div class="line">1,</div><div class="line">2</div><div class="line">)</div></pre></td></tr></table></figure>
-<p>通过打印可以看到由 NSArray ，创建的对象并不是 NSArray 本身，有可能是<strong>NSArray0 ,</strong>NSSingleObjectArrayI 、<strong>NSArrayI ， 这里 NSArray 就是那个抽象类，而被创建出来那些奇奇怪的类就是作为具体的实现类，同时是内部私有的。 所以通过运行时的class_addMethod和class_replaceMethod来添加方法或是通过method_exchangeImplementations来替换系统中对应的原生方法必须依据它具体的实现类，也就是说必须依据</strong>NSArray0 、<strong>NSSingleObjectArrayI 、</strong>NSArrayI这三者，而不能依据NSArray。 </p>
-        
-          <a class="article-more-a" href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Runtime</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Method Swizzling</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSAaray,NSMutableArray 数组越界</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NSString, NSMutableString 崩溃</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</a>
-    </h1>
-  
-
-        
-        <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" class="archive-article-date">
-  	<time datetime="2017-01-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。</p>
-<h2 id="一-效果图"><a href="#一-效果图" class="headerlink" title="一.效果图"></a>一.效果图</h2><p><br></p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></center><br><br><br><center> UINavigationBar和UITabbar渐变.gif</center>
-
-<h2 id="二-思路"><a href="#二-思路" class="headerlink" title="二.思路"></a>二.思路</h2><p> <strong>A. 设置tableView</strong> </p>
-<p> a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又要显示在UINavigationBar下方，所以需要设置tablewView的frame和contentInset：   </p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">self.tableView.frame = CGRectMake(<span class="number">0</span>, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);</div><div class="line"></div><div class="line">self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">动画</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">UINavigationBar</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UITabBar</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Runtime(整理笔记)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/22/Runtime(整理笔记)/">Runtime (整理笔记)</a>
-    </h1>
-  
-
-        
-        <a href="/2017/01/22/Runtime(整理笔记)/" class="archive-article-date">
-  	<time datetime="2017-01-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>说明:此文是自己的总结笔记，主要参考这几篇文章:<br><a href="http://www.cnblogs.com/ioshe/p/5489086.html"><a href="http://www.cnblogs.com/ioshe/p/5489086.html">iOS开发-Runtime详解</a></a><br>NSHipster里面的这两篇文章 :<br><a href="http://nshipster.cn/associated-objects/"><a href="http://nshipster.cn/associated-objects/">Associated Objects</a></a><br><a href="http://nshipster.cn/method-swizzling/">Method Swizzling</a> 
-</strong></p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-fd4a701e71520f82.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="树1.jpg"></center>
-
-<h1 id="一-Runtime简介"><a href="#一-Runtime简介" class="headerlink" title="一.Runtime简介"></a>一.Runtime简介</h1><ul>
-<li>Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心之一，我们平时编写的OC代码，底层都是基于它来实现的。<br>比如:</li>
-</ul>
-<p>[receiver doSomething];<br>底层运行会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething))<br>如果带有参数比如:<br>[receiver doSomething:(id)arg…];<br>底层运行时会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething), arg1, arg2, …)<br>可能通过以上你看不出它的价值，但是我们需要了解OC是一门动态语言，它会将一些工作放在代码运行时才处理而非在编译的时候，也就是说，有很多类和成员变量在我们编译的时候是不知道的，而在运行时，我们所编写的代码会转换成完整的代码运行。<br>因此，编译器是不够，我们还需要一个运行时的系统来处理编译后的代码</p>
-<ul>
-<li>Runtime 基本是C和汇编写的，可以充分保证动态系统的高效性<br><br>
-        
-          <a class="article-more-a" href="/2017/01/22/Runtime(整理笔记)/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Runtime</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Method Swizzling</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">黑魔法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Associated Objects</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/22/Runtime(整理笔记)/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-我的2016-年终总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/16/我的2016-年终总结/">2016 总结</a>
-    </h1>
-  
-
-        
-        <a href="/2017/01/16/我的2016-年终总结/" class="archive-article-date">
-  	<time datetime="2017-01-15T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>不知不觉间，2016已经走到年尾了。再过几天就是农历的除夕，粗略回想一下，真心觉得2016过得贼快，仿佛什么都没做，它就溜走了；但细细一想，其实，这一年里也发生了很多事情。而且，对于我来说很多都是大事。年底，稍微闲点，因此，总结下过往，寄语于新年。</p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-414438772cead36b.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="路.jpeg"></center>
-
-<h2 id="一-工作"><a href="#一-工作" class="headerlink" title="一. 工作"></a>一. 工作</h2><p>工作是这一整年的重心，来青柠互动也一年多了，作为初创公司的元老之一，这一年陪着公司一起成长，经历挺多，也学到挺多。</p>
-<p><strong>1. 工作能力</strong></p>
-<p>这一年来，基本都是跟着项目走，从1758广场舞到D.Talk再到D.OA,到最后一直担任D.Talk的项目负责人，负责D.Talk的迭代更新；几个项目锻炼下来，编程的思路、对于OC这么语言的理解、对于项目的掌控，以及bug的处理能力，总的来说，是有一定长足的进步。</p>
-<p>挺感谢青柠给予的这个平台，让我可以比较完整的锻炼了，虽然其中包含了大量的加班，但能看到自己比较明显的进步，在这个快节奏的城市里，至少能有一点心安。</p>
-<p>同时，比较空闲的时候，也自己开源了一些项目，写了一些技术博客，对于技术做了一些总结，也因为这样，认识了很多传说中的大牛，他们有的比自己还小，但是编程的功底明显比自己高很多，羡慕之余，也激发了自己的斗志。感觉这样挺踏实的。<br>
-        
-          <a class="article-more-a" href="/2017/01/16/我的2016-年终总结/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">总结</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">情感</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/16/我的2016-年终总结/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-  
 
 
           </div>
@@ -620,10 +229,10 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
+		isHome: false,
 		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
