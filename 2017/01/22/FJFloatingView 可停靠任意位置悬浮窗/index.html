@@ -11,7 +11,7 @@
   <meta name="description" content="由于项目需求，需要一个悬浮窗口，随手势移动，可以停靠在任意位置，所以自己整了一个，简单封装一下，希望能帮到有需要的朋友。
 一.效果图FJFloatingView效果图
 
-二.使用方法FJFloatingView *floatingView = [[FJFloatingView alloc] initWithFrame:CGRectMake(100, 100, FJ_FLOATING_VOICE_V">
+二.使用方法12FJFloatingView *floatingView = [[FJFloatingView alloc] initWithFrame:CGRectMake(100, 100, FJ_FLOATING_VOICE">
 <meta property="og:type" content="article">
 <meta property="og:title" content="FJFloatingView 可停靠任意位置悬浮窗">
 <meta property="og:url" content="//fjf.com/2017/01/22/FJFloatingView 可停靠任意位置悬浮窗/index.html">
@@ -19,16 +19,16 @@
 <meta property="og:description" content="由于项目需求，需要一个悬浮窗口，随手势移动，可以停靠在任意位置，所以自己整了一个，简单封装一下，希望能帮到有需要的朋友。
 一.效果图FJFloatingView效果图
 
-二.使用方法FJFloatingView *floatingView = [[FJFloatingView alloc] initWithFrame:CGRectMake(100, 100, FJ_FLOATING_VOICE_V">
+二.使用方法12FJFloatingView *floatingView = [[FJFloatingView alloc] initWithFrame:CGRectMake(100, 100, FJ_FLOATING_VOICE">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-5230518adea5dd97.gif?imageMogr2/auto-orient/strip">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-a7c591e150e8ec18.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T12:24:20.000Z">
+<meta property="og:updated_time" content="2017-01-22T12:26:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FJFloatingView 可停靠任意位置悬浮窗">
 <meta name="twitter:description" content="由于项目需求，需要一个悬浮窗口，随手势移动，可以停靠在任意位置，所以自己整了一个，简单封装一下，希望能帮到有需要的朋友。
 一.效果图FJFloatingView效果图
 
-二.使用方法FJFloatingView *floatingView = [[FJFloatingView alloc] initWithFrame:CGRectMake(100, 100, FJ_FLOATING_VOICE_V">
+二.使用方法12FJFloatingView *floatingView = [[FJFloatingView alloc] initWithFrame:CGRectMake(100, 100, FJ_FLOATING_VOICE">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-5230518adea5dd97.gif?imageMogr2/auto-orient/strip">
   
     <link rel="alternative" href="/atom.xml" title="Fjf&#39;s Tech Blog" type="application/atom+xml">
@@ -178,10 +178,8 @@
         <p>由于项目需求，需要一个悬浮窗口，随手势移动，可以停靠在任意位置，所以自己整了一个，简单封装一下，希望能帮到有需要的朋友。</p>
 <h1 id="一-效果图"><a href="#一-效果图" class="headerlink" title="一.效果图"></a>一.效果图</h1><center><img src="http://upload-images.jianshu.io/upload_images/2252551-5230518adea5dd97.gif?imageMogr2/auto-orient/strip" alt="FJFloatingView效果图.gif"></center><br><br><br><center>FJFloatingView效果图</center>
 
-<h1 id="二-使用方法"><a href="#二-使用方法" class="headerlink" title="二.使用方法"></a>二.使用方法</h1><pre><code>FJFloatingView *floatingView = [[FJFloatingView alloc] initWithFrame:CGRectMake(100, 100, FJ_FLOATING_VOICE_VIEW_SIZE, FJ_FLOATING_VOICE_VIEW_SIZE)];
-[self.view addSubview:floatingView];
-</code></pre><h1 id="三-主要代码分析"><a href="#三-主要代码分析" class="headerlink" title="三.主要代码分析:"></a>三.主要代码分析:</h1><p>滑动范围四个值:</p>
-<p>// 上边距(默认值:0)<br>@property (nonatomic, assign) CGFloat upEdgeDistance;<br>// 右边距(右边距:SCREEN_WIDTH)<br>@property (nonatomic, assign) CGFloat downEdgeDistance;<br>// 左边距(默认值:0)<br>@property (nonatomic, assign) CGFloat leftEdgeDistance;<br>// 下边距(默认值:SCREEN_HEIGHT)<br>@property (nonatomic, assign) CGFloat rightEdgeDistance;</p>
+<h1 id="二-使用方法"><a href="#二-使用方法" class="headerlink" title="二.使用方法"></a>二.使用方法</h1><figure class="highlight inform7"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">FJFloatingView *floatingView = <span class="comment">[<span class="comment">[FJFloatingView alloc]</span> initWithFrame:CGRectMake(100, 100, FJ_FLOATING_VOICE_VIEW_SIZE, FJ_FLOATING_VOICE_VIEW_SIZE)]</span>;</div><div class="line">    <span class="comment">[self.view addSubview:floatingView]</span>;</div></pre></td></tr></table></figure>
+<h1 id="三-主要代码分析"><a href="#三-主要代码分析" class="headerlink" title="三.主要代码分析:"></a>三.主要代码分析:</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">滑动范围四个值:</div><div class="line"><span class="comment">// 上边距(默认值:0)</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">CGFloat</span> upEdgeDistance;</div><div class="line"><span class="comment">// 右边距(右边距:SCREEN_WIDTH)</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">CGFloat</span> downEdgeDistance;</div><div class="line"><span class="comment">// 左边距(默认值:0)</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">CGFloat</span> leftEdgeDistance;</div><div class="line"><span class="comment">// 下边距(默认值:SCREEN_HEIGHT)</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">CGFloat</span> rightEdgeDistance;</div></pre></td></tr></table></figure>
 <p>这四个值主要是有利于需求的扩展，比如需求规定不能超过状态栏，只需将上边距设为20即可。</p>
 <p>手势滑动处理函数，限定floatingView在规定的范围滑动:</p>
 <p>#pragma mark — response event</p>
@@ -459,7 +457,27 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">动画</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">UINavigationBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -475,31 +493,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">动画</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">UINavigationBar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">总结</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">情感</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
             
             <div class="clearfix"></div>
