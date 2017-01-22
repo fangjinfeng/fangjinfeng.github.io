@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-660810b4b19c20c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-50fb9b2b29b4bbd9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f16b189494df783f.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T09:33:32.000Z">
+<meta property="og:updated_time" content="2017-01-22T09:35:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OC工具类:防崩溃策略(runtime机制)">
 <meta name="twitter:description" content="由于上一篇文章中，很多人都说通过类别拓展，添加新方法，然后对新方法进行判断，来达到防止崩溃的目的，这样做法不利于项目的维护和后期的扩展，毕竟长期以来大家习惯了用系统自带的方法。所以最好的方法就是在系统方法里面判断，因此研究了下,通过runtime机制替换了系统的方法，来对参数添加判断，以此来防止崩溃现象。主要启发自这篇文章:
@@ -420,7 +420,8 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
 <center><img src="http://upload-images.jianshu.io/upload_images/2252551-50fb9b2b29b4bbd9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风景2.jpg"></center>
 
 
-<h1 id="三-总结"><a href="#三-总结" class="headerlink" title="三.总结"></a>三.总结</h1><h2 id="1-NSArray"><a href="#1-NSArray" class="headerlink" title="1.NSArray"></a>1.NSArray</h2><p>主要替换objectAtIndex:方法</p>
+<h1 id="三-总结"><a href="#三-总结" class="headerlink" title="三.总结"></a>三.总结</h1><p><strong>1.NSArray</strong></p>
+<p>主要替换objectAtIndex:方法</p>
 <pre><code>+ (void)load {
     //只执行一次这个方法
     static dispatch_once_t onceToken;
@@ -481,7 +482,8 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
     }
     return [self safe_ZeroObjectAtIndex:index];
 }
-</code></pre><h2 id="2-NSMutableArray"><a href="#2-NSMutableArray" class="headerlink" title="2.NSMutableArray"></a>2.NSMutableArray</h2><p>主要替换方法:objectAtIndex:、removeObjectsInRange:、insertObject:atIndex:、removeObject:inRange:这几个方法</p>
+</code></pre><p><strong>2.NSMutableArray</strong></p>
+<p>主要替换方法:objectAtIndex:、removeObjectsInRange:、insertObject:atIndex:、removeObject:inRange:这几个方法</p>
 <pre><code>+ (void)load {
     //只执行一次这个方法
     static dispatch_once_t onceToken;
@@ -598,7 +600,8 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
 
     [self safeMutable_insertObject:anObject atIndex:index];
 }
-</code></pre><h2 id="3-NSString"><a href="#3-NSString" class="headerlink" title="3.NSString"></a>3.NSString</h2><p>主要替换方法:substringFromIndex:,substringToIndex:,substringWithRange:,rangeOfString:options:range:locale:这几个主要方法</p>
+</code></pre><p><strong>3.NSString</strong></p>
+<p>主要替换方法:substringFromIndex:,substringToIndex:,substringWithRange:,rangeOfString:options:range:locale:这几个主要方法</p>
 <pre><code>+ (void)load {
     //只执行一次这个方法
     static dispatch_once_t onceToken;
@@ -811,7 +814,8 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
     }
     return [self safePoint_substringWithRange:range];
 }
-</code></pre><h2 id="4-NSMutableString"><a href="#4-NSMutableString" class="headerlink" title="4.NSMutableString"></a>4.NSMutableString</h2><p>主要替换方法:substringFromIndex:,substringToIndex:,substringWithRange:,rangeOfString:options:range:locale:，appendString,这几个主要方法</p>
+</code></pre><p><strong>4.NSMutableString</strong></p>
+<p>主要替换方法:substringFromIndex:,substringToIndex:,substringWithRange:,rangeOfString:options:range:locale:，appendString,这几个主要方法</p>
 <pre><code>+ (void)load {
     //只执行一次这个方法
     static dispatch_once_t onceToken;
@@ -953,7 +957,8 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
     }
     return [self safeMutable_appendString:aString];
 }
-</code></pre><h2 id="5-NSMutableDictionary"><a href="#5-NSMutableDictionary" class="headerlink" title="5.NSMutableDictionary"></a>5.NSMutableDictionary</h2><p>主要替换removeObjectForKey:和 setObject:forKey:这两个方法</p>
+</code></pre><p><strong>5.NSMutableDictionary</strong></p>
+<p>主要替换removeObjectForKey:和 setObject:forKey:这两个方法</p>
 <pre><code>+ (void)load {
     //只执行一次这个方法
     static dispatch_once_t onceToken;
@@ -1101,8 +1106,8 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
 <nav id="article-nav">
   
   
-    <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</div>
+    <a href="/2017/01/22/Runtime(整理笔记)/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Runtime (整理笔记)</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -1226,6 +1231,14 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">动画</a>
               </li>
              
@@ -1243,14 +1256,6 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">情感</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
             
             <div class="clearfix"></div>
