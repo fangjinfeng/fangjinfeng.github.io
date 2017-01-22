@@ -144,80 +144,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-NSTimer 超时 block回调" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/06/NSTimer 超时 block回调/">NSTimer 超时 block回调</a>
-    </h1>
-  
-
-        
-        <a href="/2016/12/06/NSTimer 超时 block回调/" class="archive-article-date">
-  	<time datetime="2016-12-06T12:17:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近做直播，由于经常用到定时器进行各种比如说心跳报文发送、进入后台2分钟自动关闭直播等操作，所以经常用到定时器的超时限制(即输入定时间隔和超时次数，定时器判断重复次数超过定时次数,清空定时次数，回调block，进入下一次循环)，所以参考了这篇文章:</p>
-<p> <a href="http://blog.csdn.net/woaifen3344/article/details/44623641">ios 给NSTimer添加Block回调版本创建方法</a></p>
-<h1 id="一、NSTimer-Extention-h"><a href="#一、NSTimer-Extention-h" class="headerlink" title="一、NSTimer+Extention.h"></a>一、NSTimer+Extention.h</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//  DeJiaIM</span></div><div class="line"><span class="comment">//  Created by fjf on 2016/12/6.</span></div><div class="line"><span class="comment">//  Copyright © 2016年 tsningning. All rights reserved.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span>(^<span class="built_in">NSTimerBlock</span>)(<span class="keyword">void</span>);</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSTimer</span> (<span class="title">Extention</span>)</span></div><div class="line"></div><div class="line"><span class="comment">/**</div><div class="line">     设置定时器</div><div class="line"></div><div class="line"> @param interval 定时间隔</div><div class="line">     @param repeats 是否重复</div><div class="line">     @param callback 回调</div><div class="line"> @return 返回定时器</div><div class="line"> */</span></div><div class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)interval</div><div class="line">                                    repeats:(<span class="built_in">BOOL</span>)repeats</div><div class="line">                                   timerCallback:(<span class="built_in">NSTimerBlock</span>)callback;</div><div class="line"></div><div class="line"><span class="comment">/**</div><div class="line"> 设置定时器</div><div class="line"></div><div class="line">     @param interval 定时间隔</div><div class="line"> @param repeats 是否重复</div><div class="line">     @param limitCount 超时次数</div><div class="line">     @param timerCallback 回调</div><div class="line"> @return 返回定时器</div><div class="line"> */</span></div><div class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)interval</div><div class="line">                                    repeats:(<span class="built_in">BOOL</span>)repeats</div><div class="line">                                 limitCount:(<span class="built_in">NSInteger</span>)limitCount</div><div class="line">                                   timerCallback:(<span class="built_in">NSTimerBlock</span>)timerCallback;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2016/12/06/NSTimer 超时 block回调/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSTimer</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Block</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">超时 回调</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/06/NSTimer 超时 block回调/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-FJFloatingView 可停靠任意位置悬浮窗" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -278,6 +204,88 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2016/10/22/FJFloatingView 可停靠任意位置悬浮窗/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/18/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</a>
+    </h1>
+  
+
+        
+        <a href="/2016/08/18/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" class="archive-article-date">
+  	<time datetime="2016-08-18T07:49:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。</p>
+<h2 id="一-效果图"><a href="#一-效果图" class="headerlink" title="一.效果图"></a>一.效果图</h2><p><br></p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></center><br><br><br><center> UINavigationBar和UITabbar渐变.gif</center>
+
+<h2 id="二-思路"><a href="#二-思路" class="headerlink" title="二.思路"></a>二.思路</h2><p> <strong>A. 设置tableView</strong> </p>
+<p> a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又要显示在UINavigationBar下方，所以需要设置tablewView的frame和contentInset：   </p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">self.tableView.frame = CGRectMake(<span class="number">0</span>, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);</div><div class="line"></div><div class="line">self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2016/08/18/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IOS</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">动画</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">UINavigationBar</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UITabBar</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/08/18/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">展开全文 >></a>
         </p>
       
 
@@ -404,18 +412,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ImageBrowser</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">仿微信图片浏览</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">仿微博图片浏览</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
               </li>
              
@@ -425,6 +421,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ImageBrowser</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">仿微信图片浏览</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">仿微博图片浏览</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -444,6 +452,14 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">动画</a>
               </li>
              
@@ -453,14 +469,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
              
               <li class="article-tag-list-item">
