@@ -9,34 +9,34 @@
   <title>UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏 | FJF&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。
-1.效果图    
+一.效果图    
 
  UINavigationBar和UITabbar渐变.gif
 
-2.思路A. 设置tableView12345* This two-line bullet won&apos;t break* This two-line bullet  will break
+二.思路A. 设置tableView12345* This two-line bullet won&apos;t break* This two-line bullet  will break
  a.因为当UINavigation">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏">
 <meta property="og:url" content="//fjf.com/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/index.html">
 <meta property="og:site_name" content="FJF's Tech Blog">
 <meta property="og:description" content="由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。
-1.效果图    
+一.效果图    
 
  UINavigationBar和UITabbar渐变.gif
 
-2.思路A. 设置tableView12345* This two-line bullet won&apos;t break* This two-line bullet  will break
+二.思路A. 设置tableView12345* This two-line bullet won&apos;t break* This two-line bullet  will break
  a.因为当UINavigation">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b51f6f96b81f8ffa.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T03:23:18.000Z">
+<meta property="og:updated_time" content="2017-01-22T03:26:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏">
 <meta name="twitter:description" content="由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。
-1.效果图    
+一.效果图    
 
  UINavigationBar和UITabbar渐变.gif
 
-2.思路A. 设置tableView12345* This two-line bullet won&apos;t break* This two-line bullet  will break
+二.思路A. 设置tableView12345* This two-line bullet won&apos;t break* This two-line bullet  will break
  a.因为当UINavigation">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip">
   
@@ -191,11 +191,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。</p>
-<h1 id="1-效果图"><a href="#1-效果图" class="headerlink" title="1.效果图"></a>1.效果图</h1><center><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></center>    
+<h2 id="一-效果图"><a href="#一-效果图" class="headerlink" title="一.效果图"></a>一.效果图</h2><center><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></center>    
 
 <center> UINavigationBar和UITabbar渐变.gif</center>
 
-<h1 id="2-思路"><a href="#2-思路" class="headerlink" title="2.思路"></a>2.思路</h1><h3 id="A-设置tableView"><a href="#A-设置tableView" class="headerlink" title="A. 设置tableView"></a>A. 设置tableView</h3><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">* This two-<span class="keyword">line</span> bullet </div><div class="line">won't <span class="keyword">break</span></div><div class="line"></div><div class="line">* This two-<span class="keyword">line</span> bullet  </div><div class="line">will <span class="keyword">break</span></div></pre></td></tr></table></figure>
+<h2 id="二-思路"><a href="#二-思路" class="headerlink" title="二.思路"></a>二.思路</h2><h3 id="A-设置tableView"><a href="#A-设置tableView" class="headerlink" title="A. 设置tableView"></a>A. 设置tableView</h3><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">* This two-<span class="keyword">line</span> bullet </div><div class="line">won't <span class="keyword">break</span></div><div class="line"></div><div class="line">* This two-<span class="keyword">line</span> bullet  </div><div class="line">will <span class="keyword">break</span></div></pre></td></tr></table></figure>
 <p> a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又要显示在UINavigationBar下方，所以需要设置tablewView的frame和contentInset：   </p>
 <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">self.tableView.frame = CGRectMake(<span class="number">0</span>, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);</div><div class="line"></div><div class="line">self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div></pre></td></tr></table></figure>
 <h3 id="B-当tableView向上移动一个属性-UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在-void-scrollViewDidScroll-UIScrollView-scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离："><a href="#B-当tableView向上移动一个属性-UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在-void-scrollViewDidScroll-UIScrollView-scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离：" class="headerlink" title="B.当tableView向上移动一个属性,UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在- (void)scrollViewDidScroll:(UIScrollView*)scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离："></a>B.当tableView向上移动一个属性,UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在- (void)scrollViewDidScroll:(UIScrollView*)scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离：</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">CGFloat_originalOffsetY</span>;<span class="comment">//上一次偏移量</span></div><div class="line"></div><div class="line"><span class="built_in">CGFloat</span> offsetY = scrollView.contentOffset.y-_originalOffsetY;<span class="comment">//获取每次滚动偏移的距离</span></div><div class="line"></div><div class="line"> _originalOffsetY = scrollView.contentOffset.y;<span class="comment">//将这次tableView偏移量重新赋值给_originalOffsetY</span></div><div class="line">~~~   </div><div class="line"></div><div class="line">又因为当<span class="built_in">UINavigationBar</span>和<span class="built_in">UITabBar</span>已经隐藏，继续向上滚动，已经不需要隐藏，同样的当tableView滚动到最后滚不动的时候<span class="built_in">UINavigationBar</span>和<span class="built_in">UITabBar</span>也不需要移动，所以添加判断条件</div><div class="line"></div><div class="line"></div><div class="line">~~~ </div><div class="line"><span class="comment">//判断是否滚动到底部</span></div><div class="line"><span class="built_in">CGFloat</span> bottomOffset = scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.size.height; </div><div class="line"></div><div class="line"><span class="comment">//判断UINavigationBar是否已经隐藏</span></div><div class="line">scrollView.contentOffset.y &gt; - (<span class="number">2</span>*kNavigationBarHeight)</div></pre></td></tr></table></figure>
@@ -212,7 +212,7 @@
 // 设置偏移translationY
 - (void)fj_moveByTranslationY:(CGFloat)translationY;
 </code></pre><p>###F.在- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate函数里面判断当前NavigationBar偏移是否超过一半，如果一半则动画隐藏，如果没有则动画显示:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//恢复或隐藏navigationBar和statusBar</span></div><div class="line">- (<span class="keyword">void</span>)restoreNavigationBarAndStatusBarWithContentOffset:(<span class="built_in">CGPoint</span>)contentOffset &#123;</div><div class="line">     <span class="built_in">CGFloat</span> navigationBarCenterHeight  = kNavigationBarHeight/<span class="number">2.0</span>;</div><div class="line">     <span class="built_in">CGFloat</span> transformTy = <span class="keyword">self</span>.navigationController.navigationBar.transform.ty;</div><div class="line">     <span class="keyword">if</span> (transformTy &lt; <span class="number">0</span> &amp;&amp; transformTy &gt; -kNavigationBarHeight) &#123;</div><div class="line">         <span class="keyword">if</span> (transformTy &lt; -navigationBarCenterHeight &amp;&amp; contentOffset.y &gt; -navigationBarCenterHeight) &#123;</div><div class="line">             [<span class="built_in">UIView</span> animateWithDuration:kDefaultAnimationTime animations:^&#123;</div><div class="line">                 [<span class="keyword">self</span> hideNavigationBarAndStatusBar];</div><div class="line">            	 &#125;];</div><div class="line">          &#125;</div><div class="line">         <span class="keyword">else</span> &#123;</div><div class="line">            [<span class="built_in">UIView</span> animateWithDuration:kDefaultAnimationTime animations:^&#123;</div><div class="line">               [<span class="keyword">self</span> showNavigationBarAndStatusBar];</div><div class="line">            &#125;];</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="3-最后"><a href="#3-最后" class="headerlink" title="3.最后:"></a>3.最后:</h2><p>送上我最喜欢之一的动漫图:</p>
+<h2 id="三-最后"><a href="#三-最后" class="headerlink" title="三.最后:"></a>三.最后:</h2><p>送上我最喜欢之一的动漫图:</p>
 <p><br></p>
 <center><img src="http://upload-images.jianshu.io/upload_images/2252551-b51f6f96b81f8ffa.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="光.jpeg"></center>
 
@@ -335,7 +335,7 @@
 <nav id="article-nav">
   
   
-    <a href="/2017/01/16/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/01/16/我的2016-年终总结/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">2016 总结</div>
       <i class="icon-circle-right"></i>
     </a>
@@ -440,14 +440,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">总结</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">情感</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">IOS</a>
               </li>
              
@@ -461,6 +453,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">情感</a>
               </li>
             
             <div class="clearfix"></div>
