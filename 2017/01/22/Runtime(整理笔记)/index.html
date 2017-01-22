@@ -34,7 +34,7 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-5dc658aa84039b6a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b4ffbcd4679976f9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-c8427ef9817bc8a6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T08:49:47.000Z">
+<meta property="og:updated_time" content="2017-01-22T08:56:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Runtime (整理笔记)">
 <meta name="twitter:description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
@@ -200,9 +200,8 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 </ul>
 <p>[receiver doSomething];<br>底层运行会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething))<br>如果带有参数比如:<br>[receiver doSomething:(id)arg…];<br>底层运行时会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething), arg1, arg2, …)<br>可能通过以上你看不出它的价值，但是我们需要了解OC是一门动态语言，它会将一些工作放在代码运行时才处理而非在编译的时候，也就是说，有很多类和成员变量在我们编译的时候是不知道的，而在运行时，我们所编写的代码会转换成完整的代码运行。<br>因此，编译器是不够，我们还需要一个运行时的系统来处理编译后的代码</p>
 <ul>
-<li>Runtime 基本是C和汇编写的，可以充分保证动态系统的高效性</li>
-</ul>
-<h1 id="二-Runtime的作用"><a href="#二-Runtime的作用" class="headerlink" title="二. Runtime的作用:"></a>二. Runtime的作用:</h1><ul>
+<li>Runtime 基本是C和汇编写的，可以充分保证动态系统的高效性<a id="more"></a>
+<h1 id="二-Runtime的作用"><a href="#二-Runtime的作用" class="headerlink" title="二. Runtime的作用:"></a>二. Runtime的作用:</h1></li>
 <li>获取某个类的所有成员变量</li>
 <li>获取某个类的所有属性</li>
 <li>获取某个类的所有方法</li>
@@ -663,14 +662,6 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">总结</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">情感</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">动画</a>
               </li>
              
@@ -680,6 +671,14 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">情感</a>
               </li>
             
             <div class="clearfix"></div>
