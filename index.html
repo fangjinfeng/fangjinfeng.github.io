@@ -157,26 +157,814 @@
 
         
         <a href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/" class="archive-article-date">
-  	<time datetime="2017-01-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
+  	<time datetime="2017-01-22T09:07:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>说明:此文是自己的总结笔记，主要参考这几篇文章:<br><a href="http://www.cnblogs.com/ioshe/p/5489086.html"><a href="http://www.cnblogs.com/ioshe/p/5489086.html">iOS开发-Runtime详解</a></a><br>NSHipster里面的这两篇文章 :<br><a href="http://nshipster.cn/associated-objects/"><a href="http://nshipster.cn/associated-objects/">Associated Objects</a></a><br><a href="http://nshipster.cn/method-swizzling/">Method Swizzling</a> 
-</strong></p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-fd4a701e71520f82.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="树1.jpg"></center>
+        <p>由于上一篇文章中，很多人都说通过类别拓展，添加新方法，然后对新方法进行判断，来达到防止崩溃的目的，这样做法不利于项目的维护和后期的扩展，毕竟长期以来大家习惯了用系统自带的方法。所以最好的方法就是在系统方法里面判断，因此研究了下,通过runtime机制替换了系统的方法，来对参数添加判断，以此来防止崩溃现象。主要启发自这篇文章:</p>
+<p><a href="http://www.cocoachina.com/ios/20141219/10696.html" target="_blank" rel="external">从NSArray看类簇</a>，这篇文章比较详细介绍了类簇的设计模式。</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-ad197a76346a5242.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风景.jpeg"></center>
 
-<h1 id="一-Runtime简介"><a href="#一-Runtime简介" class="headerlink" title="一.Runtime简介"></a>一.Runtime简介</h1><ul>
-<li>Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心之一，我们平时编写的OC代码，底层都是基于它来实现的。<br>比如:</li>
-</ul>
-<p>[receiver doSomething];<br>底层运行会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething))<br>如果带有参数比如:<br>[receiver doSomething:(id)arg…];<br>底层运行时会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething), arg1, arg2, …)<br>可能通过以上你看不出它的价值，但是我们需要了解OC是一门动态语言，它会将一些工作放在代码运行时才处理而非在编译的时候，也就是说，有很多类和成员变量在我们编译的时候是不知道的，而在运行时，我们所编写的代码会转换成完整的代码运行。<br>因此，编译器是不够，我们还需要一个运行时的系统来处理编译后的代码</p>
-<ul>
-<li>Runtime 基本是C和汇编写的，可以充分保证动态系统的高效性<br><br>
-        
-          <a class="article-more-a" href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/#more">more >></a>
-        
+
+
+<h1 id="一-原理"><a href="#一-原理" class="headerlink" title="一.原理"></a>一.原理</h1><p>1.由于NSString、NSArray、NSMutableString、NSMutableArray、NSMutableDictionary这几个类型都是Class Clusters（类簇）设计模式设计出来的，它们偷偷隐藏了很多具体的实现类， 只暴露出简单的接口来供外层调用，实现了很好的封装。</p>
+<p>首先我们利用 NSArray 的几个方法来创建实例对象:</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">(lldb) po [NSArray array]</div><div class="line"><span class="variable">&lt;__NSArray0 0x600000017670&gt;</span>(</div><div class="line">)</div><div class="line">(lldb) po [NSArray arrayWithObject:<span class="meta">@"Hello,Zie"];</span></div><div class="line"><span class="variable">&lt;__NSSingleObjectArrayI 0x600000017680&gt;</span>(</div><div class="line">Hello,Zie</div><div class="line">)</div><div class="line">po [NSArray arrayWithObjects:<span class="meta">@1,</span><span class="meta">@2,</span> nil];</div><div class="line"><span class="variable">&lt;__NSArrayI 0x100500050&gt;</span>(</div><div class="line">1,</div><div class="line">2</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>通过打印可以看到由 NSArray ，创建的对象并不是 NSArray 本身，有可能是 <__nsarray0 、="" __nssingleobjectarrayi="" __nsarrayi="">， 这里 NSArray 就是那个抽象类，而被创建出来那些奇奇怪的类就是作为具体的实现类，同时是内部私有的。 所以通过运行时的class_addMethod和class_replaceMethod来添加方法或是通过method_exchangeImplementations来替换系统中对应的原生方法必须依据它具体的实现类，也就是说必须依据<__nsarray0 、="" __nssingleobjectarrayi="" __nsarrayi="">这三者，而不能依据NSArray。 </__nsarray0></__nsarray0></p>
+<h1 id="二-具体实现-以NSString和NSMutableArray为例"><a href="#二-具体实现-以NSString和NSMutableArray为例" class="headerlink" title="二.具体实现:以NSString和NSMutableArray为例"></a>二.具体实现:以NSString和NSMutableArray为例</h1><p>##1.NSString:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-53135b8f6384d005.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="NSString实例类型.png"></center>
+
+<center>NSString实例类型.png</center>
+
+<p>经发现NSString实际的实现类有<__nscfconstantstring、nstaggedpointerstring、__nscfstring>这三者，由于NSMutableString主要实现类是<__nscfstring>，所以将<__nscfstring>相应的替代方法放到NSMutableString相关文件里面。</__nscfstring></__nscfstring></__nscfconstantstring、nstaggedpointerstring、__nscfstring></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">"NSString+Safe.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">NSString</span> (<span class="title">Safe</span>)</span></div><div class="line"></div><div class="line"><span class="meta">#pragma mark --- init method</span></div><div class="line"></div><div class="line">+ (<span class="keyword">void</span>)load &#123;</div><div class="line">    <span class="comment">//只执行一次这个方法</span></div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line">    </div><div class="line">        <span class="built_in">NSString</span> *tmpSubFromStr = <span class="string">@"substringFromIndex:"</span>;</div><div class="line">        <span class="built_in">NSString</span> *tmpSafeSubFromStr = <span class="string">@"safe_substringFromIndex:"</span>;</div><div class="line">        <span class="built_in">NSString</span> *tmpSafePointSubFromStr = <span class="string">@"safePoint_substringFromIndex:"</span>;</div><div class="line">    </div><div class="line">    </div><div class="line">        [<span class="keyword">self</span> exchangeImplementationWithClassStr:<span class="string">@"__NSCFConstantString"</span> originalMethodStr:tmpSubFromStr newMethodStr:tmpSafeSubFromStr];</div><div class="line">    </div><div class="line">        [<span class="keyword">self</span> exchangeImplementationWithClassStr:<span class="string">@"NSTaggedPointerString"</span> originalMethodStr:tmpSubFromStr newMethodStr:tmpSafePointSubFromStr];</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">       <span class="built_in">NSString</span> *tmpSubToStr = <span class="string">@"substringToIndex:"</span>;</div><div class="line">        <span class="built_in">NSString</span> *tmpSafeSubToStr = <span class="string">@"safe_substringToIndex:"</span>;</div><div class="line">        <span class="built_in">NSString</span> *tmpSafePointSubToStr = <span class="string">@"safePoint_substringToIndex:"</span>;</div><div class="line">    </div><div class="line">    </div><div class="line">        [<span class="keyword">self</span> exchangeImplementationWithClassStr:<span class="string">@"__NSCFConstantString"</span> originalMethodStr:tmpSubToStr newMethodStr:tmpSafeSubToStr];</div><div class="line">    </div><div class="line">        [<span class="keyword">self</span> exchangeImplementationWithClassStr:<span class="string">@"NSTaggedPointerString"</span> originalMethodStr:tmpSubToStr newMethodStr:tmpSafePointSubToStr];</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">        <span class="built_in">NSString</span> *tmpSubRangeStr = <span class="string">@"substringWithRange:"</span>;</div><div class="line">        <span class="built_in">NSString</span> *tmpSafeSubRangeStr = <span class="string">@"safe_substringWithRange:"</span>;</div><div class="line">        <span class="built_in">NSString</span> *tmpSafePointSubRangeStr = <span class="string">@"safePoint_substringWithRange:"</span>;</div><div class="line">    </div><div class="line">    </div><div class="line">        [<span class="keyword">self</span> exchangeImplementationWithClassStr:<span class="string">@"__NSCFConstantString"</span> originalMethodStr:tmpSubRangeStr newMethodStr:tmpSafeSubRangeStr];</div><div class="line">    </div><div class="line">       [<span class="keyword">self</span> exchangeImplementationWithClassStr:<span class="string">@"NSTaggedPointerString"</span> originalMethodStr:tmpSubRangeStr newMethodStr:tmpSafePointSubRangeStr];</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">        <span class="built_in">NSString</span> *tmpRangeOfStr = <span class="string">@"rangeOfString:options:range:locale:"</span>;</div><div class="line">        <span class="built_in">NSString</span> *tmpSafeRangeOfStr = <span class="string">@"safe_rangeOfString:options:range:locale:"</span>;</div><div class="line">        <span class="built_in">NSString</span> *tmpSafePointRangeOfStr = <span class="string">@"safePoint_rangeOfString:options:range:locale:"</span>;</div><div class="line">    </div><div class="line">    </div><div class="line">        [<span class="keyword">self</span> exchangeImplementationWithClassStr:<span class="string">@"__NSCFConstantString"</span> originalMethodStr:tmpRangeOfStr newMethodStr:tmpSafeRangeOfStr];</div><div class="line">    </div><div class="line">        [<span class="keyword">self</span> exchangeImplementationWithClassStr:<span class="string">@"NSTaggedPointerString"</span> originalMethodStr:tmpRangeOfStr newMethodStr:tmpSafePointRangeOfStr];</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    &#125;);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里因为将<__nscfstring>放到NSMutableString类别里面去替换，所以只做实例类<__nscfconstantstring、nstaggedpointerstring>的替换。<br>因为最终调用替换函数:method_exchangeImplementations(originalMethod, swizzledMethod);，所以</__nscfconstantstring、nstaggedpointerstring></__nscfstring></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NSString *tmpSubFromStr = @<span class="string">"substringFromIndex:"</span><span class="comment">; </span></div><div class="line">NSString *tmpSafeSubFromStr = @<span class="string">"safe_substringFromIndex:"</span><span class="comment">; </span></div><div class="line">NSString *tmpSafePointSubFromStr = @<span class="string">"safePoint_substringFromIndex:"</span><span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>每一个实例类别都应该有自己相对应的替换方法,这里tmpSubFromStr是系统的方法，tmpSafeSubFromStr是<__nscfconstantstring>实例类对应的替换方法，tmpSafePointSubFromStr是NSTaggedPointerString对应的替换方法。这里虽然是NSString，可以通过</__nscfconstantstring></p>
+<pre><code>SEL originalSelector = NSSelectorFromString(originalMethodStr); 
+SEL swizzledSelector = NSSelectorFromString(newMethodStr);
+</code></pre><p>转换成相应的SEL方法。如果每个实力类没有自己对应的方法，比如说像这样:</p>
+<pre><code>NSString *tmpSubFromStr = @&quot;substringFromIndex:&quot;;
+NSString *tmpSafeSubFromStr = @&quot;safe_substringFromIndex:&quot;;
+
+
+[self exchangeImplementationWithClassStr:@&quot;__NSCFConstantString&quot; originalMethodStr:tmpSubFromStr newMethodStr:tmpSafeSubFromStr];
+
+[self exchangeImplementationWithClassStr:@&quot;NSTaggedPointerString&quot; originalMethodStr:tmpSubFromStr newMethodStr:tmpSafeSubFromStr];
+</code></pre><p>那最终只会对NSTaggedPointerString原来的substringFromIndex:函数进行替换，<__nscfconstantstring>实例类型的就不起作用。</__nscfconstantstring></p>
+<pre><code>// 获取 method
++ (Method)methodOfClassStr:(NSString *)classStr selector:(SEL)selector {
+    return class_getInstanceMethod(NSClassFromString(classStr),selector);
+}
+
+// 判断添加 新方法 或 新方法 替换 原来 方法
++ (void)exchangeImplementationWithClassStr:(NSString *)classStr originalMethodStr:(NSString *)originalMethodStr newMethodStr:(NSString *)newMethodStr {
+
+    SEL originalSelector = NSSelectorFromString(originalMethodStr);
+    SEL swizzledSelector = NSSelectorFromString(newMethodStr);
+
+    Method originalMethod = [NSString methodOfClassStr:classStr selector:NSSelectorFromString(originalMethodStr)];
+    Method swizzledMethod = [NSString methodOfClassStr:classStr selector:NSSelectorFromString(newMethodStr)];
+
+    // 判断 是否 可以添加 新方法
+    BOOL didAddMethod =
+class_addMethod(NSClassFromString(classStr),
+                originalSelector,
+                method_getImplementation(swizzledMethod),
+                method_getTypeEncoding(swizzledMethod));
+
+    if (didAddMethod) {
+        class_replaceMethod(NSClassFromString(classStr),
+                        swizzledSelector,
+                        method_getImplementation(originalMethod),
+                        method_getTypeEncoding(originalMethod));
+
+    } else {
+        // 替换 原有 方法
+        method_exchangeImplementations(originalMethod, swizzledMethod);
+    }
+}
+</code></pre><p><br><br>这段代码主要通过运行时，先判断是否可以往该实际类里面添加新方法，如果可以则添加新方法，如果不行，则替换原有的方法。但我们要替换的函数一般系统包含，所以只会走替换函数method_exchangeImplementations，但为了系统的健壮性，还是有必要先进行判断。</p>
+<pre><code>#pragma mark --- implement method
+/****************************************  substringFromIndex:  ***********************************/
+/**
+ 从from位置截取字符串 对应 __NSCFConstantString
+
+ @param from 截取起始位置
+ @return 截取的子字符串
+ */
+- (NSString *)safe_substringFromIndex:(NSUInteger)from {
+    if (from &gt; self.length ) {
+        return nil;
+    }
+    return [self safe_substringFromIndex:from];
+}
+/**
+ 从from位置截取字符串 对应  NSTaggedPointerString
+
+ @param from 截取起始位置
+ @return 截取的子字符串
+ */
+- (NSString *)safePoint_substringFromIndex:(NSUInteger)from {
+    if (from &gt; self.length ) {
+        return nil;
+    }
+    return [self safePoint_substringFromIndex:from];
+}
+
+/****************************************  substringFromIndex:  ***********************************/
+/**
+ 从开始截取到to位置的字符串  对应  __NSCFConstantString
+
+ @param to 截取终点位置
+ @return 返回截取的字符串
+ */
+- (NSString *)safe_substringToIndex:(NSUInteger)to {
+    if (to &gt; self.length ) {
+        return nil;
+    }
+    return [self safe_substringToIndex:to];
+}
+
+/**
+ 从开始截取到to位置的字符串  对应  NSTaggedPointerString
+
+ @param to 截取终点位置
+ @return 返回截取的字符串
+ */
+- (NSString *)safePoint_substringToIndex:(NSUInteger)to {
+   if (to &gt; self.length ) {
+        return nil;
+    }
+    return [self safePoint_substringToIndex:to];
+}
+
+
+
+/*********************************** rangeOfString:options:range:locale:  ***************************/
+/**
+ 搜索指定 字符串  对应  __NSCFConstantString
+
+ @param searchString 指定 字符串
+ @param mask 比较模式
+ @param rangeOfReceiverToSearch 搜索 范围
+ @param locale 本地化
+ @return 返回搜索到的字符串 范围
+ */
+- (NSRange)safe_rangeOfString:(NSString *)searchString options:(NSStringCompareOptions)mask range:(NSRange)rangeOfReceiverToSearch locale:(nullable NSLocale *)locale {
+    if (!searchString) {
+        searchString = self;
+    }
+
+    if (rangeOfReceiverToSearch.location &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if (rangeOfReceiverToSearch.length &gt; self.length) {
+         rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if ((rangeOfReceiverToSearch.location + rangeOfReceiverToSearch.length) &gt; self.length) {
+         rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+
+    return [self safe_rangeOfString:searchString options:mask range:rangeOfReceiverToSearch locale:locale];
+}
+
+
+/**
+ 搜索指定 字符串  对应  NSTaggedPointerString
+
+ @param searchString 指定 字符串
+ @param mask 比较模式
+ @param rangeOfReceiverToSearch 搜索 范围
+ @param locale 本地化
+ @return 返回搜索到的字符串 范围
+ */
+- (NSRange)safePoint_rangeOfString:(NSString *)searchString options:(NSStringCompareOptions)mask range:(NSRange)rangeOfReceiverToSearch locale:(nullable NSLocale *)locale {
+    if (!searchString) {
+        searchString = self;
+    }
+
+    if (rangeOfReceiverToSearch.location &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if (rangeOfReceiverToSearch.length &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if ((rangeOfReceiverToSearch.location + rangeOfReceiverToSearch.length) &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+
+    return [self safePoint_rangeOfString:searchString options:mask range:rangeOfReceiverToSearch locale:locale];
+}
+
+/*********************************** substringWithRange:  ***************************/
+/**
+ 截取指定范围的字符串  对应  __NSCFConstantString
+
+ @param range 指定的范围
+ @return 返回截取的字符串
+ */
+- (NSString *)safe_substringWithRange:(NSRange)range {
+    if (range.location &gt; self.length) {
+        return nil;
+    }
+
+    if (range.length &gt; self.length) {
+        return nil;
+    }
+
+    if ((range.location + range.length) &gt; self.length) {
+        return nil;
+    }
+    return [self safe_substringWithRange:range];
+}
+
+/**
+ 截取指定范围的字符串 对应  NSTaggedPointerString
+
+ @param range 指定的范围
+ @return 返回截取的字符串
+ */
+- (NSString *)safePoint_substringWithRange:(NSRange)range {
+    if (range.location &gt; self.length) {
+        return nil;
+    }
+
+    if (range.length &gt; self.length) {
+        return nil;
+    }
+
+    if ((range.location + range.length) &gt; self.length) {
+        return nil;
+    }
+    return [self safePoint_substringWithRange:range];
+}
+@end
+</code></pre><p>这里是具体的替换方法，对传入的参数进行判断，如果参数合理，就执行原来系统的方法，如果参数不合理，就直接返回适当内容(一般返回nil或直接return)；这里主要说一点：</p>
+<pre><code>// __NSCFConstantString 类型
+NSString *tmpConstantString = @&quot;432423432432432432&quot;;
+[tmpConstantString rangeOfString:nil];
+</code></pre><p>比如说系统原有的rangeOfString:函数，当你传入为nil的时候，就会导致崩溃，所以你很容易，就会去替换掉系统的该函数，但这是没有效果的，<br><img src="http://upload-images.jianshu.io/upload_images/2252551-fc6001c403cb9082.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="NSString的rangeOfString.png"><br>从这里我们可以看出来，真正导致系统崩溃的是rangeOfString:options:range:locale:执行了系统的该函数，所以应该去替换的是系统的rangeOfString:options:range:locale:这个函数。</p>
+<p>同样的NSMutableArray：</p>
+<pre><code>// __NSArrayM 类型
+NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
+[tmpMutableArrayM removeObjectAtIndex:1000];
+</code></pre><p>NSMutableArray的removeObjectAtIndex函数传入一个超过数组本身长度的索引，就会导致崩溃，所以你去替换系统的removeObjectAtIndex方法这样也是没有效果的<br><img src="http://upload-images.jianshu.io/upload_images/2252551-660810b4b19c20c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="NSMutableArray的removeObjectAtIndex.png"></p>
+<p>因为真正导致该崩溃的因为是因为系统执行了removeObjectsInRange:函数，函数里面的参数range超出了数组的范围，需要对该参数进行判断，才能有效的防止崩溃，所以替换系统的方法，必须先清楚引起系统崩溃的具体原因，才能对症下药。</p>
+<p>##2.NSMutableArray：<br>NSMutableArray主要原理跟NSString是一样的，但这里有一点需要注意的:</p>
+<p>由于NSArray和NSMutableArray里面都有objectAtIndex这个原生函数，但是NSArray和NSMutableArray的实际类不一样，所以NSArray和NSMutableArray里面的替换方法必须不一样，否则因为替换 method_exchangeImplementations(originalMethod, swizzledMethod);只是简单的进行将新方法替换掉原有的方法，但是它并没有类别的区分，所以如果NSArray和NSMutableArray里面的替换方法一样，那就只会执行NSMutableArray里面的替换方法，NSArray里面的不起作用(NSArray里面的load方法先执行)。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2252551-50fb9b2b29b4bbd9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风景2.jpg"></p>
+<p>#三.总结:</p>
+<p>#1.NSArray<br>主要替换objectAtIndex:方法</p>
+<pre><code>+ (void)load {
+    //只执行一次这个方法
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+
+        //替换 objectAtIndex
+        NSString *tmpStr = @&quot;objectAtIndex:&quot;;
+        NSString *tmpFirstStr = @&quot;safe_ZeroObjectAtIndex:&quot;;
+        NSString *tmpThreeStr = @&quot;safe_objectAtIndex:&quot;;
+        NSString *tmpSecondStr = @&quot;safe_singleObjectAtIndex:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSArray0&quot; originalMethodStr:tmpStr newMethodStr:tmpFirstStr];
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSSingleObjectArrayI&quot; originalMethodStr:tmpStr newMethodStr:tmpSecondStr];
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSArrayI&quot; originalMethodStr:tmpStr newMethodStr:tmpThreeStr];
+    });
+}
+</code></pre><p>实现方法:</p>
+<pre><code>#pragma mark --- implement method
+
+/**
+ 取出NSArray 第index个 值 对应 __NSArrayI
+
+ @param index 索引 index
+ @return 返回值
+ */
+- (id)safe_objectAtIndex:(NSUInteger)index {
+    if (index &gt;= self.count){
+        return nil;
+    }
+    return [self safe_objectAtIndex:index];
+}
+
+
+/**
+ 取出NSArray 第index个 值 对应   __NSSingleObjectArrayI
+
+ @param index 索引 index
+ @return 返回值
+ */
+- (id)safe_singleObjectAtIndex:(NSUInteger)index {
+    if (index &gt;= self.count){
+        return nil;
+    }
+    return [self safe_singleObjectAtIndex:index];
+}
+
+/**
+ 取出NSArray 第index个 值 对应 __NSArray0
+
+ @param index 索引 index
+ @return 返回值
+ */
+- (id)safe_ZeroObjectAtIndex:(NSUInteger)index {
+    if (index &gt;= self.count){
+        return nil;
+    }
+    return [self safe_ZeroObjectAtIndex:index];
+}
+</code></pre><p>#2.NSMutableArray<br>主要替换方法:objectAtIndex:、removeObjectsInRange:、insertObject:atIndex:、removeObject:inRange:这几个方法</p>
+<pre><code>+ (void)load {
+    //只执行一次这个方法
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+
+        //替换 objectAtIndex:
+        NSString *tmpGetStr = @&quot;objectAtIndex:&quot;;
+        NSString *tmpSafeGetStr = @&quot;safeMutable_objectAtIndex:&quot;;
+        [self exchangeImplementationWithClassStr:@&quot;__NSArrayM&quot; originalMethodStr:tmpGetStr newMethodStr:tmpSafeGetStr];
+
+
+        //替换 removeObjectsInRange:
+        NSString *tmpRemoveStr = @&quot;removeObjectsInRange:&quot;;
+        NSString *tmpSafeRemoveStr = @&quot;safeMutable_removeObjectsInRange:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSArrayM&quot; originalMethodStr:tmpRemoveStr newMethodStr:tmpSafeRemoveStr];
+
+
+        //替换 insertObject:atIndex:
+        NSString *tmpInsertStr = @&quot;insertObject:atIndex:&quot;;
+        NSString *tmpSafeInsertStr = @&quot;safeMutable_insertObject:atIndex:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSArrayM&quot; originalMethodStr:tmpInsertStr newMethodStr:tmpSafeInsertStr];
+
+        //替换 removeObject:inRange:
+        NSString *tmpRemoveRangeStr = @&quot;removeObject:inRange:&quot;;
+        NSString *tmpSafeRemoveRangeStr = @&quot;safeMutable_removeObject:inRange:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSArrayM&quot; originalMethodStr:tmpRemoveRangeStr newMethodStr:tmpSafeRemoveRangeStr];
+
+    });
+}
+</code></pre><p>实现方法:</p>
+<pre><code>#pragma mark --- implement method
+
+/**
+ 取出NSArray 第index个 值
+
+ @param index 索引 index
+ @return 返回值
+ */
+- (id)safeMutable_objectAtIndex:(NSUInteger)index {
+    if (index &gt;= self.count){
+        return nil;
+    }
+    return [self safeMutable_objectAtIndex:index];
+}
+
+/**
+ NSMutableArray 移除 索引 index 对应的 值
+
+ @param range 移除 范围
+ */
+- (void)safeMutable_removeObjectsInRange:(NSRange)range {
+
+    if (range.location &gt; self.count) {
+        return;
+    }
+
+    if (range.length &gt; self.count) {
+        return;
+    }
+
+    if ((range.location + range.length) &gt; self.count) {
+        return;
+    }
+
+     return [self safeMutable_removeObjectsInRange:range];
+}
+
+
+/**
+ 在range范围内， 移除掉anObject
+
+ @param anObject 移除的anObject
+ @param range 范围
+ */
+- (void)safeMutable_removeObject:(id)anObject inRange:(NSRange)range {
+    if (range.location &gt; self.count) {
+        return;
+    }
+
+    if (range.length &gt; self.count) {
+        return;
+    }
+
+    if ((range.location + range.length) &gt; self.count) {
+        return;
+    }
+
+    if (!anObject){
+        return;
+    }
+
+
+    return [self safeMutable_removeObject:anObject inRange:range];
+
+}
+
+/**
+ NSMutableArray 插入 新值 到 索引index 指定位置
+
+ @param anObject 新值
+ @param index 索引 index
+ */
+- (void)safeMutable_insertObject:(id)anObject atIndex:(NSUInteger)index {
+    if (index &gt; self.count) {
+            return;
+    }
+
+    if (!anObject){
+        return;
+    }
+
+    [self safeMutable_insertObject:anObject atIndex:index];
+}
+</code></pre><p>#3.NSString<br>主要替换方法:substringFromIndex:,substringToIndex:,substringWithRange:,rangeOfString:options:range:locale:这几个主要方法</p>
+<pre><code>+ (void)load {
+    //只执行一次这个方法
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+
+        // 替换 substringFromIndex:
+        NSString *tmpSubFromStr = @&quot;substringFromIndex:&quot;;
+        NSString *tmpSafeSubFromStr = @&quot;safe_substringFromIndex:&quot;;
+        NSString *tmpSafePointSubFromStr = @&quot;safePoint_substringFromIndex:&quot;;
+
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSCFConstantString&quot; originalMethodStr:tmpSubFromStr newMethodStr:tmpSafeSubFromStr];
+
+        [self exchangeImplementationWithClassStr:@&quot;NSTaggedPointerString&quot; originalMethodStr:tmpSubFromStr newMethodStr:tmpSafePointSubFromStr];
+
+
+        // 替换 substringToIndex:
+        NSString *tmpSubToStr = @&quot;substringToIndex:&quot;;
+        NSString *tmpSafeSubToStr = @&quot;safe_substringToIndex:&quot;;
+        NSString *tmpSafePointSubToStr = @&quot;safePoint_substringToIndex:&quot;;
+
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSCFConstantString&quot; originalMethodStr:tmpSubToStr newMethodStr:tmpSafeSubToStr];
+
+        [self exchangeImplementationWithClassStr:@&quot;NSTaggedPointerString&quot; originalMethodStr:tmpSubToStr newMethodStr:tmpSafePointSubToStr];
+
+
+        // 替换 substringWithRange:
+        NSString *tmpSubRangeStr = @&quot;substringWithRange:&quot;;
+        NSString *tmpSafeSubRangeStr = @&quot;safe_substringWithRange:&quot;;
+        NSString *tmpSafePointSubRangeStr = @&quot;safePoint_substringWithRange:&quot;;
+
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSCFConstantString&quot; originalMethodStr:tmpSubRangeStr newMethodStr:tmpSafeSubRangeStr];
+
+        [self exchangeImplementationWithClassStr:@&quot;NSTaggedPointerString&quot; originalMethodStr:tmpSubRangeStr newMethodStr:tmpSafePointSubRangeStr];
+
+
+        // 替换 rangeOfString:options:range:locale:
+        NSString *tmpRangeOfStr = @&quot;rangeOfString:options:range:locale:&quot;;
+        NSString *tmpSafeRangeOfStr = @&quot;safe_rangeOfString:options:range:locale:&quot;;
+        NSString *tmpSafePointRangeOfStr = @&quot;safePoint_rangeOfString:options:range:locale:&quot;;
+
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSCFConstantString&quot; originalMethodStr:tmpRangeOfStr newMethodStr:tmpSafeRangeOfStr];
+
+        [self exchangeImplementationWithClassStr:@&quot;NSTaggedPointerString&quot; originalMethodStr:tmpRangeOfStr newMethodStr:tmpSafePointRangeOfStr];
+
+    });
+}
+</code></pre><p>实现方法:</p>
+<pre><code>#pragma mark --- implement method
+
+/****************************************  substringFromIndex:  ***********************************/
+  /**
+ 从from位置截取字符串 对应 __NSCFConstantString
+
+ @param from 截取起始位置
+ @return 截取的子字符串
+ */
+- (NSString *)safe_substringFromIndex:(NSUInteger)from {
+    if (from &gt; self.length ) {
+        return nil;
+    }
+    return [self safe_substringFromIndex:from];
+}
+/**
+ 从from位置截取字符串 对应  NSTaggedPointerString
+
+ @param from 截取起始位置
+ @return 截取的子字符串
+ */
+- (NSString *)safePoint_substringFromIndex:(NSUInteger)from {
+    if (from &gt; self.length ) {
+        return nil;
+    }
+    return [self safePoint_substringFromIndex:from];
+}
+
+/****************************************  substringFromIndex:  ***********************************/
+ /**
+ 从开始截取到to位置的字符串  对应  __NSCFConstantString
+
+ @param to 截取终点位置
+ @return 返回截取的字符串
+ */
+- (NSString *)safe_substringToIndex:(NSUInteger)to   {
+    if (to &gt; self.length ) {
+        return nil;
+    }
+    return [self safe_substringToIndex:to];
+}
+
+/**
+ 从开始截取到to位置的字符串  对应  NSTaggedPointerString
+
+ @param to 截取终点位置
+ @return 返回截取的字符串
+ */
+  - (NSString *)safePoint_substringToIndex:(NSUInteger)to {
+    if (to &gt; self.length ) {
+        return nil;
+    }
+    return [self safePoint_substringToIndex:to];
+}
+
+
+
+/*********************************** rangeOfString:options:range:locale:  ***************************/
+/**
+ 搜索指定 字符串  对应  __NSCFConstantString
+
+ @param searchString 指定 字符串
+ @param mask 比较模式
+ @param rangeOfReceiverToSearch 搜索 范围
+ @param locale 本地化
+ @return 返回搜索到的字符串 范围
+ */
+- (NSRange)safe_rangeOfString:(NSString *)searchString options:(NSStringCompareOptions)mask range:(NSRange)rangeOfReceiverToSearch locale:(nullable NSLocale *)locale {
+    if (!searchString) {
+        searchString = self;
+    }
+
+    if (rangeOfReceiverToSearch.location &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if (rangeOfReceiverToSearch.length &gt; self.length) {
+         rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if ((rangeOfReceiverToSearch.location + rangeOfReceiverToSearch.length) &gt; self.length) {
+         rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+
+    return [self safe_rangeOfString:searchString options:mask range:rangeOfReceiverToSearch locale:locale];
+}
+
+
+/**
+ 搜索指定 字符串  对应  NSTaggedPointerString
+
+ @param searchString 指定 字符串
+ @param mask 比较模式
+ @param rangeOfReceiverToSearch 搜索 范围
+ @param locale 本地化
+ @return 返回搜索到的字符串 范围
+ */
+- (NSRange)safePoint_rangeOfString:(NSString *)searchString options:(NSStringCompareOptions)mask range:(NSRange)rangeOfReceiverToSearch locale:(nullable NSLocale *)locale {
+    if (!searchString) {
+        searchString = self;
+    }
+
+    if (rangeOfReceiverToSearch.location &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if (rangeOfReceiverToSearch.length &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if ((rangeOfReceiverToSearch.location + rangeOfReceiverToSearch.length) &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+
+    return [self safePoint_rangeOfString:searchString options:mask range:rangeOfReceiverToSearch locale:locale];
+}
+
+/*********************************** substringWithRange:  ***************************/
+/**
+ 截取指定范围的字符串  对应  __NSCFConstantString
+
+ @param range 指定的范围
+ @return 返回截取的字符串
+ */
+- (NSString *)safe_substringWithRange:(NSRange)range {
+   if (range.location &gt; self.length) {
+        return nil;
+    }
+
+    if (range.length &gt; self.length) {
+        return nil;
+    }
+
+    if ((range.location + range.length) &gt; self.length) {
+        return nil;
+    }
+    return [self safe_substringWithRange:range];
+}
+
+/**
+ 截取指定范围的字符串 对应  NSTaggedPointerString
+
+ @param range 指定的范围
+ @return 返回截取的字符串
+ */
+- (NSString *)safePoint_substringWithRange:(NSRange)range {
+    if (range.location &gt; self.length) {
+        return nil;
+    }
+
+    if (range.length &gt; self.length) {
+        return nil;
+    }
+
+    if ((range.location + range.length) &gt; self.length) {
+        return nil;
+    }
+    return [self safePoint_substringWithRange:range];
+}
+</code></pre><p>##4.NSMutableString<br>主要替换方法:substringFromIndex:,substringToIndex:,substringWithRange:,rangeOfString:options:range:locale:，appendString,这几个主要方法</p>
+<pre><code>+ (void)load {
+    //只执行一次这个方法
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+
+        // 替换  substringFromIndex:
+        NSString *tmpSubFromStr = @&quot;substringFromIndex:&quot;;
+        NSString *tmpSafeSubFromStr = @&quot;safeMutable_substringFromIndex:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSCFString&quot; originalMethodStr:tmpSubFromStr newMethodStr:tmpSafeSubFromStr];
+
+
+        // 替换  substringToIndex:
+        NSString *tmpSubToStr = @&quot;substringToIndex:&quot;;
+        NSString *tmpSafeSubToStr = @&quot;safeMutable_substringToIndex:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSCFString&quot; originalMethodStr:tmpSubToStr newMethodStr:tmpSafeSubToStr];
+
+
+        // 替换  substringWithRange:
+       NSString *tmpSubRangeStr = @&quot;substringWithRange:&quot;;
+        NSString *tmpSafeSubRangeStr = @&quot;safeMutable_substringWithRange:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSCFString&quot; originalMethodStr:tmpSubRangeStr newMethodStr:tmpSafeSubRangeStr];
+
+
+        // 替换  rangeOfString:options:range:locale:
+        NSString *tmpRangeOfStr = @&quot;rangeOfString:options:range:locale:&quot;;
+        NSString *tmpSafeRangeOfStr = @&quot;safeMutable_rangeOfString:options:range:locale:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSCFString&quot; originalMethodStr:tmpRangeOfStr newMethodStr:tmpSafeRangeOfStr];
+
+        // 替换  appendString
+        NSString *tmpAppendStr = @&quot;appendString:&quot;;
+        NSString *tmpSafeAppendStr = @&quot;safeMutable_appendString:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSCFString&quot; originalMethodStr:tmpAppendStr newMethodStr:tmpSafeAppendStr];
+
+    });
+ }
+</code></pre><p>实现方法:</p>
+<pre><code>#pragma mark --- implement method
+/****************************************  substringFromIndex:  ***********************************/
+/**
+ 从from位置截取字符串 对应 __NSCFString
+
+ @param from 截取起始位置
+ @return 截取的子字符串
+ */
+- (NSString *)safeMutable_substringFromIndex:(NSUInteger)from {
+    if (from &gt; self.length ) {
+        return nil;
+    }
+    return [self safeMutable_substringFromIndex:from];
+}
+
+
+/****************************************  substringFromIndex:  ***********************************/
+/**
+ 从开始截取到to位置的字符串  对应  __NSCFString
+
+ @param to 截取终点位置
+ @return 返回截取的字符串
+ */
+- (NSString *)safeMutable_substringToIndex:(NSUInteger)to {
+    if (to &gt; self.length ) {
+        return nil;
+    }
+    return [self safeMutable_substringToIndex:to];
+}
+
+
+
+/*********************************** rangeOfString:options:range:locale:  ***************************/
+/**
+ 搜索指定 字符串  对应  __NSCFString
+
+ @param searchString 指定 字符串
+ @param mask 比较模式
+ @param rangeOfReceiverToSearch 搜索 范围
+ @param locale 本地化
+ @return 返回搜索到的字符串 范围
+ */
+- (NSRange)safeMutable_rangeOfString:(NSString *)searchString options:(NSStringCompareOptions)mask range:(NSRange)rangeOfReceiverToSearch locale:(nullable NSLocale *)locale {
+    if (!searchString) {
+        searchString = self;
+    }
+
+    if (rangeOfReceiverToSearch.location &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if (rangeOfReceiverToSearch.length &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+    if ((rangeOfReceiverToSearch.location + rangeOfReceiverToSearch.length) &gt; self.length) {
+        rangeOfReceiverToSearch = NSMakeRange(0, self.length);
+    }
+
+
+    return [self safeMutable_rangeOfString:searchString options:mask range:rangeOfReceiverToSearch locale:locale];
+}
+
+
+
+/*********************************** substringWithRange:  ***************************/
+/**
+ 截取指定范围的字符串  对应  __NSCFString
+
+ @param range 指定的范围
+ @return 返回截取的字符串
+ */
+- (NSString *)safeMutable_substringWithRange:(NSRange)range {
+    if (range.location &gt; self.length) {
+        return nil;
+    }
+
+    if (range.length &gt; self.length) {
+        return nil;
+    }
+
+    if ((range.location + range.length) &gt; self.length) {
+        return nil;
+    }
+    return [self safeMutable_substringWithRange:range];
+}
+
+
+/*********************************** safeMutable_appendString:  ***************************/
+/**
+ 追加字符串 对应  __NSCFString
+
+ @param aString 追加的字符串
+ */
+- (void)safeMutable_appendString:(NSString *)aString {
+    if (!aString) {
+        return;
+    }
+    return [self safeMutable_appendString:aString];
+}
+</code></pre><p>##5.NSMutableDictionary<br>主要替换removeObjectForKey:和 setObject:forKey:这两个方法</p>
+<pre><code>+ (void)load {
+    //只执行一次这个方法
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+
+        // 替换 removeObjectForKey:
+        NSString *tmpRemoveStr = @&quot;removeObjectForKey:&quot;;
+        NSString *tmpSafeRemoveStr = @&quot;safeMutable_removeObjectForKey:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSDictionaryM&quot; originalMethodStr:tmpRemoveStr newMethodStr:tmpSafeRemoveStr];
+
+
+        // 替换 setObject:forKey:
+        NSString *tmpSetStr = @&quot;setObject:forKey:&quot;;
+        NSString *tmpSafeSetRemoveStr = @&quot;safeMutable_setObject:forKey:&quot;;
+
+        [self exchangeImplementationWithClassStr:@&quot;__NSDictionaryM&quot; originalMethodStr:tmpSetStr newMethodStr:tmpSafeSetRemoveStr];
+    });
+}
+</code></pre><p>实现方法:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#pragma mark --- implement method</span></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 根据akey 移除 对应的 键值对</div><div class="line"></div><div class="line"> @param aKey key</div><div class="line"> */</div><div class="line">- (<span class="keyword">void</span>)safeMutable_removeObjectForKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)aKey &#123;</div><div class="line">    <span class="keyword">if</span> (!aKey) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    [<span class="keyword">self</span> safeMutable_removeObjectForKey:aKey];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 将键值对 添加 到 NSMutableDictionary 内</div><div class="line"></div><div class="line"> @param anObject 值</div><div class="line"> @param aKey 键</div><div class="line"> */</div><div class="line">- (<span class="keyword">void</span>)safeMutable_setObject:(<span class="keyword">id</span>)anObject forKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)aKey &#123;</div><div class="line">    <span class="keyword">if</span> (!anObject) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (!aKey) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> [<span class="keyword">self</span> safeMutable_setObject:anObject forKey:aKey];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="四-最后"><a href="#四-最后" class="headerlink" title="四:最后"></a>四:最后</h1><p>送上一张喜欢的图片:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-f16b189494df783f.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风景3.jpeg"></center>
+
+
+<p><strong>这是gitHub链接地址:<a href="https://github.com/fangjinfeng" target="_blank" rel="external">FJ_Safe</a>,大家有兴趣可以看一下，如果觉得不错，麻烦给个喜欢或star,若发现问题请及时反馈，谢谢！ </strong></p>
+<p><strong>– 2017，新的开始！</strong></p>
+
       
 
       
@@ -216,88 +1004,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</a>
-    </h1>
-  
-
-        
-        <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" class="archive-article-date">
-  	<time datetime="2017-01-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。</p>
-<h2 id="一-效果图"><a href="#一-效果图" class="headerlink" title="一.效果图"></a>一.效果图</h2><p><br></p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></center><br><br><br><center> UINavigationBar和UITabbar渐变.gif</center>
-
-<h2 id="二-思路"><a href="#二-思路" class="headerlink" title="二.思路"></a>二.思路</h2><p> <strong>A. 设置tableView</strong> </p>
-<p> a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又要显示在UINavigationBar下方，所以需要设置tablewView的frame和contentInset：   </p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">self.tableView.frame = CGRectMake(<span class="number">0</span>, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);</div><div class="line"></div><div class="line">self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">动画</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">UINavigationBar</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UITabBar</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">展开全文 >></a>
         </p>
       
 
@@ -387,6 +1093,88 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/01/22/Runtime(整理笔记)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</a>
+    </h1>
+  
+
+        
+        <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" class="archive-article-date">
+  	<time datetime="2017-01-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。</p>
+<h2 id="一-效果图"><a href="#一-效果图" class="headerlink" title="一.效果图"></a>一.效果图</h2><p><br></p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></center><br><br><br><center> UINavigationBar和UITabbar渐变.gif</center>
+
+<h2 id="二-思路"><a href="#二-思路" class="headerlink" title="二.思路"></a>二.思路</h2><p> <strong>A. 设置tableView</strong> </p>
+<p> a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又要显示在UINavigationBar下方，所以需要设置tablewView的frame和contentInset：   </p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">self.tableView.frame = CGRectMake(<span class="number">0</span>, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);</div><div class="line"></div><div class="line">self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IOS</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">动画</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">UINavigationBar</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UITabBar</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">展开全文 >></a>
         </p>
       
 
@@ -588,6 +1376,14 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">动画</a>
               </li>
              
@@ -605,14 +1401,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">情感</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
             
             <div class="clearfix"></div>
