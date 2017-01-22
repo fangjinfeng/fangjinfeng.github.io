@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>Runtime (整理笔记) | Fjf&#39;s Tech Blog</title>
+  <title>OC工具类:防崩溃策略(runtime机制) | Fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
 
@@ -17,8 +17,8 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 
 [receiver doSomething];">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Runtime (整理笔记)">
-<meta property="og:url" content="//fjf.com/2017/01/22/Runtime(整理笔记)/index.html">
+<meta property="og:title" content="OC工具类:防崩溃策略(runtime机制)">
+<meta property="og:url" content="//fjf.com/2017/01/22/OC工具类防崩溃策略(runtime机制)/index.html">
 <meta property="og:site_name" content="Fjf's Tech Blog">
 <meta property="og:description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
 
@@ -34,9 +34,9 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-5dc658aa84039b6a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b4ffbcd4679976f9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-c8427ef9817bc8a6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T08:57:33.000Z">
+<meta property="og:updated_time" content="2017-01-22T09:01:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Runtime (整理笔记)">
+<meta name="twitter:title" content="OC工具类:防崩溃策略(runtime机制)">
 <meta name="twitter:description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
 
 
@@ -171,19 +171,19 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Runtime(整理笔记)" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-OC工具类防崩溃策略(runtime机制)" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Runtime (整理笔记)
+      OC工具类:防崩溃策略(runtime机制)
     </h1>
   
 
         
-        <a href="/2017/01/22/Runtime(整理笔记)/" class="archive-article-date">
+        <a href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/" class="archive-article-date">
   	<time datetime="2017-01-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
 </a>
         
@@ -458,15 +458,15 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">黑魔法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Associated Objects</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Method Swizzling</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSAaray,NSMutableArray 数组越界</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NSString, NSMutableString 崩溃</a>
         		</li>
       		
 		</ul>
@@ -522,7 +522,7 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://fjf.com/2017/01/22/Runtime(整理笔记)/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://fjf.com/2017/01/22/OC工具类防崩溃策略(runtime机制)/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -536,9 +536,18 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
   
 <nav id="article-nav">
   
+    <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏
+        
+      </div>
+    </a>
   
-    <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</div>
+  
+    <a href="/2017/01/16/我的2016-年终总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">2016 总结</div>
       <i class="icon-circle-right"></i>
     </a>
   

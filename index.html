@@ -173,7 +173,7 @@
 </ul>
 <p>[receiver doSomething];<br>底层运行会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething))<br>如果带有参数比如:<br>[receiver doSomething:(id)arg…];<br>底层运行时会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething), arg1, arg2, …)<br>可能通过以上你看不出它的价值，但是我们需要了解OC是一门动态语言，它会将一些工作放在代码运行时才处理而非在编译的时候，也就是说，有很多类和成员变量在我们编译的时候是不知道的，而在运行时，我们所编写的代码会转换成完整的代码运行。<br>因此，编译器是不够，我们还需要一个运行时的系统来处理编译后的代码</p>
 <ul>
-<li>Runtime 基本是C和汇编写的，可以充分保证动态系统的高效性
+<li>Runtime 基本是C和汇编写的，可以充分保证动态系统的高效性<br><br>
         
           <a class="article-more-a" href="/2017/01/22/Runtime(整理笔记)/#more">more >></a>
         
@@ -298,6 +298,95 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-OC工具类防崩溃策略(runtime机制)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/">OC工具类:防崩溃策略(runtime机制)</a>
+    </h1>
+  
+
+        
+        <a href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/" class="archive-article-date">
+  	<time datetime="2017-01-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>说明:此文是自己的总结笔记，主要参考这几篇文章:<br><a href="http://www.cnblogs.com/ioshe/p/5489086.html"><a href="http://www.cnblogs.com/ioshe/p/5489086.html">iOS开发-Runtime详解</a></a><br>NSHipster里面的这两篇文章 :<br><a href="http://nshipster.cn/associated-objects/"><a href="http://nshipster.cn/associated-objects/">Associated Objects</a></a><br><a href="http://nshipster.cn/method-swizzling/">Method Swizzling</a> 
+</strong></p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-fd4a701e71520f82.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="树1.jpg"></center>
+
+<h1 id="一-Runtime简介"><a href="#一-Runtime简介" class="headerlink" title="一.Runtime简介"></a>一.Runtime简介</h1><ul>
+<li>Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心之一，我们平时编写的OC代码，底层都是基于它来实现的。<br>比如:</li>
+</ul>
+<p>[receiver doSomething];<br>底层运行会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething))<br>如果带有参数比如:<br>[receiver doSomething:(id)arg…];<br>底层运行时会被编译器转化为:<br>objc_msgSend(receiver, @selector(doSomething), arg1, arg2, …)<br>可能通过以上你看不出它的价值，但是我们需要了解OC是一门动态语言，它会将一些工作放在代码运行时才处理而非在编译的时候，也就是说，有很多类和成员变量在我们编译的时候是不知道的，而在运行时，我们所编写的代码会转换成完整的代码运行。<br>因此，编译器是不够，我们还需要一个运行时的系统来处理编译后的代码</p>
+<ul>
+<li>Runtime 基本是C和汇编写的，可以充分保证动态系统的高效性<br><br>
+        
+          <a class="article-more-a" href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IOS</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Runtime</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Method Swizzling</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSAaray,NSMutableArray 数组越界</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NSString, NSMutableString 崩溃</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/01/22/OC工具类防崩溃策略(runtime机制)/">展开全文 >></a>
         </p>
       
 
@@ -516,6 +605,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">情感</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSAaray,NSMutableArray 数组越界</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
               </li>
             
             <div class="clearfix"></div>
