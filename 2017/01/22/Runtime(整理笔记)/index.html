@@ -6,17 +6,49 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>Fjf&#39;s Tech Blog</title>
+  <title>Runtime (整理笔记) | Fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="IOS开发工程师一枚。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Fjf's Tech Blog">
-<meta property="og:url" content="//fjf.com/index.html">
+  <meta name="description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
+
+
+
+#一.Runtime简介
+
+Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心之一，我们平时编写的OC代码，底层都是基于它来实现的。比如:
+
+[receiver doSomething">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Runtime (整理笔记)">
+<meta property="og:url" content="//fjf.com/2017/01/22/Runtime(整理笔记)/index.html">
 <meta property="og:site_name" content="Fjf's Tech Blog">
-<meta property="og:description" content="IOS开发工程师一枚。">
+<meta property="og:description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
+
+
+
+#一.Runtime简介
+
+Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心之一，我们平时编写的OC代码，底层都是基于它来实现的。比如:
+
+[receiver doSomething">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-fd4a701e71520f82.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-1566c70f1fe5b9a8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-c4e79765b9dbbf2b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-5dc658aa84039b6a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b4ffbcd4679976f9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-c8427ef9817bc8a6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-01-22T08:32:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Fjf's Tech Blog">
-<meta name="twitter:description" content="IOS开发工程师一枚。">
+<meta name="twitter:title" content="Runtime (整理笔记)">
+<meta name="twitter:description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
+
+
+
+#一.Runtime简介
+
+Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心之一，我们平时编写的OC代码，底层都是基于它来实现的。比如:
+
+[receiver doSomething">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-fd4a701e71520f82.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="Fjf&#39;s Tech Blog" type="application/atom+xml">
   
@@ -142,16 +174,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-Runtime(整理笔记)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-Runtime(整理笔记)" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/22/Runtime(整理笔记)/">Runtime (整理笔记)</a>
+    <h1 class="article-title" itemprop="name">
+      Runtime (整理笔记)
     </h1>
   
 
@@ -432,6 +462,27 @@
       
 
       
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
     </div>
     <div class="article-info article-info-index">
       
@@ -466,18 +517,74 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/22/Runtime(整理笔记)/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://fjf.com/2017/01/22/Runtime(整理笔记)/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
 
-
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
 
 
@@ -485,177 +592,10 @@
 
 
   
-    <article id="post-UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</a>
-    </h1>
+    <div class="duoshuo"></div>
   
 
-        
-        <a href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" class="archive-article-date">
-  	<time datetime="2017-01-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于项目需求要做一个这样的功能，所以做好之后，抽取出来，封装了下，希望能帮到有需要的朋友。</p>
-<h2 id="一-效果图"><a href="#一-效果图" class="headerlink" title="一.效果图"></a>一.效果图</h2><p><br></p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-b0e4d462a737c150.gif?imageMogr2/auto-orient/strip" alt="UINavigationBar和UITabbar渐变.gif"></center><br><br><br><center> UINavigationBar和UITabbar渐变.gif</center>
 
-<h2 id="二-思路"><a href="#二-思路" class="headerlink" title="二.思路"></a>二.思路</h2><p> <strong>A. 设置tableView</strong> </p>
-<p> a.因为当UINavigationBar和UITabBar隐藏的时候，tableView要完全占据整个屏幕，当UINavigationBar和UITabBar显示的时候，tableView又要显示在UINavigationBar下方，所以需要设置tablewView的frame和contentInset：   </p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">self.tableView.frame = CGRectMake(<span class="number">0</span>, -kNavigationBarHeight,kScreenWidth,kScreenHeight+kNavigationBarHeight);</div><div class="line"></div><div class="line">self.tableView.contentInset = UIEdgeInsetsMake(kNavigationBarHeight,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</div></pre></td></tr></table></figure>
-<p><strong>B.设置UINavigationBar和UITabBar的位移</strong></p>
-<p>当tableView向上移动一个属性,UINavigationBar要向上移动一个属性，UITabBar要向下移动一个像素，所以需要在- (void)scrollViewDidScroll:(UIScrollView*)scrollView方法中获取每一次tableView滚动的距离，因此需要记住上次tableView的偏移量距离：</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">CGFloat_originalOffsetY</span>;<span class="comment">//上一次偏移量</span></div><div class="line"></div><div class="line"><span class="built_in">CGFloat</span> offsetY = scrollView.contentOffset.y-_originalOffsetY;<span class="comment">//获取每次滚动偏移的距离</span></div><div class="line"></div><div class="line"> _originalOffsetY = scrollView.contentOffset.y;<span class="comment">//将这次tableView偏移量重新赋值给_originalOffsetY</span></div><div class="line"> </div><div class="line">~~~   </div><div class="line"></div><div class="line">又因为当<span class="built_in">UINavigationBar</span>和<span class="built_in">UITabBar</span>已经隐藏，继续向上滚动，已经不需要隐藏，同样的当tableView滚动到最后滚不动的时候<span class="built_in">UINavigationBar</span>和<span class="built_in">UITabBar</span>也不需要移动，所以添加判断条件</div><div class="line"></div><div class="line">~~~ </div><div class="line"><span class="comment">//判断是否滚动到底部</span></div><div class="line"><span class="built_in">CGFloat</span> bottomOffset = scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.size.height; </div><div class="line"></div><div class="line"><span class="comment">//判断UINavigationBar是否已经隐藏</span></div><div class="line">scrollView.contentOffset.y &gt; - (<span class="number">2</span>*kNavigationBarHeight)</div></pre></td></tr></table></figure>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// UIScrollView 代理</span></div><div class="line">- (<span class="keyword">void</span>)scrollViewDidScroll:(<span class="built_in">UIScrollView</span>*)scrollView &#123;</div><div class="line"></div><div class="line">     <span class="built_in">CGFloat</span> bottomOffset = scrollView.contentSize.height- scrollView.contentOffset.y- scrollView.frame.size.height;</div><div class="line"></div><div class="line">     <span class="keyword">if</span>(scrollView.contentOffset.y&gt; - kNavigationBarHeight &amp;&amp; bottomOffset &gt;<span class="number">0</span>) &#123;</div><div class="line"></div><div class="line">        <span class="built_in">CGFloat</span> offsetY = scrollView.contentOffset.y-_originalOffsetY;</div><div class="line"></div><div class="line">        [<span class="keyword">self</span> moveNavigationBarAndStatusBarByOffsetY:offsetY];</div><div class="line">     &#125;</div><div class="line">     _originalOffsetY= scrollView.contentOffset.y;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">动画</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">UINavigationBar</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UITabBar</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/22/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-我的2016-年终总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/16/我的2016-年终总结/">2016 总结</a>
-    </h1>
-  
-
-        
-        <a href="/2017/01/16/我的2016-年终总结/" class="archive-article-date">
-  	<time datetime="2017-01-15T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>不知不觉间，2016已经走到年尾了。再过几天就是农历的除夕，粗略回想一下，真心觉得2016过得贼快，仿佛什么都没做，它就溜走了；但细细一想，其实，这一年里也发生了很多事情。而且，对于我来说很多都是大事。年底，稍微闲点，因此，总结下过往，寄语于新年。</p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-414438772cead36b.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="路.jpeg"></center>
-
-<h2 id="一-工作"><a href="#一-工作" class="headerlink" title="一. 工作"></a>一. 工作</h2><p>工作是这一整年的重心，来青柠互动也一年多了，作为初创公司的元老之一，这一年陪着公司一起成长，经历挺多，也学到挺多。</p>
-<p><strong>1. 工作能力</strong></p>
-<p>这一年来，基本都是跟着项目走，从1758广场舞到D.Talk再到D.OA,到最后一直担任D.Talk的项目负责人，负责D.Talk的迭代更新；几个项目锻炼下来，编程的思路、对于OC这么语言的理解、对于项目的掌控，以及bug的处理能力，总的来说，是有一定长足的进步。</p>
-<p>挺感谢青柠给予的这个平台，让我可以比较完整的锻炼了，虽然其中包含了大量的加班，但能看到自己比较明显的进步，在这个快节奏的城市里，至少能有一点心安。</p>
-<p>同时，比较空闲的时候，也自己开源了一些项目，写了一些技术博客，对于技术做了一些总结，也因为这样，认识了很多传说中的大牛，他们有的比自己还小，但是编程的功底明显比自己高很多，羡慕之余，也激发了自己的斗志。感觉这样挺踏实的。</p>
-<p><strong>2. 工作认知</strong></p>
-<p>2016，移动端的风，基本已经消散，飞起来的猪，很多头先着地了。寒冬已至，作为创业公司的青柠和IOS开发的我也一样受到了影响。</p>
-<p>去年，创业初期的25名员工，到今年年底只剩12名老员工了，当然还有40几个新员工的加入。人来人走，在IT这一行业，是一种常态，也算见怪不怪了。</p>
-<p>离职的员工里，有些是自己想走，有些是被公司开除的，看着熟悉的面孔的离别，我逐渐意识到，生存成为了公司也是我们这些开发者的目标。激烈竞争的市场为了生存或是以后的生活，公司不断优化着自己的最合理配置，程序员之间的优胜劣汰也逐步显现出来，尤其像现在IOS端人满为患。所以学习成为了我们第一要务。</p>
-<p>学习不只是编程技能的提高，还包括着对于项目功能的理解和把控；对于app用户体验的敏锐直觉；对于市场动态的了解等，这方面我真的要感谢强哥，这一年里，他教会了我很多除了编程以外的东西，尤其是作为项目负责人的所必须的细心和用心。</p>
-<p><strong>3. 工作心得</strong></p>
-<p>这是挺幸运的一年，年会的时候，拿了最佳优秀员工，同时自己表演的节目也得了三等奖，(PS:去年是一等奖，今年选材没选好，拖累了鹏程和余红)，最后还中了128G的IPhone7。确实是挺幸运的，人生第一次中大奖，不过，光红包也发了2000多。但确实很感谢，大家的认可。</p>
-<p>不觉间也毕业了2年多了，从福州到深圳，从鑫诺到爱高到青柠，对于工作，确实有太多不可变因素了，离开鑫诺是因为想来深圳，离开爱高，是因为风停了，公司倒了，衷心祝愿青柠会越来越好。</p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-ad388ceb7fbf7747.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="光.jpeg"></center>
-        
-          <a class="article-more-a" href="/2017/01/16/我的2016-年终总结/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">总结</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">情感</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/16/我的2016-年终总结/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-  
 
 
           </div>
@@ -677,8 +617,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
