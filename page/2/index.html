@@ -310,6 +310,76 @@
 
 
   
+    <article id="post-UIAlertView  标题显示不出来" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/10/UIAlertView  标题显示不出来/">UIAlertView  标题显示不出来</a>
+    </h1>
+  
+
+        
+        <a href="/2016/10/10/UIAlertView  标题显示不出来/" class="archive-article-date">
+  	<time datetime="2016-10-10T03:28:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近做项目的时候，遇到一个问题，就是UIAlterView 设置了标题，但是标题一直显示不出来，但是单独出来自己写个demo,进行测试，又没问题，找了挺久的终于找到原因，因此这边记录一下，方便以后查看，也希望能帮助有遇到此问题的朋友。</p>
+<p><strong>这个问题是由于在UIViewController类别里面重写了系统的- (void)setTitle:(NSString*)title方法导致的。</strong></p>
+<h1 id="一-UIAlertView显示不出标题"><a href="#一-UIAlertView显示不出标题" class="headerlink" title="一.UIAlertView显示不出标题"></a>一.UIAlertView显示不出标题</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import<span class="meta-string">"ViewController.h"</span></span></div><div class="line">@implementationUIViewController (Extention)</div><div class="line">- (<span class="keyword">void</span>)setTitle:(<span class="built_in">NSString</span>*)title&#123;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line">@interfaceViewController()</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line">@implementationViewController</div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">[superviewDidLoad];</div><div class="line"><span class="built_in">UIAlertView</span>*alterView = [[<span class="built_in">UIAlertViewalloc</span>]initWithTitle:<span class="string">@"提示"</span>message:<span class="string">@"大家  好!"</span>delegate:nilcancelButtonTitle:<span class="string">@"取消"</span>otherButtonTitles:<span class="string">@"确定"</span>,<span class="literal">nil</span>];</div><div class="line">[alterViewshow];</div><div class="line"><span class="keyword">self</span>.view.backgroundColor= [<span class="built_in">UIColorwhiteColor</span>];</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2016/10/10/UIAlertView  标题显示不出来/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UIAlertView</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">标题</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/10/10/UIAlertView  标题显示不出来/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -525,14 +595,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
               </li>
              
@@ -546,6 +608,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Method Swizzling</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">UIAlertView</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">标题</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSAaray,NSMutableArray 数组越界</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -566,14 +652,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">情感</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSAaray,NSMutableArray 数组越界</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
               </li>
             
             <div class="clearfix"></div>

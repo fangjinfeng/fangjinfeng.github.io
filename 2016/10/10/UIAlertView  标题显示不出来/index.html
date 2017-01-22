@@ -6,17 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>Tag: Block | Fjf&#39;s Tech Blog</title>
+  <title>UIAlertView  标题显示不出来 | Fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="IOS开发工程师一枚。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Fjf's Tech Blog">
-<meta property="og:url" content="//fjf.com/tags/Block/index.html">
+  <meta name="description" content="最近做项目的时候，遇到一个问题，就是UIAlterView 设置了标题，但是标题一直显示不出来，但是单独出来自己写个demo,进行测试，又没问题，找了挺久的终于找到原因，因此这边记录一下，方便以后查看，也希望能帮助有遇到此问题的朋友。
+这个问题是由于在UIViewController类别里面重写了系统的- (void)setTitle:(NSString*)title方法导致的。
+一.UIAler">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UIAlertView  标题显示不出来">
+<meta property="og:url" content="//fjf.com/2016/10/10/UIAlertView  标题显示不出来/index.html">
 <meta property="og:site_name" content="Fjf's Tech Blog">
-<meta property="og:description" content="IOS开发工程师一枚。">
+<meta property="og:description" content="最近做项目的时候，遇到一个问题，就是UIAlterView 设置了标题，但是标题一直显示不出来，但是单独出来自己写个demo,进行测试，又没问题，找了挺久的终于找到原因，因此这边记录一下，方便以后查看，也希望能帮助有遇到此问题的朋友。
+这个问题是由于在UIViewController类别里面重写了系统的- (void)setTitle:(NSString*)title方法导致的。
+一.UIAler">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-6b86382227f8d804.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-5dfe79efd56ded37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-6d55cf4fe84292f1.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-01-22T13:24:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Fjf's Tech Blog">
-<meta name="twitter:description" content="IOS开发工程师一枚。">
+<meta name="twitter:title" content="UIAlertView  标题显示不出来">
+<meta name="twitter:description" content="最近做项目的时候，遇到一个问题，就是UIAlterView 设置了标题，但是标题一直显示不出来，但是单独出来自己写个demo,进行测试，又没问题，找了挺久的终于找到原因，因此这边记录一下，方便以后查看，也希望能帮助有遇到此问题的朋友。
+这个问题是由于在UIViewController类别里面重写了系统的- (void)setTitle:(NSString*)title方法导致的。
+一.UIAler">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-6b86382227f8d804.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="Fjf&#39;s Tech Blog" type="application/atom+xml">
   
@@ -142,114 +153,177 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-UIAlertView  标题显示不出来" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/12/26/Block里面的weak-strong理解/" class="archive-article-date">
-  	<time datetime="2016-12-26T13:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-26</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/26/Block里面的weak-strong理解/">Block里面的weak-strong理解</a>
+    <h1 class="article-title" itemprop="name">
+      UIAlertView  标题显示不出来
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2016/10/10/UIAlertView  标题显示不出来/" class="archive-article-date">
+  	<time datetime="2016-10-10T03:28:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近做项目的时候，遇到一个问题，就是UIAlterView 设置了标题，但是标题一直显示不出来，但是单独出来自己写个demo,进行测试，又没问题，找了挺久的终于找到原因，因此这边记录一下，方便以后查看，也希望能帮助有遇到此问题的朋友。</p>
+<p><strong>这个问题是由于在UIViewController类别里面重写了系统的- (void)setTitle:(NSString*)title方法导致的。</strong></p>
+<h1 id="一-UIAlertView显示不出标题"><a href="#一-UIAlertView显示不出标题" class="headerlink" title="一.UIAlertView显示不出标题"></a>一.UIAlertView显示不出标题</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import<span class="meta-string">"ViewController.h"</span></span></div><div class="line">@implementationUIViewController (Extention)</div><div class="line">- (<span class="keyword">void</span>)setTitle:(<span class="built_in">NSString</span>*)title&#123;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line">@interfaceViewController()</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line">@implementationViewController</div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">[superviewDidLoad];</div><div class="line"><span class="built_in">UIAlertView</span>*alterView = [[<span class="built_in">UIAlertViewalloc</span>]initWithTitle:<span class="string">@"提示"</span>message:<span class="string">@"大家  好!"</span>delegate:nilcancelButtonTitle:<span class="string">@"取消"</span>otherButtonTitles:<span class="string">@"确定"</span>,<span class="literal">nil</span>];</div><div class="line">[alterViewshow];</div><div class="line"><span class="keyword">self</span>.view.backgroundColor= [<span class="built_in">UIColorwhiteColor</span>];</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>程序运行效果:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-6b86382227f8d804.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="UIAlterView--无标题"></center><br><br><br><center>UIAlterView–无标题</center>
+
+<h1 id="二-注释掉-void-setTitle-NSString-title-标题显示出来"><a href="#二-注释掉-void-setTitle-NSString-title-标题显示出来" class="headerlink" title="二.注释掉-(void)setTitle:(NSString *)title,标题显示出来"></a>二.注释掉-(void)setTitle:(NSString *)title,标题显示出来</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import<span class="meta-string">"ViewController.h"</span></span></div><div class="line">@implementationUIViewController (Extention)</div><div class="line"><span class="comment">//- (void)setTitle:(NSString *)title&#123;</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//&#125;</span></div><div class="line"><span class="keyword">@end</span></div><div class="line">@interfaceViewController()</div><div class="line"><span class="keyword">@end</span></div><div class="line">@implementationViewController</div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">[superviewDidLoad];</div><div class="line"><span class="built_in">UIAlertView</span>*alterView = [[<span class="built_in">UIAlertViewalloc</span>]initWithTitle:<span class="string">@"提示"</span>message:<span class="string">@"大家好!"</span>delegate:nilcancelButtonTitle:<span class="string">@"取消"</span>otherButtonTitles:<span class="string">@"确定"</span>,<span class="literal">nil</span>];</div><div class="line">[alterViewshow];</div><div class="line"><span class="keyword">self</span>.view.backgroundColor= [<span class="built_in">UIColorwhiteColor</span>];</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>程序运行效果:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-5dfe79efd56ded37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="UIAlterView--有标题"></center><br><br><br><center>UIAlterView–有标题</center>
+
+<h1 id="三-最后"><a href="#三-最后" class="headerlink" title="三.最后:"></a>三.最后:</h1><p>送上一直自己挺喜欢的图片:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-6d55cf4fe84292f1.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="树.jpg"></center>
+
+
+<p><strong>至于具体原因，我百度了下也没有官方说法，在这里就不误导大家，大家可以去了解下，然后跟我说下，大家相互进步。<a href="https://github.com/fangjinfeng/FJAlterViewTitleCannotShow" target="_blank" rel="external">gitHub链接地址</a>和<a href="http://www.jianshu.com/p/f860197eadaa" target="_blank" rel="external">简书链接</a>大家有兴趣可以看一下，如果觉得不错，麻烦给个喜欢或star,如果有问题请及时反馈，谢谢！</strong></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Block</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UIAlertView</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">weakSelf</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">strongSelf</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">标题</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://fjf.com/2016/10/10/UIAlertView  标题显示不出来/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/12/06/NSTimer 超时 block回调/" class="archive-article-date">
-  	<time datetime="2016-12-06T12:17:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-06</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/06/NSTimer 超时 block回调/">NSTimer 超时 block回调</a>
-    </h1>
+    <a href="/2016/10/22/FJFloatingView 可停靠任意位置悬浮窗/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          FJFloatingView 可停靠任意位置悬浮窗
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/18/UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">UINavigationBar和UITabBar 上滚渐变显示 下拉渐变隐藏</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Block</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSTimer</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">超时 回调</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -272,9 +346,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
