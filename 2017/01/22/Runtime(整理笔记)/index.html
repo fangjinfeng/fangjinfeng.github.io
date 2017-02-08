@@ -34,7 +34,7 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-5dc658aa84039b6a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b4ffbcd4679976f9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-c8427ef9817bc8a6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T13:13:50.000Z">
+<meta property="og:updated_time" content="2017-02-08T01:50:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Runtime (整理笔记)">
 <meta name="twitter:description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
@@ -410,11 +410,25 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 <li><strong>持续的预防：</strong> 不管你对你理解 swlzzling 框架，UIKit 或者其他内嵌框架有多自信，一定要记住所有东西在下一个发行版本都可能变得不再好使。做好准备，在使用这个黑魔法中走得更远，不要让程序反而出现不可思议的行为。</li>
 </ul>
 </blockquote>
+<p><strong>1. 常见坑</strong></p>
+<ul>
+<li><p>Method swizzling 是非原子性的，在多线程环境下可能被多次修改，但同样 Method swizzling 又是全局性的，就会造成不可预知的错误。</p>
+</li>
+<li><p>可能出现命名冲突的问题，这样就不会调用到系统原方法，可能导致未知问题。</p>
+</li>
+<li><p>Method swizzling 看起来像递归，对新人来说不容易理解。</p>
+</li>
+<li><p>出现问题 Method swizzling 不容易进行debug，来发现问题</p>
+</li>
+<li><p>随着项目迭代和人员更换，使用Method swizzling 的项目不容易维护，因为开发人员有时根本不知道在Method swizzling 里面修改了东西。</p>
+</li>
+</ul>
 <h1 id="十-感想"><a href="#十-感想" class="headerlink" title="十.感想"></a>十.感想</h1><p>runtime是把双刃剑，因为所有的代码都运行在它之上，改变它，可能会改变代码的正常运行逻辑和所有与之交互的东西，因此会产生可怕的副作用。但同时它强大的功能也可以给应用的框架或者代码的编写带来非常大的遍历。</p>
 <p>因此，对于runtime唯一的建议就是，需谨慎使用，一旦使用，必须先了解runtime的相关原理，做好预防措施。</p>
 <h1 id="十一-最后"><a href="#十一-最后" class="headerlink" title="十一.最后:"></a>十一.最后:</h1><p>送上一张喜欢的图片:</p>
 <center><img src="http://upload-images.jianshu.io/upload_images/2252551-c8427ef9817bc8a6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="树5.jpg"></center>
 
+<p><strong>提醒:不应该把runtime的使用看成是高大上的东西，并以使用这个为荣，实际开发中runtime能少用应该少用，正常的系统方法才是正道！</strong></p>
 <p><strong>这是一篇总结笔记，大家有兴趣可以蛮看一下，这里是<a href="http://www.jianshu.com/p/320cf0557e93" target="_blank" rel="external">简书链接</a>如果觉得不错，麻烦给个喜欢或star,若发现有错误的地方请及时反馈，谢谢！</strong></p>
 
       
@@ -642,18 +656,6 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Block</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">weakSelf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">strongSelf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">IOS</a>
               </li>
              
@@ -670,6 +672,26 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Block</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">weakSelf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">strongSelf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ImageBrowser</a>
               </li>
              
@@ -679,14 +701,6 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">仿微博图片浏览</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -714,6 +728,14 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">UIAlertView</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">标题</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
               </li>
              
@@ -723,14 +745,6 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">剖析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">UIAlertView</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">标题</a>
               </li>
              
               <li class="article-tag-list-item">

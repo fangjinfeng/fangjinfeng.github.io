@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-660810b4b19c20c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-50fb9b2b29b4bbd9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f16b189494df783f.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T13:13:07.000Z">
+<meta property="og:updated_time" content="2017-02-08T01:52:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OC工具类:防崩溃策略(runtime机制)">
 <meta name="twitter:description" content="由于上一篇文章中，很多人都说通过类别拓展，添加新方法，然后对新方法进行判断，来达到防止崩溃的目的，这样做法不利于项目的维护和后期的扩展，毕竟长期以来大家习惯了用系统自带的方法。所以最好的方法就是在系统方法里面判断，因此研究了下,通过runtime机制替换了系统的方法，来对参数添加判断，以此来防止崩溃现象。主要启发自这篇文章:
@@ -980,10 +980,25 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
     });
 }
 </code></pre><p>实现方法:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#pragma mark --- implement method</span></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 根据akey 移除 对应的 键值对</div><div class="line"></div><div class="line"> @param aKey key</div><div class="line"> */</div><div class="line">- (<span class="keyword">void</span>)safeMutable_removeObjectForKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)aKey &#123;</div><div class="line">    <span class="keyword">if</span> (!aKey) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    [<span class="keyword">self</span> safeMutable_removeObjectForKey:aKey];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 将键值对 添加 到 NSMutableDictionary 内</div><div class="line"></div><div class="line"> @param anObject 值</div><div class="line"> @param aKey 键</div><div class="line"> */</div><div class="line">- (<span class="keyword">void</span>)safeMutable_setObject:(<span class="keyword">id</span>)anObject forKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)aKey &#123;</div><div class="line">    <span class="keyword">if</span> (!anObject) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (!aKey) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> [<span class="keyword">self</span> safeMutable_setObject:anObject forKey:aKey];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="四-最后"><a href="#四-最后" class="headerlink" title="四:最后"></a>四:最后</h1><p>送上一张喜欢的图片:</p>
+<h1 id="四-感想"><a href="#四-感想" class="headerlink" title="四: 感想"></a>四: 感想</h1><p><strong>1. 常见坑</strong></p>
+<ul>
+<li><p>Method swizzling 是非原子性的，在多线程环境下可能被多次修改，但同样 Method swizzling 又是全局性的，就会造成不可预知的错误。</p>
+</li>
+<li><p>可能出现命名冲突的问题，这样就不会调用到系统原方法，可能导致未知问题。</p>
+</li>
+<li><p>Method swizzling 看起来像递归，对新人来说不容易理解。</p>
+</li>
+<li><p>出现问题 Method swizzling 不容易进行debug，来发现问题</p>
+</li>
+<li><p>随着项目迭代和人员更换，使用Method swizzling 的项目不容易维护，因为开发人员有时根本不知道在Method swizzling 里面修改了东西。</p>
+</li>
+</ul>
+<p><strong>2.总结</strong><br>runtime是把双刃剑，因为所有的代码都运行在它之上，改变它，可能会改变代码的正常运行逻辑和所有与之交互的东西，因此会产生可怕的副作用。但同时它强大的功能也可以给应用的框架或者代码的编写带来非常大的遍历。</p>
+<p>因此，对于runtime唯一的建议就是，需谨慎使用，一旦使用，必须先了解runtime的相关原理，做好预防措施，在添加完自己的代码之后，一定要调用系统原来的方法。</p>
+<h1 id="五-最后"><a href="#五-最后" class="headerlink" title="五: 最后"></a>五: 最后</h1><p>送上一张喜欢的图片:</p>
 <center><img src="http://upload-images.jianshu.io/upload_images/2252551-f16b189494df783f.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风景3.jpeg"></center>
 
-
+<p><strong>提醒:不应该把runtime的使用看成是高大上的东西，并以使用这个为荣，实际开发中runtime能少用应该少用，正常的系统方法才是正道！</strong></p>
 <p><strong>这是gitHub链接地址:<a href="https://github.com/fangjinfeng" target="_blank" rel="external">FJ_Safe</a>和<a href="http://www.jianshu.com/p/bea2bfed3f3f" target="_blank" rel="external">简书链接</a>,大家有兴趣可以看一下，如果觉得不错，麻烦给个喜欢或star,若发现问题请及时反馈，谢谢！ </strong></p>
 <p><strong>– 2017，新的开始！</strong></p>
 
@@ -1221,18 +1236,6 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Block</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">weakSelf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">strongSelf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">IOS</a>
               </li>
              
@@ -1249,6 +1252,26 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Block</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">weakSelf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">strongSelf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ImageBrowser</a>
               </li>
              
@@ -1258,14 +1281,6 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">仿微博图片浏览</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1293,6 +1308,14 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">UIAlertView</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">标题</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
               </li>
              
@@ -1302,14 +1325,6 @@ NSMutableArray *tmpMutableArrayM = [NSMutableArray arrayWithCapacity:0];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">剖析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">UIAlertView</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">标题</a>
               </li>
              
               <li class="article-tag-list-item">
