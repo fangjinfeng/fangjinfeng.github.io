@@ -6,13 +6,13 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>2016 总结 | Fjf&#39;s Tech Blog</title>
+  <title>NSString, NSArray, NSDictionary 关于strong 和 copy 使用 | Fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="NSString 和 NSArray 在@property的时候，到底是用strong还是用copy修饰，这里依据自己的理解，做一个总结。
 一. NSString声明变量:
 // strong  类型  NSString@property (nonatomic, strong) NSString strongString;// copy    类型  NSString@property (nona">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2016 总结">
+<meta property="og:title" content="NSString, NSArray, NSDictionary 关于strong 和 copy 使用">
 <meta property="og:url" content="//fjf.com/2017/03/01/NSString, NSArray, NSDictionary 关于strong 和 copy 使用/index.html">
 <meta property="og:site_name" content="Fjf's Tech Blog">
 <meta property="og:description" content="NSString 和 NSArray 在@property的时候，到底是用strong还是用copy修饰，这里依据自己的理解，做一个总结。
@@ -21,9 +21,9 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-1acb5713cbdf93d3.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-eeb98c38a961fdec.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-be0af2225c48dc3b.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-03-01T02:10:16.000Z">
+<meta property="og:updated_time" content="2017-03-01T02:12:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2016 总结">
+<meta name="twitter:title" content="NSString, NSArray, NSDictionary 关于strong 和 copy 使用">
 <meta name="twitter:description" content="NSString 和 NSArray 在@property的时候，到底是用strong还是用copy修饰，这里依据自己的理解，做一个总结。
 一. NSString声明变量:
 // strong  类型  NSString@property (nonatomic, strong) NSString strongString;// copy    类型  NSString@property (nona">
@@ -160,7 +160,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      2016 总结
+      NSString, NSArray, NSDictionary 关于strong 和 copy 使用
     </h1>
   
 
@@ -546,6 +546,22 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">IOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">UI</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">悬浮窗</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Assistive Touch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">copy</a>
               </li>
              
@@ -566,22 +582,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">IOS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">UI</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">悬浮窗</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Assistive Touch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ImageBrowser</a>
               </li>
              
@@ -591,6 +591,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">仿微博图片浏览</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -606,23 +614,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -635,6 +627,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">情感</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -658,11 +658,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">总结</a>
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">情感</a>
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
             
             <div class="clearfix"></div>
