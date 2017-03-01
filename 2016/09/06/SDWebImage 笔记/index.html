@@ -15,7 +15,7 @@ SDWebImage源码剖析（二）
 
 
 
-一、简介:SDWebImage是一个异步下载图片并且支持缓存的UIImageView分类。主要逻辑为:
+一. 简介SDWebImage是一个异步下载图片并且支持缓存的UIImageView分类。主要逻辑为:
 
 查看缓存，如果缓存中存在图片就返回图片并且更新UIImag">
 <meta property="og:type" content="article">
@@ -29,7 +29,7 @@ SDWebImage源码剖析（二）
 
 
 
-一、简介:SDWebImage是一个异步下载图片并且支持缓存的UIImageView分类。主要逻辑为:
+一. 简介SDWebImage是一个异步下载图片并且支持缓存的UIImageView分类。主要逻辑为:
 
 查看缓存，如果缓存中存在图片就返回图片并且更新UIImag">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-da47b5477dd0a0db.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -38,7 +38,7 @@ SDWebImage源码剖析（二）
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f9a6e2182226391c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f53ce164dc39f86c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f9e75aade7c43568.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-01-22T14:00:21.000Z">
+<meta property="og:updated_time" content="2017-03-01T02:05:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SDWebImage 剖析笔记">
 <meta name="twitter:description" content="项目中一直都有使用SDWebImage，对这个框架有一定的了解，但是体系却未能贯通，因此特地整理下,主要参考:
@@ -48,7 +48,7 @@ SDWebImage源码剖析（二）
 
 
 
-一、简介:SDWebImage是一个异步下载图片并且支持缓存的UIImageView分类。主要逻辑为:
+一. 简介SDWebImage是一个异步下载图片并且支持缓存的UIImageView分类。主要逻辑为:
 
 查看缓存，如果缓存中存在图片就返回图片并且更新UIImag">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-da47b5477dd0a0db.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -204,16 +204,69 @@ SDWebImage源码剖析（二）
 <center><img src="http://upload-images.jianshu.io/upload_images/2252551-da47b5477dd0a0db.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="蝶.jpg"></center>
 
 
-<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介:"></a>一、简介:</h1><p>SDWebImage是一个异步下载图片并且支持缓存的UIImageView分类。<br>主要逻辑为:</p>
+<h1 id="一-简介"><a href="#一-简介" class="headerlink" title="一. 简介"></a>一. 简介</h1><p>SDWebImage是一个异步下载图片并且支持缓存的UIImageView分类。<br>主要逻辑为:</p>
 <ul>
 <li>查看缓存，如果缓存中存在图片就返回图片并且更新UIImageView.</li>
 <li>缓存中不存在图片就异步下载图片，加入缓存，更新UIImageView.</li>
 </ul>
+<p><strong>主要用到的对象：</strong></p>
+<p>1、UIImageView (WebCache)类别，入口封装，实现读取图片完成后的回调</p>
+<p>2、SDWebImageManager，对图片进行管理的中转站，记录那些图片正在读取。<br>向下层读取Cache（调用SDImageCache），或者向网络读取对象（调用SDWebImageDownloader） 。<br>实现SDImageCache和SDWebImageDownloader的回调。</p>
+<p>3、SDImageCache，根据URL的MD5摘要对图片进行存储和读取（实现存在内存中或者存在硬盘上两种实现）<br>实现图片和内存清理工作。</p>
+<p>4、SDWebImageDownloader，根据URL向网络读取数据（实现部分读取和全部读取后再通知回调两种方式）</p>
+<p>其他类：<br>SDWebImageDecoder，异步对图像进行了一次解压。</p>
 <p>具体流程图:</p>
-<center><img src="http://upload-images.jianshu.io/upload_images/2252551-67de99c91d2725e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDWebImage实现流程图.png"></center><br><br><br><center>SDWebImage实现流程图</center><br><a id="more"></a><br>#    二.架构简介:<br>A.架构图:<br><br><center><img src="http://upload-images.jianshu.io/upload_images/2252551-b5f53e4e8f08dabf.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDWebImageView_relationship.jpeg"></center><br><br><br><center>SDWebImageView_relationship</center>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-67de99c91d2725e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDWebImage实现流程图.png"></center><br><br><br><center>SDWebImage实现流程图</center>
+
+<p><strong>SDWebImage 加载图片的流程 :</strong></p>
+<ol>
+<li><p>入口 setImageWithURL:placeholderImage:options: 会先把 placeholderImage 显示，然后 SDWebImageManager 根据 URL 开始处理图片。</p>
+</li>
+<li><p>进入 SDWebImageManager-downloadWithURL:delegate:options:userInfo:，交给 SDImageCache 从缓存查找图片是否已经下载 queryDiskCacheForKey:delegate:userInfo:.</p>
+</li>
+<li><p>先从内存图片缓存查找是否有图片，如果内存中已经有图片缓存，SDImageCacheDelegate 回调 imageCache:didFindImage:forKey:userInfo: 到 SDWebImageManager。</p>
+</li>
+<li><p>SDWebImageManagerDelegate 回调 webImageManager:didFinishWithImage: 到 UIImageView+WebCache 等前端展示图片。</p>
+</li>
+<li><p>如果内存缓存中没有，生成 NSInvocationOperation 添加到队列开始从硬盘查找图片是否已经缓存。</p>
+</li>
+<li><p>根据 URLKey 在硬盘缓存目录下尝试读取图片文件。这一步是在 NSOperation 进行的操作，所以回主线程进行结果回调 notifyDelegate:。</p>
+</li>
+<li><p>如果上一操作从硬盘读取到了图片，将图片添加到内存缓存中（如果空闲内存过小，会先清空内存缓存）。SDImageCacheDelegate 回调 imageCache:didFindImage:forKey:userInfo:。进而回调展示图片。</p>
+</li>
+<li><p>如果从硬盘缓存目录读取不到图片，说明所有缓存都不存在该图片，需要下载图片，回调 imageCache:didNotFindImageForKey:userInfo:。</p>
+</li>
+<li><p>共享或重新生成一个下载器 SDWebImageDownloader 开始下载图片。</p>
+</li>
+<li><p>图片下载由 NSURLConnection 来做，实现相关 delegate 来判断图片下载中、下载完成和下载失败。</p>
+</li>
+<li><p>connection:didReceiveData: 中利用 ImageIO 做了按图片下载进度加载效果。</p>
+</li>
+<li><p>connectionDidFinishLoading: 数据下载完成后交给 SDWebImageDecoder 做图片解码处理。</p>
+</li>
+<li><p>图片解码处理在一个 NSOperationQueue 完成，不会拖慢主线程 UI。如果有需要对下载的图片进行二次处理，最好也在这里完成，效率会好很多。</p>
+</li>
+<li><p>在主线程 notifyDelegateOnMainThreadWithInfo: 宣告解码完成，imageDecoder:didFinishDecodingImage:userInfo: 回调给 SDWebImageDownloader。</p>
+</li>
+<li><p>imageDownloader:didFinishWithImage: 回调给 SDWebImageManager 告知图片下载完成。</p>
+</li>
+<li><p>通知所有的 downloadDelegates 下载完成，回调给需要的地方展示图片。</p>
+</li>
+<li><p>将图片保存到 SDImageCache 中，内存缓存和硬盘缓存同时保存。写文件到硬盘也在以单独 NSInvocationOperation 完成，避免拖慢主线程。</p>
+</li>
+<li><p>SDImageCache 在初始化的时候会注册一些消息通知，在内存警告或退到后台的时候清理内存图片缓存，应用结束的时候清理过期图片。</p>
+</li>
+<li><p>SDImageCache 也提供了 UIButton+WebCache 和 MKAnnotationView+WebCache，方便使用。</p>
+</li>
+<li><p>SDWebImagePrefetcher 可以预先下载图片，方便后续使用。</p>
+</li>
+</ol>
+<a id="more"></a>
+<h1 id="二-架构简介"><a href="#二-架构简介" class="headerlink" title="二. 架构简介"></a>二. 架构简介</h1><p>A.架构图:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-b5f53e4e8f08dabf.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDWebImageView_relationship.jpeg"></center><br><br><br><center>SDWebImageView_relationship</center>
 
 <p>UIImageView+WebCaceh和UIButton+WebCache直接为UIkit框架提供接口，而SDWebImageManger负责处理和协调SDWebImageDownloader和SDWebImageCache.并与UIkit层进行交互。</p>
-<h1 id="三、具体分析"><a href="#三、具体分析" class="headerlink" title="三、具体分析:"></a>三、具体分析:</h1><h2 id="1-UIImageView-WebCache"><a href="#1-UIImageView-WebCache" class="headerlink" title="1.UIImageView+WebCache"></a>1.UIImageView+WebCache</h2><h3 id="A-框架常用入口"><a href="#A-框架常用入口" class="headerlink" title="A.框架常用入口"></a>A.框架常用入口</h3><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 所有设置图片最终都会调用这个方法</span></div><div class="line">- (void)sd_setImageWithURL:(NSURL *)url </div><div class="line"><span class="symbol">          placeholderImage:</span>(UIImage *)<span class="class">placeholder </span>&#123;</div><div class="line">      [self sd_setImageWithURL:url </div><div class="line"><span class="symbol">            placeholderImage:</span>placeholder </div><div class="line"><span class="symbol">                     options:</span><span class="number">0</span> </div><div class="line"><span class="symbol">                    progress:</span>nil </div><div class="line"><span class="symbol">                   completed:</span>nil];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="三-具体分析"><a href="#三-具体分析" class="headerlink" title="三. 具体分析"></a>三. 具体分析</h1><h2 id="1-UIImageView-WebCache"><a href="#1-UIImageView-WebCache" class="headerlink" title="1.UIImageView+WebCache"></a>1.UIImageView+WebCache</h2><h3 id="A-框架常用入口"><a href="#A-框架常用入口" class="headerlink" title="A.框架常用入口"></a>A.框架常用入口</h3><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 所有设置图片最终都会调用这个方法</span></div><div class="line">- (void)sd_setImageWithURL:(NSURL *)url </div><div class="line"><span class="symbol">          placeholderImage:</span>(UIImage *)<span class="class">placeholder </span>&#123;</div><div class="line">      [self sd_setImageWithURL:url </div><div class="line"><span class="symbol">            placeholderImage:</span>placeholder </div><div class="line"><span class="symbol">                     options:</span><span class="number">0</span> </div><div class="line"><span class="symbol">                    progress:</span>nil </div><div class="line"><span class="symbol">                   completed:</span>nil];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>该接口调用下面这个方法:</p>
 <p>[self   sd_setImageWithURL:placeholderImage:options:progress:completed:]<br>该方法作为sd_setImageWithURL接口的最终入口，提供了多种参数。 </p>
 <ul>
@@ -303,7 +356,40 @@ SDWebImage源码剖析（二）
 <p>而最后一个代理方法会在图片下载完成之后调用completionBlock 来完成最后 UIImageView.image的更新，而这里调用的 progressBlock，completionBlock， cancelBlock 都是在之前存储在 URLCallbacks<br>字典中的.</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)connectionDidFinishLoading:(<span class="built_in">NSURLConnection</span> *)aConnection &#123;</div><div class="line">        SDWebImageDownloaderCompletedBlock completionBlock = <span class="keyword">self</span>.completedBlock;</div><div class="line">        <span class="keyword">@synchronized</span>(<span class="keyword">self</span>) &#123;</div><div class="line"><span class="comment">// 停止 该线程 运行时</span></div><div class="line">            <span class="built_in">CFRunLoopStop</span>(<span class="built_in">CFRunLoopGetCurrent</span>());</div><div class="line">            <span class="keyword">self</span>.thread = <span class="literal">nil</span>;</div><div class="line">            <span class="keyword">self</span>.connection = <span class="literal">nil</span>;</div><div class="line"><span class="comment">// 通知停止状态栏转圈请求</span></div><div class="line">            <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">                [[<span class="built_in">NSNotificationCenter</span> defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:<span class="keyword">self</span>];</div><div class="line">                [[<span class="built_in">NSNotificationCenter</span> defaultCenter] postNotificationName:SDWebImageDownloadFinishNotification object:<span class="keyword">self</span>];</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    </div><div class="line">        <span class="keyword">if</span> (![[<span class="built_in">NSURLCache</span> sharedURLCache] cachedResponseForRequest:_request]) &#123;</div><div class="line">            responseFromCached = <span class="literal">NO</span>;</div><div class="line">        &#125;</div><div class="line">    </div><div class="line">        <span class="keyword">if</span> (completionBlock) &#123;</div><div class="line">            <span class="keyword">if</span> (<span class="keyword">self</span>.options &amp; SDWebImageDownloaderIgnoreCachedResponse &amp;&amp; responseFromCached) &#123;</div><div class="line">                completionBlock(<span class="literal">nil</span>, <span class="literal">nil</span>, <span class="literal">nil</span>, <span class="literal">YES</span>);</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">self</span>.imageData) &#123;</div><div class="line"><span class="comment">// 进行缓存</span></div><div class="line">                <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> sd_imageWithData:<span class="keyword">self</span>.imageData];</div><div class="line">                <span class="built_in">NSString</span> *key = [[SDWebImageManager sharedManager] cacheKeyForURL:<span class="keyword">self</span>.request.URL];</div><div class="line">                image = [<span class="keyword">self</span> scaledImageForKey:key image:image];</div><div class="line">            </div><div class="line">                <span class="comment">// Do not force decoding animated GIFs</span></div><div class="line">                <span class="keyword">if</span> (!image.images) &#123;</div><div class="line"><span class="comment">// 进行解码</span></div><div class="line">                    <span class="keyword">if</span> (<span class="keyword">self</span>.shouldDecompressImages) &#123;</div><div class="line">                        image = [<span class="built_in">UIImage</span> decodedImageWithImage:image];</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (<span class="built_in">CGSizeEqualToSize</span>(image.size, <span class="built_in">CGSizeZero</span>)) &#123;</div><div class="line">                    completionBlock(<span class="literal">nil</span>, <span class="literal">nil</span>, [<span class="built_in">NSError</span> errorWithDomain:SDWebImageErrorDomain code:<span class="number">0</span> userInfo:@&#123;<span class="built_in">NSLocalizedDescriptionKey</span> : <span class="string">@"Downloaded image has 0 pixels"</span>&#125;], <span class="literal">YES</span>);</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">else</span> &#123;</div><div class="line">                    completionBlock(image, <span class="keyword">self</span>.imageData, <span class="literal">nil</span>, <span class="literal">YES</span>);</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                completionBlock(<span class="literal">nil</span>, <span class="literal">nil</span>, [<span class="built_in">NSError</span> errorWithDomain:SDWebImageErrorDomain code:<span class="number">0</span> userInfo:@&#123;<span class="built_in">NSLocalizedDescriptionKey</span> : <span class="string">@"Image data is nil"</span>&#125;], <span class="literal">YES</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">self</span>.completionBlock = <span class="literal">nil</span>;</div><div class="line">        [<span class="keyword">self</span> done];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>转换处理图片和进行缓存后，将下载image赋值给控件。</p>
-<h2 id="四-最后"><a href="#四-最后" class="headerlink" title="四:最后"></a>四:最后</h2><p>送上一张自己喜欢的图片:</p>
+<h2 id="四-面试点"><a href="#四-面试点" class="headerlink" title="四. 面试点"></a>四. 面试点</h2><p>1、SDImageCache是怎么做数据管理的?</p>
+<ul>
+<li><p>SDImageCache分成两部分，一个是内存层面的，一个是磁盘层面的。</p>
+</li>
+<li><p>内存层面的相当是个缓存器，以 Key - Value 的形式存储图片。当内存不够的时候，会清除所有缓存图片。</p>
+</li>
+<li><p>磁盘层面用搜索文件系统的方式做管理，文件替换方式是以时间为单位，剔除时间大一一周的图片文件。</p>
+</li>
+<li><p>当SDWebImageManager 向 SDImageCache 要资源时， 先搜索内存层面的数据，如果有直接返回，没有再访问磁盘，如果有将图片从磁盘读取出来，然后做解压，将图片对象放到内存层面做备份，再返回调用层。</p>
+</li>
+</ul>
+<ol>
+<li>为什么图片要进行解压?</li>
+</ol>
+<ul>
+<li>因为UIImage的imageWithData函数是每次画图的时候才将Data解压成ARGB图像，所以在每次画图的时候，会有一个解压操作，这样效率很低，但是只有瞬时的内存需求，为了提高效率，通过SDWebImageDecoder将包装在Data下的资源解压，然后花在另外一张图片上面，这样这张图片就不需要重复解压了，这种做法就是典型的空间换取时间的做法。</li>
+</ul>
+<ol>
+<li>SDWebImage 在多线程下载图片时防止错乱的策略</li>
+</ol>
+<ul>
+<li><p>SDWebImage 会将ImageView 对象关联一个下载列表(列表是给AnimationImages用的，这个时候会下载多张图片），当tableView滚动时，imageView会重设数据源url,这时会cancel掉下载列表中当前对应的下载任务，然后开启一个新的下载任务，这样就保证只有当前可见的cell对象的ImageView对象关联的下载任务能够回调，不会发生Image错乱。</p>
+</li>
+<li><p>同时，SDWebImage 管理了一个全局下载队列SDWebDownloadManager，并发量设置为6，也就表示如果cell的数目大于6，就会有部分下载队列处于等待状态，而且，在添加下载任务到全局的下载队列中去的时候，SDWebImage 默认采取的是LIFO(后进先出)策略，具体是添加新的下载任务的时候，将之前的下载任务添加依赖为新的下载任务。</p>
+</li>
+</ul>
+<p><strong>另外解决方案:</strong></p>
+<ul>
+<li><p>将imageView对象和图片的url相关联，在滑动时，不取消旧的下载任务，而是在下载任务完成回调时，进行url匹配，只有匹配成功的image会刷新imageView对象，而其他的image则只做缓存操作，而不刷新UI。</p>
+</li>
+<li><p>同时，仍然管理一个执行队列，为了避免占用太多的资源，通常会对执行队列设置一个最大的并发量。此外，为了保证LIFO的下载策略，可以自己维持一个等待队列，每次下载任务开始的时候，将后进入的下载任务插入到等待队列的前面。</p>
+</li>
+</ul>
+<h2 id="五-最后"><a href="#五-最后" class="headerlink" title="五.最后"></a>五.最后</h2><p>送上一张自己喜欢的图片:</p>
 <center><img src="http://upload-images.jianshu.io/upload_images/2252551-f9e75aade7c43568.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="风景.jpeg"></center>
 
 
@@ -547,6 +633,26 @@ SDWebImage源码剖析（二）
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">copy</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">strong</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NSString</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSArray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSDictionary</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">IOS</a>
               </li>
              
@@ -575,6 +681,26 @@ SDWebImage源码剖析（二）
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
               </li>
              
@@ -596,26 +722,6 @@ SDWebImage源码剖析（二）
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
               </li>
              
               <li class="article-tag-list-item">

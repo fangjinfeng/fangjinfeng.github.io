@@ -144,6 +144,107 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-NSString, NSArray, NSDictionary 关于strong 和 copy 使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/01/NSString, NSArray, NSDictionary 关于strong 和 copy 使用/">2016 总结</a>
+    </h1>
+  
+
+        
+        <a href="/2017/03/01/NSString, NSArray, NSDictionary 关于strong 和 copy 使用/" class="archive-article-date">
+  	<time datetime="2017-02-28T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>NSString</strong> 和 <strong>NSArray</strong> 在@property的时候，到底是用strong还是用copy修饰，这里依据自己的理解，做一个总结。</p>
+<h1 id="一-NSString"><a href="#一-NSString" class="headerlink" title="一. NSString"></a>一. NSString</h1><p><strong>声明变量:</strong></p>
+<p>// strong  类型  NSString<br>@property (nonatomic, strong) NSString <em>strongString;<br>// copy    类型  NSString<br>@property (nonatomic, copy)   NSString </em>copyedString;</p>
+<p>这里分别声明了一个用strong修饰的strongString变量和一个用copy修饰的copyedString变量。<strong>（注意: 不可以写成copyStr会报property follows cocoa naming convention for returning ‘owned’ objects意思是不能使用copy来作为开头命名，copy是cocoa用的）</strong></p>
+<p><strong>NSString 赋值</strong></p>
+<p>NSString *tmpString = @”123456”;</p>
+<p>self.strongString = tmpString;<br>self.copyedString = tmpString;</p>
+<p>NSLog(@”tmpString: %@, %p”, tmpString, tmpString);<br>NSLog(@”self.strongString: %@, %p”, self.strongString, self.strongString);<br>NSLog(@”self.copyedString: %@, %p”, self.copyedString, self.copyedString);</p>
+<p><strong>查看输出结果</strong></p>
+<p>tmpString: 123456, 0x106074078<br>self.strongString: 123456, 0x106074078<br>self.copyedString: 123456, 0x106074078</p>
+<p>根据输出的内存地址和内容，我们可以发现不管是strong修饰还是copy修饰，指向的都是同一个内存地址，也就是tmpString的地址。strongString和copyedString都只是对tmpString的引用，只会导致tmpString的计算器加1，并没有拷贝一份新的，tmpString的retainCount应该是3.</p>
+<p><strong>NSMutableString 赋值</strong></p>
+<p>NSMutableString *tmpMutableString = [[NSMutableString alloc] initWithString:@”123456”];</p>
+<p>self.strongString = tmpMutableString;<br>self.copyedString = tmpMutableString;</p>
+<p>NSLog(@”tmpMutableString: %@, %p”, tmpMutableString, tmpMutableString);<br>NSLog(@”self.strongString: %@, %p”, self.strongString, self.strongString);<br>NSLog(@”self.copyedString: %@, %p”, self.copyedString, self.copyedString);</p>
+<p>[tmpMutableString appendString:@”789”];</p>
+<p>NSLog(@”tmpMutableString: %@, %p”, tmpMutableString, tmpMutableString);<br>NSLog(@”self.strongString: %@, %p”, self.strongString, self.strongString);<br>NSLog(@”self.copyedString: %@, %p”, self.copyedString, self.copyedString);</p>
+<p><strong>输出打印结果</strong></p>
+<p>tmpMutableString: 123456, 0x600000260640<br>self.strongString: 123456, 0x600000260640<br>self.copyedString: 123456, 0xa003635343332316</p>
+<p>tmpMutableString: 123456789, 0x600000260640<br>self.strongString: 123456789, 0x600000260640<br>self.copyedString: 123456, 0xa003635343332316</p>
+<p>这时候我们可以看到，copy修饰的copyedString 字符串, 已经不再是简单的引用了，而是拷贝一个新的，让copyedStr指向了一个新的地址。此时tmpMutableString的ratainCount应该是2.</p>
+<p>然后我们将[tmpMutableString appendString:@”789”];加上“789”，输出后，发现tmpMutableString和strongString会随之改变，但copyedString则不会随之变化。<br>
+        
+          <a class="article-more-a" href="/2017/03/01/NSString, NSArray, NSDictionary 关于strong 和 copy 使用/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">copy</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">strong</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NSString</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSArray</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSDictionary</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/01/NSString, NSArray, NSDictionary 关于strong 和 copy 使用/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Runtime(整理笔记)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -468,83 +569,9 @@
 
 
   
-    <article id="post-NSTimer 超时 block回调" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/06/NSTimer 超时 block回调/">NSTimer 超时 block回调</a>
-    </h1>
-  
-
-        
-        <a href="/2016/12/06/NSTimer 超时 block回调/" class="archive-article-date">
-  	<time datetime="2016-12-06T12:17:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近做直播，由于经常用到定时器进行各种比如说心跳报文发送、进入后台2分钟自动关闭直播等操作，所以经常用到定时器的超时限制(即输入定时间隔和超时次数，定时器判断重复次数超过定时次数,清空定时次数，回调block，进入下一次循环)，所以参考了这篇文章:</p>
-<p> <a href="http://blog.csdn.net/woaifen3344/article/details/44623641">ios 给NSTimer添加Block回调版本创建方法</a></p>
-<h1 id="一、NSTimer-Extention-h"><a href="#一、NSTimer-Extention-h" class="headerlink" title="一、NSTimer+Extention.h"></a>一、NSTimer+Extention.h</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//  DeJiaIM</span></div><div class="line"><span class="comment">//  Created by fjf on 2016/12/6.</span></div><div class="line"><span class="comment">//  Copyright © 2016年 tsningning. All rights reserved.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span>(^<span class="built_in">NSTimerBlock</span>)(<span class="keyword">void</span>);</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSTimer</span> (<span class="title">Extention</span>)</span></div><div class="line"></div><div class="line"><span class="comment">/**</div><div class="line">     设置定时器</div><div class="line"></div><div class="line"> @param interval 定时间隔</div><div class="line">     @param repeats 是否重复</div><div class="line">     @param callback 回调</div><div class="line"> @return 返回定时器</div><div class="line"> */</span></div><div class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)interval</div><div class="line">                                    repeats:(<span class="built_in">BOOL</span>)repeats</div><div class="line">                                   timerCallback:(<span class="built_in">NSTimerBlock</span>)callback;</div><div class="line"></div><div class="line"><span class="comment">/**</div><div class="line"> 设置定时器</div><div class="line"></div><div class="line">     @param interval 定时间隔</div><div class="line"> @param repeats 是否重复</div><div class="line">     @param limitCount 超时次数</div><div class="line">     @param timerCallback 回调</div><div class="line"> @return 返回定时器</div><div class="line"> */</span></div><div class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)interval</div><div class="line">                                    repeats:(<span class="built_in">BOOL</span>)repeats</div><div class="line">                                 limitCount:(<span class="built_in">NSInteger</span>)limitCount</div><div class="line">                                   timerCallback:(<span class="built_in">NSTimerBlock</span>)timerCallback;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2016/12/06/NSTimer 超时 block回调/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Block</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSTimer</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">超时 回调</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/06/NSTimer 超时 block回调/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -647,6 +674,26 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">copy</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">strong</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NSString</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSArray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSDictionary</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">IOS</a>
               </li>
              
@@ -675,6 +722,26 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
               </li>
              
@@ -696,26 +763,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
               </li>
              
               <li class="article-tag-list-item">

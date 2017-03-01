@@ -6,17 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>Tag: SDWebImage | Fjf&#39;s Tech Blog</title>
+  <title>2016 总结 | Fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="IOS开发工程师一枚。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Fjf's Tech Blog">
-<meta property="og:url" content="//fjf.com/tags/SDWebImage/index.html">
+  <meta name="description" content="NSString 和 NSArray 在@property的时候，到底是用strong还是用copy修饰，这里依据自己的理解，做一个总结。
+一. NSString声明变量:
+// strong  类型  NSString@property (nonatomic, strong) NSString strongString;// copy    类型  NSString@property (nona">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2016 总结">
+<meta property="og:url" content="//fjf.com/2017/03/01/NSString, NSArray, NSDictionary 关于strong 和 copy 使用/index.html">
 <meta property="og:site_name" content="Fjf's Tech Blog">
-<meta property="og:description" content="IOS开发工程师一枚。">
+<meta property="og:description" content="NSString 和 NSArray 在@property的时候，到底是用strong还是用copy修饰，这里依据自己的理解，做一个总结。
+一. NSString声明变量:
+// strong  类型  NSString@property (nonatomic, strong) NSString strongString;// copy    类型  NSString@property (nona">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-1acb5713cbdf93d3.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-eeb98c38a961fdec.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-be0af2225c48dc3b.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-03-01T02:10:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Fjf's Tech Blog">
-<meta name="twitter:description" content="IOS开发工程师一枚。">
+<meta name="twitter:title" content="2016 总结">
+<meta name="twitter:description" content="NSString 和 NSArray 在@property的时候，到底是用strong还是用copy修饰，这里依据自己的理解，做一个总结。
+一. NSString声明变量:
+// strong  类型  NSString@property (nonatomic, strong) NSString strongString;// copy    类型  NSString@property (nona">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-1acb5713cbdf93d3.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="Fjf&#39;s Tech Blog" type="application/atom+xml">
   
@@ -142,68 +153,299 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-NSString, NSArray, NSDictionary 关于strong 和 copy 使用" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/09/06/SDWebImage 笔记/" class="archive-article-date">
-  	<time datetime="2016-09-06T07:17:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-06</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/09/06/SDWebImage 笔记/">SDWebImage 剖析笔记</a>
+    <h1 class="article-title" itemprop="name">
+      2016 总结
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017/03/01/NSString, NSArray, NSDictionary 关于strong 和 copy 使用/" class="archive-article-date">
+  	<time datetime="2017-02-28T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>NSString</strong> 和 <strong>NSArray</strong> 在@property的时候，到底是用strong还是用copy修饰，这里依据自己的理解，做一个总结。</p>
+<h1 id="一-NSString"><a href="#一-NSString" class="headerlink" title="一. NSString"></a>一. NSString</h1><p><strong>声明变量:</strong></p>
+<p>// strong  类型  NSString<br>@property (nonatomic, strong) NSString <em>strongString;<br>// copy    类型  NSString<br>@property (nonatomic, copy)   NSString </em>copyedString;</p>
+<p>这里分别声明了一个用strong修饰的strongString变量和一个用copy修饰的copyedString变量。<strong>（注意: 不可以写成copyStr会报property follows cocoa naming convention for returning ‘owned’ objects意思是不能使用copy来作为开头命名，copy是cocoa用的）</strong></p>
+<p><strong>NSString 赋值</strong></p>
+<p>NSString *tmpString = @”123456”;</p>
+<p>self.strongString = tmpString;<br>self.copyedString = tmpString;</p>
+<p>NSLog(@”tmpString: %@, %p”, tmpString, tmpString);<br>NSLog(@”self.strongString: %@, %p”, self.strongString, self.strongString);<br>NSLog(@”self.copyedString: %@, %p”, self.copyedString, self.copyedString);</p>
+<p><strong>查看输出结果</strong></p>
+<p>tmpString: 123456, 0x106074078<br>self.strongString: 123456, 0x106074078<br>self.copyedString: 123456, 0x106074078</p>
+<p>根据输出的内存地址和内容，我们可以发现不管是strong修饰还是copy修饰，指向的都是同一个内存地址，也就是tmpString的地址。strongString和copyedString都只是对tmpString的引用，只会导致tmpString的计算器加1，并没有拷贝一份新的，tmpString的retainCount应该是3.</p>
+<p><strong>NSMutableString 赋值</strong></p>
+<p>NSMutableString *tmpMutableString = [[NSMutableString alloc] initWithString:@”123456”];</p>
+<p>self.strongString = tmpMutableString;<br>self.copyedString = tmpMutableString;</p>
+<p>NSLog(@”tmpMutableString: %@, %p”, tmpMutableString, tmpMutableString);<br>NSLog(@”self.strongString: %@, %p”, self.strongString, self.strongString);<br>NSLog(@”self.copyedString: %@, %p”, self.copyedString, self.copyedString);</p>
+<p>[tmpMutableString appendString:@”789”];</p>
+<p>NSLog(@”tmpMutableString: %@, %p”, tmpMutableString, tmpMutableString);<br>NSLog(@”self.strongString: %@, %p”, self.strongString, self.strongString);<br>NSLog(@”self.copyedString: %@, %p”, self.copyedString, self.copyedString);</p>
+<p><strong>输出打印结果</strong></p>
+<p>tmpMutableString: 123456, 0x600000260640<br>self.strongString: 123456, 0x600000260640<br>self.copyedString: 123456, 0xa003635343332316</p>
+<p>tmpMutableString: 123456789, 0x600000260640<br>self.strongString: 123456789, 0x600000260640<br>self.copyedString: 123456, 0xa003635343332316</p>
+<p>这时候我们可以看到，copy修饰的copyedString 字符串, 已经不再是简单的引用了，而是拷贝一个新的，让copyedStr指向了一个新的地址。此时tmpMutableString的ratainCount应该是2.</p>
+<p>然后我们将[tmpMutableString appendString:@”789”];加上“789”，输出后，发现tmpMutableString和strongString会随之改变，但copyedString则不会随之变化。<br><a id="more"></a><br><strong>分析</strong></p>
+<ol>
+<li><p>当源字符串是NSString类型时，由于是不可变字符串，所以，不管是使用strong还是copy修饰，都是指向原来的对象，copy操作只是做了次浅拷贝。</p>
+</li>
+<li><p>当源字符串是NSMutableString时，strong只是将源字符串的引用计算器加1，依旧指向原来的对象，而copy则是对源字符串做了次深拷贝，从而生成一个新的对象，并且self.copyedString的指针指向了这个新的对象。并且这个copy属性的对象始终是NSString类型而不是NSMutableString类型，如果想让拷贝过来的对象可变，就需要使用mutableCopy。</p>
+</li>
+</ol>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>如果源字符串是NSString类型，使用copy和strong修饰的字符串效果是一样的，都指向源字符串的内存地址。</p>
+</li>
+<li><p>如果源字符串是NSMutableString的时候，使用strong只会增加引用计算器，但copy会执行一次深拷贝，会造成不必要的内存浪费。</p>
+</li>
+<li><p>一般我们声明NSString时，如果不希望它中途被改变，并且来源有可能是NSMutableString类型(可变类型)这种情况下用copy,进行深拷贝。</p>
+</li>
+<li><p>如果确定来源是NSString类型(不可变类型)，这种情况下用strong比较好。因为copy修饰的NSString在进行set操作时，底层进行了这样的判断if ([str isMemberOfClass: [NSString class]])，如果来源是可变的，就进行一次深拷贝，如果是不可变的就和strong修饰一样，进行一次浅拷贝，<br>当项目庞大时，有成百上千个NSString对象，多少会损耗app性能。</p>
+</li>
+</ul>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-1acb5713cbdf93d3.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="相遇.jpeg"></center>
+
+<h1 id="二-NSArray"><a href="#二-NSArray" class="headerlink" title="二. NSArray"></a>二. NSArray</h1><p><strong>声明变量</strong></p>
+<p>// strong  类型 NSArray<br>@property (nonatomic, strong) NSArray  <em>strongArray;<br>// copy    类型 NSArray<br>@property (nonatomic, copy)   NSArray  </em>copyedArray;<br><strong>NSArray 赋值</strong></p>
+<p>NSArray *tmpArray = [NSArray arrayWithObjects:@”1”,@”2”, nil];</p>
+<p>self.strongArray = tmpArray;<br>self.copyedArray = tmpArray;</p>
+<p>NSLog(@”tmpArray: %@, %p”, tmpArray, tmpArray);<br>NSLog(@”self.strongArray: %@, %p”, self.strongArray, self.strongArray);<br>NSLog(@”self.copyedArray: %@, %p”, self.copyedArray, self.copyedArray);</p>
+<p><strong>输出结果</strong></p>
+<p>tmpArray: (<br>1,<br>2<br>), 0x610000037220<br>self.strongArray: (<br>1,<br>2<br>), 0x610000037220<br>self.copyedArray: (<br>1,<br>2<br>), 0x610000037220</p>
+<p><strong> NSMutableArray 赋值</strong></p>
+<p>NSMutableArray *tmpArray = [NSMutableArray arrayWithObjects:@”1”,@”2”, nil];</p>
+<p>self.strongArray = tmpArray;<br>self.copyedArray = tmpArray;</p>
+<p>NSLog(@”tmpArray: %@, %p”, tmpArray, tmpArray);<br>NSLog(@”self.strongArray: %@, %p”, self.strongArray, self.strongArray);<br>NSLog(@”self.copyedArray: %@, %p”, self.copyedArray, self.copyedArray);</p>
+<p>[tmpArray addObject:@”3”];<br>NSLog(@”tmpArray: %@, %p”, tmpArray, tmpArray);<br>NSLog(@”self.strongArray: %@, %p”, self.strongArray, self.strongArray);<br>NSLog(@”self.copyedArray: %@, %p”, self.copyedArray, self.copyedArray);</p>
+<p><strong> 输出结果 </strong></p>
+<p>tmpArray: (<br>1,<br>2<br>), 0x600000052930<br>self.strongArray: (<br>1,<br>2<br>), 0x600000052930<br>self.copyedArray: (<br>1,<br>2<br>), 0x600000025c60</p>
+<p>tmpArray: (<br>1,<br>2,<br>3<br>), 0x600000052930<br>self.strongArray: (<br>1,<br>2,<br>3<br>), 0x600000052930<br>self.copyedArray: (<br>1,<br>2<br>), 0x600000025c60</p>
+<p>从以上测试输出结果，我们可以很明显的看出，NSArray用strong或者copy修饰的原理与NSString是一致的。</p>
+<ul>
+<li><p>如果来源数组是NSArray,使用strong或者copy修饰效果是一样，都指向来源数组的内存地址。</p>
+</li>
+<li><p>如果来源数组是NSMutableArray，使用strong只会增加引用计算，依旧指向来源数组的内存地址，但copy会执行一次深拷贝，指向新的内存地址。</p>
+</li>
+<li><p>同样我们声明NSArray时，如果不希望它中途被改变，并且来源有可能是NSMutableArray时，这种情况下使用copy，进行深拷贝。</p>
+</li>
+<li><p>如果确定来源是NSArray类型，这种情况下用strong类型。因为copy修饰的NSArray类型在进行set操作时，底层进行了这样的判断if ([str isMemberOfClass: [NSArray class]])，如果来源是可变的，就进行一次深拷贝，如果是不可变的就和strong修饰一样，进行一次浅拷贝，<br>当项目庞大时，有成百上千个NSArray对象，多少会损耗app性能。</p>
+</li>
+</ul>
+<p><strong> 注意 </strong> </p>
+<p>如果来源数组是NSMutableArray，使用copy修饰的数组会执行一次深拷贝，指向新的内存地址。但是目标数组里面内容的内存地址和来源数组里面内容的内存地址还是一致的，如果改变了来源数组里面内容，目标数组也会跟着改变。</p>
+<p>举个例子:</p>
+<p><strong> 声明 PersonModel </strong></p>
+<p>@interface PersonModel : NSObject<br>// 姓名<br>@property (nonatomic, copy) NSString *name;</p>
+<p>// 年龄<br>@property (nonatomic, assign) NSInteger age;</p>
+<p>// 地址<br>@property (nonatomic, copy) NSString *address;<br>@end</p>
+<p><br></p>
+<p><strong> 进行 赋值 </strong><br>PersonModel *tmpFirstPerModel = [[PersonModel alloc] init];<br>tmpFirstPerModel.name = @”Jack”;<br>tmpFirstPerModel.age = 16;<br>tmpFirstPerModel.address = @”深圳市南山区白石洲下白石一坊9巷12号”;</p>
+<p>NSLog(@”tmpFirstPerModel: %p”, tmpFirstPerModel);<br>NSMutableArray *tmpArray = [NSMutableArray arrayWithObjects:tmpFirstPerModel,@”2”, nil];</p>
+<p>self.strongArray = tmpArray;<br>self.copyedArray = tmpArray;</p>
+<p>NSLog(@”tmpArray: %p, PersonModel: %p”, tmpArray, [tmpArray objectAtIndex:0]);<br>NSLog(@”self.strongArray: %p, PersonModel: %p”, self.strongArray, [self.strongArray objectAtIndex:0]);<br>NSLog(@”self.copyedArray: %p, PersonModel: %p”, self.copyedArray, [self.copyedArray objectAtIndex:0]);</p>
+<p><br></p>
+<p><strong> 查看 输出 结果 </strong><br>tmpFirstPerModel: 0x61800002ffe0<br>tmpArray: 0x618000048ac0, PersonModel: 0x618000036960<br>self.strongArray: 0x618000048ac0, PersonModel: 0x618000036960<br>self.copyedArray: 0x618000036a60, PersonModel: 0x618000036960</p>
+<p>从输出结果可以看出，虽然使用copy修饰的self.copyedArray数组进行了深拷贝，指向了新的内存地址，但是数组里面的PersonModel的指针还是和之前初始化的tmpFirstPerModel是一致的，如果你在来源数组中修改了，self.copyedArray里面的内容也会更改。</p>
+<p><strong> 对personModel 进行修改</strong></p>
+<p>tmpFirstPerModel.address = @”厦门市翔安区新店镇朝新路3号”;</p>
+<p>NSLog(@”tmpSecondPerModel.address: %@, %p”, tmpFirstPerModel.address, tmpFirstPerModel);<br>NSLog(@”[self.strongArray objectAtIndex:0]: %@, %p”,((PersonModel <em>)[self.strongArray objectAtIndex:0]).address, [tmpArray objectAtIndex:0]);<br>NSLog(@”[self.copyedArray objectAtIndex:0]: %@, %p”,((PersonModel </em>)[self.copyedArray objectAtIndex:0]).address, [tmpArray objectAtIndex:0]);<br><br></p>
+<p><strong> 查看 输出 结果 </strong><br>tmpSecondPerModel.address: 厦门市翔安区新店镇朝新路3号, 0x618000037020<br>[self.strongArray objectAtIndex:0]: 厦门市翔安区新店镇朝新路3号, 0x618000037020<br>[self.copyedArray objectAtIndex:0]: 厦门市翔安区新店镇朝新路3号, 0x618000037020</p>
+<p>如果要避免这种情况，就必须对模型实现NSCopying和NSMutableCopying(如果支持可变类型)协议,然后实现- (id)copyWithZone:(NSZone <em>)zone 函数和- (id)mutableCopyWithZone:(NSZone </em>)zone ,接着遍历源数组进行copy添加到新数组中或者通过- (instancetype)initWithArray:(NSArray<objecttype> *)array copyItems:(BOOL)flag函数，进行初始化拷贝。</objecttype></p>
+<p><strong> 代码展示 </strong></p>
+<p>#pragma mark —- NSCopying</p>
+<ul>
+<li>(id)copyWithZone:(NSZone <em>)zone {<br>PersonModel </em>configModel = [[[self class] allocWithZone:zone] init];<br>configModel.name = [self.name copyWithZone:zone];<br>configModel.age = self.age;<br>configModel.address = [self.address copyWithZone:zone];<br>return configModel;<br>}</li>
+</ul>
+<p>#pragma mark —- NSMutableCopying</p>
+<ul>
+<li>(id)mutableCopyWithZone:(NSZone *)zone {<br>return [self copyWithZone:zone];<br>}</li>
+</ul>
+<p>// 遍历 拷贝 添加 方法<br>NSMutableArray <em>tmpMutableArray = [NSMutableArray array];<br>for (PersonModel </em>tmpPersonModel in tmpArray) {<br>[tmpMutableArray addObject:[tmpPersonModel copy]];<br>}<br>self.copyedArray = tmpMutableArray;</p>
+<p>// 初始化 方法 进行 内部 拷贝<br>self.copyedArray = [[NSArray alloc] initWithArray:tmpArray copyItems:YES];</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-eeb98c38a961fdec.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="樱花.jpeg"></center>
+
+<h1 id="三-NSDictionary"><a href="#三-NSDictionary" class="headerlink" title="三. NSDictionary"></a>三. NSDictionary</h1><p><strong> 声明变量 </strong></p>
+<p>// strong  类型   NSDictionary<br>@property (nonatomic, strong) NSDictionary <em>strongDictionary;<br>// copy    类型   NSDictionary<br>@property (nonatomic, copy)   NSDictionary </em>copyedDictionary;</p>
+<p><strong> NSDictionary 赋值 </strong></p>
+<p>NSDictionary *tmpDict = [NSDictionary dictionaryWithObjectsAndKeys:@”Jake”,@”1000”,@”LinDa”,@”1001”, nil];</p>
+<p>self.strongDictionary = tmpDict;<br>self.copyedDictionary = tmpDict;</p>
+<p>NSLog(@”tmpDict: %@, %p”, tmpDict, tmpDict);<br>NSLog(@”self.strongDictionary: %@, %p”, self.strongDictionary, self.strongDictionary);<br>NSLog(@”self.copyedDictionary: %@, %p”, self.copyedDictionary, self.copyedDictionary);</p>
+<p><strong> 输出 结果 </strong></p>
+<p>tmpDict: {<br>1000 = Jake;<br>1001 = LinDa;<br>}, 0x610000267040</p>
+<p>self.strongDictionary: {<br>1000 = Jake;<br>1001 = LinDa;<br>}, 0x610000267040</p>
+<p>self.copyedDictionary: {<br>1000 = Jake;<br>1001 = LinDa;<br>}, 0x610000267040</p>
+<p><strong> NSMutableDictionary 赋值 </strong></p>
+<p>NSMutableDictionary *tmpMutableDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@”Jake”,@”1000”,@”LinDa”,@”1001”, nil];</p>
+<p>self.strongDictionary = tmpMutableDict;<br>self.copyedDictionary = tmpMutableDict;</p>
+<p>NSLog(@”tmpMutableDict: %@, %p”, tmpMutableDict, tmpMutableDict);<br>NSLog(@”self.strongDictionary: %@, %p”, self.strongDictionary, self.strongDictionary);<br>NSLog(@”self.copyedDictionary: %@, %p”, self.copyedDictionary, self.copyedDictionary);</p>
+<p>[tmpMutableDict setObject:@”Ailis” forKey:@”1002”];<br>NSLog(@”tmpMutableDict: %@, %p”, tmpMutableDict, tmpMutableDict);<br>NSLog(@”self.strongDictionary: %@, %p”, self.strongDictionary, self.strongDictionary);<br>NSLog(@”self.copyedDictionary: %@, %p”, self.copyedDictionary, self.copyedDictionary);</p>
+<p><strong> 输出 结果 </strong></p>
+<p>tmpMutableDict: {<br>1000 = Jake;<br>1001 = LinDa;<br>}, 0x6180000459d0</p>
+<p>self.strongDictionary: {<br>1000 = Jake;<br>1001 = LinDa;<br>}, 0x6180000459d0</p>
+<p>self.copyedDictionary: {<br>1000 = Jake;<br>1001 = LinDa;<br>}, 0x618000260d40</p>
+<p>tmpMutableDict: {<br>1000 = Jake;<br>1001 = LinDa;<br>1002 = Ailis;<br>}, 0x6180000459d0</p>
+<p>self.strongDictionary: {<br>1000 = Jake;<br>1001 = LinDa;<br>1002 = Ailis;<br>}, 0x6180000459d0</p>
+<p>self.copyedDictionary: {<br>1000 = Jake;<br>1001 = LinDa;<br>}, 0x618000260d40</p>
+<p>从以上测试输出结果，我们可以很明显的看出，NSDictionary用strong或者copy修饰的原理与NSString和NSArray是一致的。</p>
+<p>同样的NSDicationary也存在着跟NSArray一样的问题。</p>
+<p>如果来源数组是NSMutableDictionary，使用copy修饰的数组会执行一次深拷贝，指向新的内存地址。但是目标数组里面内容的内存地址和来源数组里面内容的内存地址还是一致的，如果改变了来源数组里面内容，目标数组也会跟着改变。</p>
+<p>所以如果键值是类，要想进行内容赋值也必须实现NSCopying和NSMutableCopying(如果支持可变类型)协议,然后实现- (id)copyWithZone:(NSZone )zone 函数和- (id)mutableCopyWithZone:(NSZone )zone ,接着遍历源字典，根据key取出值进行copy添加到新字典里中或者通过- (instancetype)initWithDictionary:(NSDictionary<keytype, objecttype=""> *)otherDictionary copyItems:(BOOL)flag;函数，进行初始化拷贝。</keytype,></p>
+<p><strong> 注意 </strong></p>
+<p>NSMutableArray <em>array = [NSMutableArray arrayWithObjects:@”1”,@”2”, nil];<br>NSMutableDictionary </em>dict = [NSMutableDictionary dictionary];<br>dict[array] = array;<br>for (NSMutableArray *key in dict.allKeys) {<br>NSLog(@”%@”, key.class);<br>NSLog(@”%@”, [dict[key] class]);<br>}</p>
+<p><strong> 查看 输出 结果 </strong></p>
+<p>key.class: <strong>NSArrayI<br>[dict[key] class]: </strong>NSArrayM</p>
+<p>因为NSMutableDictionary 在 set key-value 的时候会把 key copy 一下，NSMutableArray 被 copy 成 NSArray 了，也就对应类族里面__NSArrayI。</p>
+<h1 id="四-最后"><a href="#四-最后" class="headerlink" title="四. 最后"></a>四. 最后</h1><p>送上一张喜欢的图片:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-be0af2225c48dc3b.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="五厘米.jpeg"></center>
+
+<p><strong>大家有兴趣可以看一下，如果觉得不错，麻烦给个喜欢,若发现问题请及时反馈，谢谢！</strong></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDWebImage</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">copy</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">流程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">strong</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">剖析</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NSString</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSArray</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">NSDictionary</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://fjf.com/2017/03/01/NSString, NSArray, NSDictionary 关于strong 和 copy 使用/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/01/22/Runtime(整理笔记)/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Runtime (整理笔记)</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -226,9 +468,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
