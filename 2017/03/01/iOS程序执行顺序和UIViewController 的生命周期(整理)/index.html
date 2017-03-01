@@ -6,17 +6,54 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>Archives: 2016/9 | Fjf&#39;s Tech Blog</title>
+  <title>iOS程序执行顺序和UIViewController 的生命周期(整理) | Fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="IOS开发工程师一枚。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Fjf's Tech Blog">
-<meta property="og:url" content="//fjf.com/archives/2016/09/index.html">
+  <meta name="description" content="说明:此文是自己的总结笔记，主要参考:iOS程序的启动执行顺序 AppDelegate 及 UIViewController 的生命周期
+一. iOS程序的启动执行顺序 程序启动顺序图 
+ 具体执行流程 
+
+程序入口进入main函数，设置AppDelegate称为函数的代理
+
+程序完成加载
+
+
+
+[AppDelegate application:didFinishLaunchingWithOpti">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS程序执行顺序和UIViewController 的生命周期(整理)">
+<meta property="og:url" content="//fjf.com/2017/03/01/iOS程序执行顺序和UIViewController 的生命周期(整理)/index.html">
 <meta property="og:site_name" content="Fjf's Tech Blog">
-<meta property="og:description" content="IOS开发工程师一枚。">
+<meta property="og:description" content="说明:此文是自己的总结笔记，主要参考:iOS程序的启动执行顺序 AppDelegate 及 UIViewController 的生命周期
+一. iOS程序的启动执行顺序 程序启动顺序图 
+ 具体执行流程 
+
+程序入口进入main函数，设置AppDelegate称为函数的代理
+
+程序完成加载
+
+
+
+[AppDelegate application:didFinishLaunchingWithOpti">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-f5fc6111d267a160.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-4c489571cabf79b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-d87fdaa6730ba561.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-99320f2b0a2f7549.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-d792c360fd6f2416.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-03-01T12:42:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Fjf's Tech Blog">
-<meta name="twitter:description" content="IOS开发工程师一枚。">
+<meta name="twitter:title" content="iOS程序执行顺序和UIViewController 的生命周期(整理)">
+<meta name="twitter:description" content="说明:此文是自己的总结笔记，主要参考:iOS程序的启动执行顺序 AppDelegate 及 UIViewController 的生命周期
+一. iOS程序的启动执行顺序 程序启动顺序图 
+ 具体执行流程 
+
+程序入口进入main函数，设置AppDelegate称为函数的代理
+
+程序完成加载
+
+
+
+[AppDelegate application:didFinishLaunchingWithOpti">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-f5fc6111d267a160.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="Fjf&#39;s Tech Blog" type="application/atom+xml">
   
@@ -142,68 +179,321 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-iOS程序执行顺序和UIViewController 的生命周期(整理)" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/09/06/SDWebImage 笔记/" class="archive-article-date">
-  	<time datetime="2016-09-06T07:17:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-06</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/09/06/SDWebImage 笔记/">SDWebImage 剖析笔记</a>
+    <h1 class="article-title" itemprop="name">
+      iOS程序执行顺序和UIViewController 的生命周期(整理)
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017/03/01/iOS程序执行顺序和UIViewController 的生命周期(整理)/" class="archive-article-date">
+  	<time datetime="2017-03-01T12:39:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="说明-此文是自己的总结笔记，主要参考"><a href="#说明-此文是自己的总结笔记，主要参考" class="headerlink" title="说明:此文是自己的总结笔记，主要参考:"></a>说明:此文是自己的总结笔记，主要参考:</h3><h3 id="iOS程序的启动执行顺序-AppDelegate-及-UIViewController-的生命周期"><a href="#iOS程序的启动执行顺序-AppDelegate-及-UIViewController-的生命周期" class="headerlink" title="iOS程序的启动执行顺序 AppDelegate 及 UIViewController 的生命周期"></a><a href="http://www.cnblogs.com/junhuawang/p/5742535.html" target="_blank" rel="external">iOS程序的启动执行顺序 AppDelegate 及 UIViewController 的生命周期</a></h3><p><img src="http://upload-images.jianshu.io/upload_images/2252551-f5fc6111d267a160.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="言叶之庭.jpeg"></p>
+<h1 id="一-iOS程序的启动执行顺序"><a href="#一-iOS程序的启动执行顺序" class="headerlink" title="一. iOS程序的启动执行顺序"></a>一. iOS程序的启动执行顺序</h1><p><strong> 程序启动顺序图 </strong><br><img src="http://upload-images.jianshu.io/upload_images/2252551-4c489571cabf79b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iOS启动原理图.png"></p>
+<p><strong> 具体执行流程 </strong></p>
+<ol>
+<li><p>程序入口<br>进入main函数，设置AppDelegate称为函数的代理</p>
+</li>
+<li><p>程序完成加载</p>
+</li>
+</ol>
+<ul>
+<li>[AppDelegate application:didFinishLaunchingWithOptions:]</li>
+</ul>
+<ol>
+<li><p>创建window窗口</p>
+</li>
+<li><p>程序被激活<br>[AppDelegate applicationDidBecomeActive:]</p>
+</li>
+<li><p>当点击command+H时(针对模拟器,手机是当点击home键)<br>程序取消激活状态<br>[AppDelegate applicationWillResignActive:];<br>程序进入后台<br>[AppDelegate applicationDidEnterBackground:];</p>
+</li>
+<li><p>点击进入工程<br>程序进入前台<br>[AppDelegate applicationWillEnterForeground:]<br>程序被激活<br>[AppDelegate applicationDidBecomeActive:];</p>
+</li>
+</ol>
+<a id="more"></a>
+<p><strong> 分析 </strong></p>
+<p><strong>1.  对于applicationWillResignActive(非活动)与applicationDidEnterBackground(后台)这两个的区别。</strong></p>
+<ul>
+<li><p>applicationWillResignActive(非活动):<br>比如当有电话进来或短信进来或锁屏等情况下，这时应用程序挂起进入非活动状态，也就是手机界面还是显示着你当前的应用程序的窗口，只不过被别的任务强制占用了，也可能是即将进入后台状态(因为要先进入非活动状态然后进入后台状态)</p>
+</li>
+<li><p>applicationDidEnterBackground(后台):<br>指当前窗口不是你的App,大多数程序进入这个后台会在这个状态上停留一会，时间到之后会进入挂起状态(Suspended)。如果你程序特殊处理后可以长期处于后台状态也可以运行。<br><strong> Suspended (挂起) </strong>: 程序在后台不能执行代码。系统会自动把程序变成这个状态而且不会发出通知。当挂起时，程序还是停留在内存中的，当系统内存低时，系统就把挂起的程序清除掉，为前台程序提供更多的内存。</p>
+</li>
+</ul>
+<p>如下图所示:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-d87fdaa6730ba561.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="活动和非活动.png"></center>
+
+<p><strong>2. UIApplicationMain 函数解释: </strong></p>
+<p>入口函数:</p>
+<p>int main(int argc, char * argv[]) {<br>@autoreleasepool {<br>return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));<br>}<br>}</p>
+<p>UIApplicationMain(int argc, char <em>argv[], NSString </em>principalClassName, NSString *delegateClassName);</p>
+<ul>
+<li><p><strong> argc </strong>和<strong> argv </strong> 参数是为了与C语言保持一致。</p>
+</li>
+<li><p><strong> principalClassName (主要类名) </strong> 和 <strong> delegateClassName (委托类名) </strong>。<br>(1) 如果principalClassName是nil，那么它的值将从Info.plist去获取，如果Info.plist没有，则默认为UIApplication。principalClass这个类除了管理整个程序的生命周期之外什么都不做，它只负责监听事件然后交给delegateClass去做。<br>(2) delegateClass 将在工程新建时实例化一个对象。NSStringFromClass([AppDelegate class]) </p>
+</li>
+<li><p><strong> AppDelegate 类实现文件 </strong></p>
+</li>
+</ul>
+<ul>
+<li>(BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions {<br>NSLog(@”— %s —“,<strong>func</strong>);//<strong>func</strong>打印方法名<br>return YES;<br>}</li>
+</ul>
+<ul>
+<li>(void)applicationWillResignActive:(UIApplication *)application {<br>NSLog(@”— %s —“,<strong>func</strong>);<br>}</li>
+</ul>
+<ul>
+<li>(void)applicationDidEnterBackground:(UIApplication *)application {<br>NSLog(@”— %s —“,<strong>func</strong>);<br>}</li>
+</ul>
+<ul>
+<li>(void)applicationWillEnterForeground:(UIApplication *)application {<br>NSLog(@”— %s —“,<strong>func</strong>);<br>}</li>
+</ul>
+<ul>
+<li>(void)applicationDidBecomeActive:(UIApplication *)application {<br>NSLog(@”— %s —“,<strong>func</strong>);<br>}</li>
+</ul>
+<ul>
+<li><p>(void)applicationDidReceiveMemoryWarning:(UIApplication *)application {<br>NSLog(@”— %s —“,<strong>func</strong>);<br>}</p>
+</li>
+<li><p>(void)applicationWillTerminate:(UIApplication *)application {<br>NSLog(@”— %s —“,<strong>func</strong>);<br>}</p>
+</li>
+</ul>
+<p><strong> 打印调用顺序 </strong><br><strong> 启动程序 </strong></p>
+<p>— -[AppDelegate application:didFinishLaunchingWithOptions:] —<br>— -[AppDelegate applicationDidBecomeActive:] —</p>
+<p><strong> 按下 Command + H + SHIFT </strong></p>
+<p>— -[AppDelegate applicationWillResignActive:] —<br>— -[AppDelegate applicationDidEnterBackground:] —</p>
+<p><strong> 重新点击 进入程序 </strong> </p>
+<p>— -[AppDelegate applicationWillEnterForeground:] —<br>— -[AppDelegate applicationDidBecomeActive:] —</p>
+<p><strong> 选择 模拟器的 Simulate Memory Warning </strong></p>
+<p>— -[AppDelegate applicationDidReceiveMemoryWarning:] —</p>
+<p><strong> 分析: </strong></p>
+<ol>
+<li><p>application:didFinishLaunchingWithOptions:<br>程序首次已经完成启动时执行，一般在这个函数里创建window对象，将程序内容通过window呈现给用户。</p>
+</li>
+<li><p>applicationWillResignActive(非活动)<br>程序将要失去Active状态时调用，比如有电话进来或者按下Home键，之后程序进入后台状态，对应的applicationWillEnterForeground(即将进入前台)方法。</p>
+</li>
+</ol>
+<p>该函数里面主要执行操作:<br>a . 暂停正在执行的任务<br>b. 禁止计时器<br>c. 减少OpenGL ES 帧率<br>d. 若为游戏应暂停游戏</p>
+<ol>
+<li>applicationDidEnterBackground(已经进入后台)<br>对应applicationDidBecomeActive(已经变成前台)</li>
+</ol>
+<p>该方法用来:<br>a. 释放共享资源<br>b. 保存用户数据(写到硬盘)<br>c.  作废计时器<br>d. 保存足够的程序状态以便下次修复;</p>
+<ol>
+<li><p>applicationWillEnterForeground(即将进入前台)<br>程序即将进入前台时调用，对应applicationWillResignActive(即将进入后台)，<br>这个方法用来: 撤销applicationWillResignActive中做的改变。</p>
+</li>
+<li><p>applicationDidBecomeActive(已经进入前台)<br>程序已经变为Active(前台)时调用。对应applicationDidEnterBackground(已经进入后台)。<br>注意: 若程序之前在后台，在此方法内刷新用户界面</p>
+</li>
+<li><p>applicationWillTerminate<br>程序即将退出时调用。记得保存数据，如applicationDidEnterBackground方法一样。</p>
+</li>
+</ol>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-99320f2b0a2f7549.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="等候.jpeg"></center>
+
+<h1 id="二-UIViewController-的-生命周期"><a href="#二-UIViewController-的-生命周期" class="headerlink" title="二. UIViewController 的 生命周期"></a>二. UIViewController 的 生命周期</h1><p><strong> 代码 示例 </strong></p>
+<p>#pragma mark — life circle</p>
+<p>// 非storyBoard(xib或非xib)都走这个方法</p>
+<ul>
+<li>(instancetype)initWithNibName:(NSString <em>)nibNameOrNil bundle:(NSBundle </em>)nibBundleOrNil {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {</li>
+</ul>
+<p>}<br>return self;<br>}</p>
+<p>// 如果连接了串联图storyBoard 走这个方法</p>
+<ul>
+<li>(instancetype)initWithCoder:(NSCoder *)aDecoder {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>if (self = [super initWithCoder:aDecoder]) {</li>
+</ul>
+<p>}<br>return self;<br>}</p>
+<p>// 加载视图(默认从nib)</p>
+<ul>
+<li>(void)loadView {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>[super loadView];<br>self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];<br>self.view.backgroundColor = [UIColor redColor];<br>}</li>
+</ul>
+<p>//视图控制器中的视图加载完成，viewController自带的view加载完成</p>
+<ul>
+<li>(void)viewDidLoad {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>[super viewDidLoad];<br>}</li>
+</ul>
+<p>//视图将要出现</p>
+<ul>
+<li>(void)viewWillAppear:(BOOL)animated {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>[super viewWillAppear:animated];<br>}</li>
+</ul>
+<p>// view 即将布局其 Subviews</p>
+<ul>
+<li>(void)viewWillLayoutSubviews {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>[super viewWillLayoutSubviews];<br>}</li>
+</ul>
+<p>// view 已经布局其 Subviews</p>
+<ul>
+<li>(void)viewDidLayoutSubviews {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>[super viewDidLayoutSubviews];<br>}</li>
+</ul>
+<p>//视图已经出现</p>
+<ul>
+<li>(void)viewDidAppear:(BOOL)animated {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>[super viewDidAppear:animated];<br>}</li>
+</ul>
+<p>//视图将要消失</p>
+<ul>
+<li>(void)viewWillDisappear:(BOOL)animated {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>[super viewWillDisappear:animated];<br>}</li>
+</ul>
+<p>//视图已经消失</p>
+<ul>
+<li>(void)viewDidDisappear:(BOOL)animated {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>[super viewDidDisappear:animated];<br>}</li>
+</ul>
+<p>//出现内存警告  //模拟内存警告:点击模拟器-&gt;hardware-&gt; Simulate Memory Warning</p>
+<ul>
+<li>(void)didReceiveMemoryWarning {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>[super didReceiveMemoryWarning];<br>}</li>
+</ul>
+<p>// 视图被销毁</p>
+<ul>
+<li>(void)dealloc {<br>NSLog(@”%s”, <strong>FUNCTION</strong>);<br>}</li>
+</ul>
+<p><strong> 查看 打印 结果 </strong></p>
+<p>2017-03-01 18:03:41.577 ViewControllerLifeCircle[32254:401790] -[ViewController initWithCoder:]<br>2017-03-01 18:03:41.581 ViewControllerLifeCircle[32254:401790] -[ViewController loadView]<br>2017-03-01 18:03:46.485 ViewControllerLifeCircle[32254:401790] -[ViewController viewDidLoad]<br>2017-03-01 18:03:46.486 ViewControllerLifeCircle[32254:401790] -[ViewController viewWillAppear:]<br>2017-03-01 18:03:46.487 ViewControllerLifeCircle[32254:401790] -[ViewController viewWillLayoutSubviews]<br>2017-03-01 18:03:46.488 ViewControllerLifeCircle[32254:401790] -[ViewController viewDidLayoutSubviews]<br>2017-03-01 18:03:46.488 ViewControllerLifeCircle[32254:401790] -[ViewController viewWillLayoutSubviews]<br>2017-03-01 18:03:46.488 ViewControllerLifeCircle[32254:401790] -[ViewController viewDidLayoutSubviews]<br>2017-03-01 18:03:46.490 ViewControllerLifeCircle[32254:401790] -[ViewController viewDidAppear:]<br>2017-03-01 19:03:13.308 ViewControllerLifeCircle[32611:427962] -[ViewController viewWillDisappear:]<br>2017-03-01 19:03:14.683 ViewControllerLifeCircle[32611:427962] -[ViewController viewDidDisappear:]<br>2017-03-01 19:03:14.683 ViewControllerLifeCircle[32611:427962] -[ViewController dealloc]<br>2017-03-01 19:12:05.927 ViewControllerLifeCircle[32611:427962] -[ViewController didReceiveMemoryWarning]</p>
+<p><strong> 分析 </strong><br><strong> 1. initWithNibName:bundle: </strong><br>初始化UIViewController，执行关键数据初始化操作，非StoryBoard创建UIViewController都会调用这个方法。<br><strong> 注意: 不要在这里做View相关操作，View在loadView方法中才初始化。</strong></p>
+<p><strong> 2. initWithCoder: </strong><br>如果使用StoryBoard进行视图管理，程序不会直接初始化一个UIViewController，StoryBoard会自动初始化或在segue被触发时自动初始化，因此方法initWithNibName:bundle不会被调用，但是initWithCoder会被调用。</p>
+<p><strong> 3. loadView </strong><br>当访问UIViewController的View属性时，View如果此时为nil,那么ViewController会自动调用loadView方法来初始化一个UIView并赋值给UIViewController的View；如果没有重载lodaView方法，则UIViewController会从nib或StoryBoard中查找默认的loadView，默认的loadView会返回一个空白的UIView对象。</p>
+<p><strong>注意:在view初始化之前，不能先调用view的getter方法，否则将导致死循环(除非先调用[super loadView])</strong></p>
+<p><strong> 4. viewDidLoad </strong><br>当loadView将view载入内存中，会进一步调用viewDidLoad方法来进行进一步设置。通常，我们对于各种初始化数据的载入，初始设定等很多内容都会在这个方法中实现。</p>
+<p><strong> 5. viewWillAppear </strong><br>系统在载入所有的数据后，将会在屏幕上显示视图，这时会先调用这个方法，通常我们会在这个方法对即将显示的视图做进一步的设置。比如，设置设备不同方向时该如何显示；设置状态栏方向、设置视图显示样式等。</p>
+<p>另一方面，当APP有多个视图时，上下级视图切换是也会调用这个方法，如果在调入视图时，需要对数据做更新，就只能在这个方法内实现。</p>
+<p><strong> 6. viewWillLayoutSubviews </strong><br>view 即将布局其Subviews。 比如view的bounds改变了(例如:状态栏从不显示到显示,视图方向变化)，要调整Subviews的位置，在调整之前要做的工作可以放在该方法中实现</p>
+<p><strong> 7. viewDidLayoutSubviews </strong><br>view已经布局其Subviews，这里可以放置调整完成之后需要做的工作。</p>
+<p><strong> 8. viewDidAppear </strong><br>在view被添加到视图层级中以及多视图，上下级视图切换时调用这个方法，在这里可以对正在显示的视图做进一步的设置。</p>
+<p><strong> 9. viewWillDisappear </strong><br>在视图切换是，当前视图在即将被移除、或被覆盖是，会调用该方法，此时还没有调用removeFromSuperview。</p>
+<p><strong> 10. viewDidDisappear </strong><br>view已经消失或被覆盖，此时已经调用removeFromSuperView;</p>
+<p><strong> 11. dealloc </strong><br>视图被销毁，此次需要对你在init和viewDidLoad中创建的对象进行释放。</p>
+<p><strong> 12. didReceiveMemoryWarning </strong><br>在内存足够的情况下，app的视图通常会一直保存在内存中，但是如果内存不够，一些没有正在显示的viewController就会收到内存不够的警告，然后就会释放自己拥有的视图，以达到释放内存的目的。但是系统只会释放内存，并不会释放对象的所有权，所以通常我们需要在这里将不需要显示在内存中保留的对象释放它的所有权，将其指针置nil。</p>
+<h1 id="三-最后"><a href="#三-最后" class="headerlink" title="三. 最后"></a>三. 最后</h1><p>送上一张喜欢的图片:</p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-d792c360fd6f2416.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="初晴.jpeg"></center>
+
+<p><strong>这是一篇总结笔记，大家有兴趣可以蛮看一下，如果觉得不错，麻烦给个喜欢,若发现有错误的地方请及时反馈，谢谢！</strong></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SDWebImage</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UIViewController</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">流程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">剖析</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">AppDelegate</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://fjf.com/2017/03/01/iOS程序执行顺序和UIViewController 的生命周期(整理)/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/03/01/NSString, NSArray, NSDictionary 关于strong 和 copy 使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">NSString, NSArray, NSDictionary 关于strong 和 copy 使用</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -226,8 +516,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

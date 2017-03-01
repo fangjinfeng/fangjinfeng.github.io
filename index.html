@@ -144,6 +144,95 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-iOS程序执行顺序和UIViewController 的生命周期(整理)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/01/iOS程序执行顺序和UIViewController 的生命周期(整理)/">iOS程序执行顺序和UIViewController 的生命周期(整理)</a>
+    </h1>
+  
+
+        
+        <a href="/2017/03/01/iOS程序执行顺序和UIViewController 的生命周期(整理)/" class="archive-article-date">
+  	<time datetime="2017-03-01T12:39:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="说明-此文是自己的总结笔记，主要参考"><a href="#说明-此文是自己的总结笔记，主要参考" class="headerlink" title="说明:此文是自己的总结笔记，主要参考:"></a>说明:此文是自己的总结笔记，主要参考:</h3><h3 id="iOS程序的启动执行顺序-AppDelegate-及-UIViewController-的生命周期"><a href="#iOS程序的启动执行顺序-AppDelegate-及-UIViewController-的生命周期" class="headerlink" title="iOS程序的启动执行顺序 AppDelegate 及 UIViewController 的生命周期"></a><a href="http://www.cnblogs.com/junhuawang/p/5742535.html">iOS程序的启动执行顺序 AppDelegate 及 UIViewController 的生命周期</a></h3><p><img src="http://upload-images.jianshu.io/upload_images/2252551-f5fc6111d267a160.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="言叶之庭.jpeg"></p>
+<h1 id="一-iOS程序的启动执行顺序"><a href="#一-iOS程序的启动执行顺序" class="headerlink" title="一. iOS程序的启动执行顺序"></a>一. iOS程序的启动执行顺序</h1><p><strong> 程序启动顺序图 </strong><br><img src="http://upload-images.jianshu.io/upload_images/2252551-4c489571cabf79b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iOS启动原理图.png"></p>
+<p><strong> 具体执行流程 </strong></p>
+<ol>
+<li><p>程序入口<br>进入main函数，设置AppDelegate称为函数的代理</p>
+</li>
+<li><p>程序完成加载</p>
+</li>
+</ol>
+<ul>
+<li>[AppDelegate application:didFinishLaunchingWithOptions:]</li>
+</ul>
+<ol>
+<li><p>创建window窗口</p>
+</li>
+<li><p>程序被激活<br>[AppDelegate applicationDidBecomeActive:]</p>
+</li>
+<li><p>当点击command+H时(针对模拟器,手机是当点击home键)<br>程序取消激活状态<br>[AppDelegate applicationWillResignActive:];<br>程序进入后台<br>[AppDelegate applicationDidEnterBackground:];</p>
+</li>
+<li><p>点击进入工程<br>程序进入前台<br>[AppDelegate applicationWillEnterForeground:]<br>程序被激活<br>[AppDelegate applicationDidBecomeActive:];</p>
+</li>
+</ol>
+        
+          <a class="article-more-a" href="/2017/03/01/iOS程序执行顺序和UIViewController 的生命周期(整理)/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UIViewController</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">AppDelegate</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/01/iOS程序执行顺序和UIViewController 的生命周期(整理)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-NSString, NSArray, NSDictionary 关于strong 和 copy 使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -496,79 +585,6 @@
 
 
   
-    <article id="post-Block里面的weak-strong理解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/26/Block里面的weak-strong理解/">Block里面的weak-strong理解</a>
-    </h1>
-  
-
-        
-        <a href="/2016/12/26/Block里面的weak-strong理解/" class="archive-article-date">
-  	<time datetime="2016-12-26T13:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>快年底了，想对一些之前有点模糊的概念进行总结，所以写了总结笔记。主要参考了这几篇文章:<br><a href="http://www.jianshu.com/p/1515fb0c3568">Block技术中的weak-strong</a><br><a href="http://url.cn/42G82a0">什么时候在 block 中不需要使用 weakSelf</a><br><a href="http://url.cn/42G83jN">为什么 weakSelf 需要配合 strong self 使用</a><br><a href="http://url.cn/42G845O">block 什么时候需要构造循环引用</a></p>
-<h1 id="一-循环引用例子"><a href="#一-循环引用例子" class="headerlink" title="一.循环引用例子"></a>一.循环引用例子</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">"ViewController.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ViewController</span>()</span>&#123;</div><div class="line">       <span class="keyword">id</span> _observer;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">ViewController</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">        [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    </div><div class="line">        _observer = [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserverForName:<span class="string">@"kThemeChangeNotification"</span> object:<span class="literal">nil</span> queue:[<span class="built_in">NSOperationQueue</span> mainQueue] usingBlock:^(<span class="built_in">NSNotification</span> * _Nonnull note) &#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, <span class="keyword">self</span>);</div><div class="line">        &#125;];</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)dealloc &#123;</div><div class="line">    <span class="keyword">if</span> (_observer) &#123;</div><div class="line">      [[<span class="built_in">NSNotificationCenter</span> defaultCenter] removeObserver:_observer];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2016/12/26/Block里面的weak-strong理解/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Block</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">weakSelf</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">strongSelf</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/26/Block里面的weak-strong理解/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -662,18 +678,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Block</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">weakSelf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">strongSelf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">IOS</a>
               </li>
              
@@ -687,6 +691,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Assistive Touch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Block</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">weakSelf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">strongSelf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ImageBrowser</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">仿微信图片浏览</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">仿微博图片浏览</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -710,35 +738,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ImageBrowser</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">仿微信图片浏览</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">仿微博图片浏览</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -758,11 +762,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">总结</a>
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">情感</a>
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -786,11 +790,31 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
+                <a href="javascript:void(0)" class="js-tag color2">UIViewController</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
+                <a href="javascript:void(0)" class="js-tag color2">AppDelegate</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">情感</a>
               </li>
             
             <div class="clearfix"></div>
