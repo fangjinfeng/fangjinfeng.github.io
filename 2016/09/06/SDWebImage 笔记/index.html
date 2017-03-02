@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>SDWebImage 剖析笔记 | Fjf&#39;s Tech Blog</title>
+  <title>SDWebImage 剖析笔记 | fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="项目中一直都有使用SDWebImage，对这个框架有一定的了解，但是体系却未能贯通，因此特地整理下,主要参考:
 iOS 源代码分析 — SDWebImage
@@ -21,7 +21,7 @@ SDWebImage源码剖析（二）
 <meta property="og:type" content="article">
 <meta property="og:title" content="SDWebImage 剖析笔记">
 <meta property="og:url" content="//fjf.com/2016/09/06/SDWebImage 笔记/index.html">
-<meta property="og:site_name" content="Fjf's Tech Blog">
+<meta property="og:site_name" content="fjf's Tech Blog">
 <meta property="og:description" content="项目中一直都有使用SDWebImage，对这个框架有一定的了解，但是体系却未能贯通，因此特地整理下,主要参考:
 iOS 源代码分析 — SDWebImage
 SDWebImage源码剖析（－）
@@ -53,7 +53,7 @@ SDWebImage源码剖析（二）
 查看缓存，如果缓存中存在图片就返回图片并且更新UIImag">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-da47b5477dd0a0db.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
-    <link rel="alternative" href="/atom.xml" title="Fjf&#39;s Tech Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="fjf&#39;s Tech Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -529,7 +529,25 @@ SDWebImage源码剖析（二）
 
 
   
-    <div class="duoshuo"></div>
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="SDWebImage 笔记" data-title="SDWebImage 剖析笔记" data-url="//fjf.com/2016/09/06/SDWebImage 笔记/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
   
 
 
@@ -621,6 +639,26 @@ SDWebImage源码剖析（二）
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">copy</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">strong</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NSString</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSArray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSDictionary</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Block</a>
               </li>
              
@@ -661,55 +699,15 @@ SDWebImage源码剖析（二）
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
+                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">copy</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">strong</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NSString</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSArray</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSDictionary</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Method Swizzling</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSAaray,NSMutableArray 数组越界</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
+                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -721,15 +719,11 @@ SDWebImage源码剖析（二）
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">动画</a>
+                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">UINavigationBar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
+                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -749,15 +743,39 @@ SDWebImage源码剖析（二）
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
+                <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Method Swizzling</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">动画</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">UINavigationBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSAaray,NSMutableArray 数组越界</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
               </li>
             
             <div class="clearfix"></div>

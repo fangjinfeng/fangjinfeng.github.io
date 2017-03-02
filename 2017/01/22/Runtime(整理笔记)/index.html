@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//fjf.com">
-  <title>Runtime (整理笔记) | Fjf&#39;s Tech Blog</title>
+  <title>Runtime (整理笔记) | fjf&#39;s Tech Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
 
@@ -19,7 +19,7 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 <meta property="og:type" content="article">
 <meta property="og:title" content="Runtime (整理笔记)">
 <meta property="og:url" content="//fjf.com/2017/01/22/Runtime(整理笔记)/index.html">
-<meta property="og:site_name" content="Fjf's Tech Blog">
+<meta property="og:site_name" content="fjf's Tech Blog">
 <meta property="og:description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
 
 
@@ -47,7 +47,7 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 [receiver doSomething];">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2252551-fd4a701e71520f82.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
-    <link rel="alternative" href="/atom.xml" title="Fjf&#39;s Tech Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="fjf&#39;s Tech Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -471,15 +471,15 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Method Swizzling</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">黑魔法</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Associated Objects</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Method Swizzling</a>
         		</li>
       		
 		</ul>
@@ -572,7 +572,25 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 
 
   
-    <div class="duoshuo"></div>
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Runtime(整理笔记)" data-title="Runtime (整理笔记)" data-url="//fjf.com/2017/01/22/Runtime(整理笔记)/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
   
 
 
@@ -664,6 +682,26 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">copy</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">strong</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NSString</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSArray</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSDictionary</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Block</a>
               </li>
              
@@ -704,55 +742,15 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
+                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">copy</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">strong</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NSString</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSArray</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSDictionary</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Method Swizzling</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">NSAaray,NSMutableArray 数组越界</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
+                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -764,15 +762,11 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">动画</a>
+                <a href="javascript:void(0)" class="js-tag color3">NSTimer</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">UINavigationBar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
+                <a href="javascript:void(0)" class="js-tag color1">超时 回调</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -792,15 +786,39 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
+                <a href="javascript:void(0)" class="js-tag color3">Runtime</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+                <a href="javascript:void(0)" class="js-tag color4">黑魔法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
+                <a href="javascript:void(0)" class="js-tag color4">Associated Objects</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Method Swizzling</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">动画</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">UINavigationBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UITabBar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">NSAaray,NSMutableArray 数组越界</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">NSString, NSMutableString 崩溃</a>
               </li>
             
             <div class="clearfix"></div>
