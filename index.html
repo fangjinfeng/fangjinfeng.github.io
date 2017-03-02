@@ -260,24 +260,17 @@
       
         <p><strong>NSString</strong> 和 <strong>NSArray</strong> 在@property的时候，到底是用strong还是用copy修饰，这里依据自己的理解，做一个总结。</p>
 <h1 id="一-NSString"><a href="#一-NSString" class="headerlink" title="一. NSString"></a>一. NSString</h1><p><strong>声明变量:</strong></p>
-<p>// strong  类型  NSString<br>@property (nonatomic, strong) NSString <em>strongString;<br>// copy    类型  NSString<br>@property (nonatomic, copy)   NSString </em>copyedString;</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// strong  类型  NSString</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSString</span> *strongString;</div><div class="line"><span class="comment">// copy    类型  NSString</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>)   <span class="built_in">NSString</span> *copyedString;</div></pre></td></tr></table></figure>
 <p>这里分别声明了一个用strong修饰的strongString变量和一个用copy修饰的copyedString变量。<strong>（注意: 不可以写成copyStr会报property follows cocoa naming convention for returning ‘owned’ objects意思是不能使用copy来作为开头命名，copy是cocoa用的）</strong></p>
 <p><strong>NSString 赋值</strong></p>
-<p>NSString *tmpString = @”123456”;</p>
-<p>self.strongString = tmpString;<br>self.copyedString = tmpString;</p>
-<p>NSLog(@”tmpString: %@, %p”, tmpString, tmpString);<br>NSLog(@”self.strongString: %@, %p”, self.strongString, self.strongString);<br>NSLog(@”self.copyedString: %@, %p”, self.copyedString, self.copyedString);</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span> *tmpString = <span class="string">@"123456"</span>;</div><div class="line"></div><div class="line"><span class="keyword">self</span>.strongString = tmpString;</div><div class="line"><span class="keyword">self</span>.copyedString = tmpString;</div><div class="line"></div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"tmpString: %@, %p"</span>, tmpString, tmpString);</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"self.strongString: %@, %p"</span>, <span class="keyword">self</span>.strongString, <span class="keyword">self</span>.strongString);</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"self.copyedString: %@, %p"</span>, <span class="keyword">self</span>.copyedString, <span class="keyword">self</span>.copyedString);</div></pre></td></tr></table></figure>
 <p><strong>查看输出结果</strong></p>
-<p>tmpString: 123456, 0x106074078<br>self.strongString: 123456, 0x106074078<br>self.copyedString: 123456, 0x106074078</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tmpString: <span class="number">123456</span>, <span class="number">0</span>x106074078</div><div class="line">self<span class="selector-class">.strongString</span>: <span class="number">123456</span>, <span class="number">0</span>x106074078</div><div class="line">self<span class="selector-class">.copyedString</span>: <span class="number">123456</span>, <span class="number">0</span>x106074078</div></pre></td></tr></table></figure>
 <p>根据输出的内存地址和内容，我们可以发现不管是strong修饰还是copy修饰，指向的都是同一个内存地址，也就是tmpString的地址。strongString和copyedString都只是对tmpString的引用，只会导致tmpString的计算器加1，并没有拷贝一份新的，tmpString的retainCount应该是3.</p>
 <p><strong>NSMutableString 赋值</strong></p>
-<p>NSMutableString *tmpMutableString = [[NSMutableString alloc] initWithString:@”123456”];</p>
-<p>self.strongString = tmpMutableString;<br>self.copyedString = tmpMutableString;</p>
-<p>NSLog(@”tmpMutableString: %@, %p”, tmpMutableString, tmpMutableString);<br>NSLog(@”self.strongString: %@, %p”, self.strongString, self.strongString);<br>NSLog(@”self.copyedString: %@, %p”, self.copyedString, self.copyedString);</p>
-<p>[tmpMutableString appendString:@”789”];</p>
-<p>NSLog(@”tmpMutableString: %@, %p”, tmpMutableString, tmpMutableString);<br>NSLog(@”self.strongString: %@, %p”, self.strongString, self.strongString);<br>NSLog(@”self.copyedString: %@, %p”, self.copyedString, self.copyedString);</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSMutableString</span> *tmpMutableString = [[<span class="built_in">NSMutableString</span> alloc] initWithString:<span class="string">@"123456"</span>];</div><div class="line"></div><div class="line"><span class="keyword">self</span>.strongString = tmpMutableString;</div><div class="line"><span class="keyword">self</span>.copyedString = tmpMutableString;</div><div class="line"></div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"tmpMutableString: %@, %p"</span>, tmpMutableString, tmpMutableString);</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"self.strongString: %@, %p"</span>, <span class="keyword">self</span>.strongString, <span class="keyword">self</span>.strongString);</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"self.copyedString: %@, %p"</span>, <span class="keyword">self</span>.copyedString, <span class="keyword">self</span>.copyedString);</div><div class="line"></div><div class="line">[tmpMutableString appendString:<span class="string">@"789"</span>];</div><div class="line"></div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"tmpMutableString: %@, %p"</span>, tmpMutableString, tmpMutableString);</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"self.strongString: %@, %p"</span>, <span class="keyword">self</span>.strongString, <span class="keyword">self</span>.strongString);</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"self.copyedString: %@, %p"</span>, <span class="keyword">self</span>.copyedString, <span class="keyword">self</span>.copyedString);</div></pre></td></tr></table></figure>
 <p><strong>输出打印结果</strong></p>
-<p>tmpMutableString: 123456, 0x600000260640<br>self.strongString: 123456, 0x600000260640<br>self.copyedString: 123456, 0xa003635343332316</p>
-<p>tmpMutableString: 123456789, 0x600000260640<br>self.strongString: 123456789, 0x600000260640<br>self.copyedString: 123456, 0xa003635343332316</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">tmpMutableString</span>: 123456, 0x600000260640</div><div class="line"><span class="attribute">self.strongString</span>: 123456, 0x600000260640</div><div class="line"><span class="attribute">self.copyedString</span>: 123456, 0xa003635343332316</div><div class="line"></div><div class="line"><span class="dns">tmpMutableString: <span class="number">123456789</span>, <span class="number">0</span>x6<span class="number">00000260640</span></div><div class="line">self.strongString: <span class="number">123456789</span>, <span class="number">0</span>x6<span class="number">00000260640</span></div><div class="line">self.copyedString: <span class="number">123456</span>, <span class="number">0</span>xa0036<span class="number">35343332316</span></span></div></pre></td></tr></table></figure>
 <p>这时候我们可以看到，copy修饰的copyedString 字符串, 已经不再是简单的引用了，而是拷贝一个新的，让copyedStr指向了一个新的地址。此时tmpMutableString的ratainCount应该是2.</p>
 <p>然后我们将[tmpMutableString appendString:@”789”];加上“789”，输出后，发现tmpMutableString和strongString会随之改变，但copyedString则不会随之变化。<br>
         
@@ -849,18 +842,6 @@ $(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">UIAlertView</a>
               </li>
              
@@ -894,6 +875,18 @@ $(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">情感</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
               </li>
             
             <div class="clearfix"></div>

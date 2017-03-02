@@ -34,7 +34,7 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-5dc658aa84039b6a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-b4ffbcd4679976f9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2252551-c8427ef9817bc8a6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-02-08T01:57:19.000Z">
+<meta property="og:updated_time" content="2017-03-02T03:40:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Runtime (整理笔记)">
 <meta name="twitter:description" content="说明:此文是自己的总结笔记，主要参考这几篇文章:iOS开发-Runtime详解NSHipster里面的这两篇文章 :Associated ObjectsMethod Swizzling 
@@ -310,7 +310,8 @@ Runtime又叫运行时，是一套底层的C语言API,其为IOS内部的核心�
 </ul>
 </li>
 </ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/2252551-5dc658aa84039b6a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="树3.jpg"></p>
+<center><img src="http://upload-images.jianshu.io/upload_images/2252551-5dc658aa84039b6a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="树3.jpg"></center>
+
 <h1 id="七-动态添加方法"><a href="#七-动态添加方法" class="headerlink" title="七.动态添加方法"></a>七.动态添加方法</h1><p>重写了拦截调用的方法并且返回YES,接下来可以根据传入的SEL类型的selector，动态添加一个方法。</p>
 <p>首先从外部隐式调用一个不存在的方法:</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 隐式调用方法</span></div><div class="line">[target performSelector:<span class="keyword">@selector</span>(resolveAdd:) withObject:<span class="string">@"test"</span>];</div><div class="line">然后，在target对象内部重写拦截调用的方法，动态添加方法</div><div class="line"></div><div class="line"><span class="keyword">void</span> runAddMethod(<span class="keyword">id</span> <span class="keyword">self</span>, SEL _cmd, <span class="built_in">NSString</span> *string)&#123;</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"add C IMP "</span>, string);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -855,18 +856,6 @@ $(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">UIAlertView</a>
               </li>
              
@@ -900,6 +889,18 @@ $(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">情感</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SDWebImage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">剖析</a>
               </li>
             
             <div class="clearfix"></div>
